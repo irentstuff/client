@@ -1,6 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                    APIS                                    */
 /* -------------------------------------------------------------------------- */
-const hostname = 'test'
+// const hostname = 'test'
 
-const apiURL = `${hostname}/`
+const apiUrl = 'http://127.0.0.1:8001/reviews/1/'
+export default { apiUrl }
