@@ -47,3 +47,13 @@ export async function deleteTestData(id) {
 
   return data
 }
+
+export async function getReviewById() {
+  try {
+    const response = await axios.get(apiUrl)
+    return response.data
+  } catch (error) {
+    console.error('Error fetching review:', error)
+    return null
+  }
+}
