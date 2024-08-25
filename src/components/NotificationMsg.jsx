@@ -11,12 +11,12 @@ import { notification } from 'antd'
 /* -------------------------------------------------------------------------- */
 /*                               NotificationMsg                              */
 /* -------------------------------------------------------------------------- */
-const NotificationMsg = () => {
+export const NotificationMsg = () => {
   console.log('NotificationMsg - render')
 
   const dispatch = useDispatch()
-  const successMsg = useSelector((state) => state.workflowManager.showSuccess)
-  const errorMsg = useSelector((state) => state.workflowManager.showError)
+  const successMsg = useSelector((state) => state.iRentStuff.showSuccess)
+  const errorMsg = useSelector((state) => state.iRentStuff.showError)
 
   useEffect(() => {
     if (successMsg.status) {
@@ -31,7 +31,7 @@ const NotificationMsg = () => {
             })
           )
       })
-    }
+    } else return undefined
   }, [successMsg])
 
   useEffect(() => {
@@ -47,8 +47,6 @@ const NotificationMsg = () => {
             })
           )
       })
-    }
+    } else return undefined
   }, [errorMsg])
 }
-
-export default NotificationMsg

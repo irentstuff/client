@@ -1,11 +1,13 @@
 import { Outlet } from 'react-router-dom'
 import { Layout } from 'antd'
+import { NotificationMsg } from '../../components/NotificationMsg'
 
 const { Header, Content, Footer } = Layout
 
-function PageLayout() {
+export const PageLayout = () => {
   return (
     <Layout style={{ minHeight: '1000vh' }}>
+      <NotificationMsg />
       <Header />
       <Content style={{ overflow: 'initial' }}>
         <Outlet />
@@ -14,4 +16,3 @@ function PageLayout() {
     </Layout>
   )
 }
-export default PageLayout

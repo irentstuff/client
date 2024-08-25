@@ -1,7 +1,18 @@
 import axios from 'axios'
-import config from './config'
+import { apiURL, itemsURL } from './config'
 
-const { apiUrl } = config
+/* -------------------------------------------------------------------------- */
+/*                                    ITEMS                                   */
+/* -------------------------------------------------------------------------- */
+export async function getAllItems() {
+  const data = await axios({
+    method: 'GET',
+    //withCredentials: true,
+    url: `${itemsURL}`
+  })
+
+  return data
+}
 
 /* -------------------------------------------------------------------------- */
 /*                           SAMPLE AXIOS FUNCTIONS                           */
@@ -10,7 +21,7 @@ export async function getTestData(param) {
   const data = await axios({
     method: 'GET',
     withCredentials: true,
-    url: `${apiUrl}?param=${param}`
+    url: `${apiURL}?param=${param}`
   })
 
   return data
@@ -21,7 +32,7 @@ export async function postTestData(payload) {
     method: 'POST',
     withCredentials: true,
     data: payload,
-    url: `${apiUrl}`
+    url: `${apiURL}`
   })
 
   return data
@@ -42,7 +53,7 @@ export async function deleteTestData(id) {
   const data = await axios({
     method: 'DELETE',
     withCredentials: true,
-    url: `${apiUrl}/${id}`
+    url: `${apiURL}/${id}`
   })
 
   return data

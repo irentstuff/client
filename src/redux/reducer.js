@@ -5,7 +5,8 @@ export const iRentStuffSlice = createSlice({
   initialState: {
     //NOTIFICATION
     showSuccess: { status: false, msg: '' },
-    showError: { status: false, msg: '' }
+    showError: { status: false, msg: '' },
+    allItems: []
   },
   reducers: {
     //NOTIFICATION
@@ -16,11 +17,14 @@ export const iRentStuffSlice = createSlice({
     updateError: (state, action) => {
       state.showError.status = action.payload.status
       state.showError.msg = action.payload.msg
+    },
+    updateAllItems: (state, action) => {
+      state.allItems = action.payload.data
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { defaultTest } = iRentStuffSlice.actions
+export const { updateSuccess, updateError, updateAllItems } = iRentStuffSlice.actions
 
 export default iRentStuffSlice.reducer
