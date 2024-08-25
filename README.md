@@ -1,9 +1,9 @@
 # SETUP ON LOCAL
 
-1. Install node
-2. npm i (install packages)
-3. npm run dev (run local)
-4. npm run server (run mock apis on port:5000)
+1. Install node (> v18 required)
+2. npm i (install packages in project)
+3. npm run dev (run app local)
+4. npm run server (run mock apis on port:5000 - only work for node > 18.0)
 
 # FRAMEWORKS
 

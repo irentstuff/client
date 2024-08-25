@@ -3,11 +3,19 @@ import { createSlice } from '@reduxjs/toolkit'
 export const iRentStuffSlice = createSlice({
   name: 'iRentStuff',
   initialState: {
-    value: ''
+    //NOTIFICATION
+    showSuccess: { status: false, msg: '' },
+    showError: { status: false, msg: '' }
   },
   reducers: {
-    defaultTest: (state, action) => {
-      state.value = 'test'
+    //NOTIFICATION
+    updateSuccess: (state, action) => {
+      state.showSuccess.status = action.payload.status
+      state.showSuccess.msg = action.payload.msg
+    },
+    updateError: (state, action) => {
+      state.showError.status = action.payload.status
+      state.showError.msg = action.payload.msg
     }
   }
 })
