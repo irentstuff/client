@@ -1,3 +1,10 @@
+# SETUP ON LOCAL
+
+1. Install node
+2. npm i (install packages)
+3. npm run dev (run local)
+4. npm run server (run mock apis on port:5000)
+
 # FRAMEWORKS
 
 ## React + Vite
