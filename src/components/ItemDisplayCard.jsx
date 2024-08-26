@@ -10,9 +10,7 @@ const { Meta } = Card
 /* -------------------------------------------------------------------------- */
 /*                               ItemDisplayCard                              */
 /* -------------------------------------------------------------------------- */
-export const ItemDisplayCard = (itemDetails) => {
-  console.log(itemDetails)
-
+export const ItemDisplayCard = ({ itemDetails }) => {
   return (
     <Col xs={24} xl={8} key={itemDetails.id}>
       <Card

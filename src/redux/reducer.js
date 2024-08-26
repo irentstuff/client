@@ -6,6 +6,9 @@ export const iRentStuffSlice = createSlice({
     //NOTIFICATION
     showSuccess: { status: false, msg: '' },
     showError: { status: false, msg: '' },
+    //AUTH
+    currentUser: { authenticated: true, id: 4 },
+    //ITEMS
     allItems: []
   },
   reducers: {

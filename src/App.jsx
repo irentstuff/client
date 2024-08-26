@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/*                                   IMPORTS                                  */
+/* -------------------------------------------------------------------------- */
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
@@ -55,7 +58,8 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<PageLayout />}>
-        <Route path='/' element={<HomePage />} />
+        <Route path='/' element={<HomePage myItems={false} />} />
+        <Route path='/MyItems' element={<HomePage myItems={true} />} />
       </Route>
     </Routes>
   )
