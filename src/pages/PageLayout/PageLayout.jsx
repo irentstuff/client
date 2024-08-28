@@ -13,10 +13,10 @@ const { Content, Footer } = Layout
 /* -------------------------------------------------------------------------- */
 export const PageLayout = () => {
   return (
-    <Layout style={{ minHeight: '1000vh' }}>
+    <Layout>
       <NotificationMsg />
       <CustomHeader />
-      <Content style={{ overflow: 'initial', paddingLeft: '50px', paddingRight: '50px', backgroundColor: 'grey' }}>
+      <Content style={{ overflow: 'initial', paddingLeft: '50px', paddingRight: '50px' }}>
         <Outlet />
       </Content>
       <Footer>Ant Design ©{new Date().getFullYear()} Created by Ant UED</Footer>

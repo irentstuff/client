@@ -5,6 +5,10 @@
 3. npm run dev (run app local)
 4. npm run server (run mock apis on port:5000 - only work for node > 18.0)
 
+# HOSTED ON (doesnt work since apis are still local)
+
+http://irentstuff-client.s3-website-ap-southeast-1.amazonaws.com/
+
 # FRAMEWORKS
 
 ## React + Vite
