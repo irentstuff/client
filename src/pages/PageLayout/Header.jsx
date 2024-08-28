@@ -16,52 +16,57 @@ const { Header } = Layout
 export const CustomHeader = () => {
   const navigate = useNavigate()
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
-  const [current, setCurrent] = useState('')
+  const [openMenu, setOpenMenu] = useState('')
 
   const items = [
     {
       label: 'My Items',
-      key: 'myItems',
+      key: 'MyItems',
       icon: <HomeOutlined />,
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
     {
       label: 'Message',
-      key: 'message',
+      key: 'Message',
       icon: <MailOutlined />,
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
     {
       label: 'Logout',
-      key: 'logout',
+      key: 'Logout',
       icon: <LogoutOutlined />,
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
     {
       label: 'Login',
-      key: 'login',
+      key: 'Login',
       icon: <LoginOutlined />,
       style: { display: currentUser.authenticated ? 'none' : 'inline-block' }
     }
   ]
 
-  const onClick = (e) => {
-    console.log(e)
-    navigate('/MyItems')
+  const openHomePage = () => {
+    navigate('/')
+    setOpenMenu('')
   }
 
-  const onClickHome = () => {
-    navigate('/')
+  const openMenuItem = (e) => {
+    navigate(`${e.key}`)
+    setOpenMenu(e.key)
   }
 
   return (
     <Header>
       <Row>
-        <Col onClick={onClickHome} span={6} style={{ color: 'white', opacity: '0.65', display: 'flex', justifyContent: 'flex-start' }}>
+        <Col
+          onClick={(e) => openHomePage(e)}
+          span={6}
+          style={{ color: 'white', opacity: '0.65', display: 'flex', justifyContent: 'flex-start' }}
+        >
           iRentStuff
         </Col>
         <Col span={18} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Menu onClick={onClick} selectedKeys={[current]} theme='dark' mode='horizontal' items={items} />
+          <Menu onClick={(e) => openMenuItem(e)} theme='dark' mode='horizontal' items={items} selectedKeys={openMenu} />
         </Col>
       </Row>
     </Header>

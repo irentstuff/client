@@ -17,20 +17,19 @@ export const HomePage = ({ myItems }) => {
   const allItems = useSelector((state) => state.iRentStuff.allItems)
   const [searchedItems, setSearchedItems] = useState([])
   const [initialDisplayItems, setInitialDisplayItems] = useState([])
-  console.log(initialDisplayItems)
-  console.log(myItems)
 
   useEffect(() => {
     if (myItems) {
       let getInitialDisplayItems = allItems.filter((item) => item.owner_id == currentUser.id)
-      console.log(getInitialDisplayItems)
       setInitialDisplayItems(getInitialDisplayItems)
-      setSearchedItems(getInitialDisplayItems)
     } else {
       setInitialDisplayItems(allItems)
-      setSearchedItems(allItems)
     }
-  }, [myItems])
+  }, [allItems, myItems])
+
+  useEffect(() => {
+    setSearchedItems(initialDisplayItems)
+  }, [initialDisplayItems])
 
   const onChange = (e) => {
     const searchedValue = e.target.value.toLowerCase()
