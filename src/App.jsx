@@ -13,6 +13,8 @@ import { getAllItems } from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { PageLayout } from './pages/PageLayout/PageLayout'
 import { HomePage } from './pages/HomePage'
+import { NoFoundPage } from './pages/NoFoundPage'
+import { UnauthorisedPage } from './pages/UnauthorisedPage'
 
 function App() {
   const dispatch = useDispatch()
@@ -59,7 +61,9 @@ function App() {
     <Routes>
       <Route path='/' element={<PageLayout />}>
         <Route path='/' element={<HomePage myItems={false} />} />
-        <Route path='/MyItems' element={<HomePage myItems={true} />} />
+        <Route path='MyItems' element={<HomePage myItems={true} />} />
+        <Route path='*' element={<NoFoundPage />} />
+        <Route path='unauthorised' element={<UnauthorisedPage />} />
       </Route>
     </Routes>
   )

@@ -3,6 +3,7 @@
 /* -------------------------------------------------------------------------- */
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 /* -------------------------------- COMPONENT ------------------------------- */
 import { Space, Input, Row } from 'antd'
 import { ItemDisplayCard } from '../components/ItemDisplayCard'
@@ -13,6 +14,7 @@ const { Search } = Input
 /*                                  HOMEPAGE                                  */
 /* -------------------------------------------------------------------------- */
 export const HomePage = ({ myItems }) => {
+  const navigate = useNavigate()
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItems = useSelector((state) => state.iRentStuff.allItems)
   const [searchedItems, setSearchedItems] = useState([])
@@ -20,6 +22,9 @@ export const HomePage = ({ myItems }) => {
 
   useEffect(() => {
     if (myItems) {
+      if (currentUser.authenticated == false) {
+        navigate('/unauthorised')
+      }
       let getInitialDisplayItems = allItems.filter((item) => item.owner_id == currentUser.id)
       setInitialDisplayItems(getInitialDisplayItems)
     } else {
