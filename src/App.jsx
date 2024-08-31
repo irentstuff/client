@@ -6,15 +6,17 @@ import './App.css'
 import { Routes, Route } from 'react-router-dom'
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
-import { updateError, updateSuccess, updateAllItems } from './redux/reducer'
+import { updateError, updateSuccess, updateAllItems, updateAllUsers } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems } from './services/api'
+import { getAllItems, getAllUsers } from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
-import { PageLayout } from './pages/PageLayout/PageLayout'
-import { HomePage } from './pages/HomePage'
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
+import { PageLayout } from './pages/PageLayout/PageLayout'
+import { HomePage } from './pages/HomePage'
+import { Login } from './pages/UserManagement/Login'
+import { Register } from './pages/UserManagement/Register'
 
 function App() {
   const dispatch = useDispatch()
@@ -23,6 +25,7 @@ function App() {
   const fetchDataAndSetGlobalState = async ({ item, apiService, updateGlobalState }) => {
     try {
       const response = await apiService()
+      console.log(item, response)
       if (response.status === 200) {
         dispatch(
           updateGlobalState({
@@ -55,6 +58,12 @@ function App() {
       apiService: getAllItems,
       updateGlobalState: updateAllItems
     })
+    // all users
+    fetchDataAndSetGlobalState({
+      item: apiLabels.allUsers,
+      apiService: getAllUsers,
+      updateGlobalState: updateAllUsers
+    })
   }, [])
 
   return (
@@ -62,6 +71,8 @@ function App() {
       <Route path='/' element={<PageLayout />}>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='MyItems' element={<HomePage myItems={true} />} />
+        <Route path='Login' element={<Login />} />
+        <Route path='Register' element={<Register />} />
         <Route path='*' element={<NoFoundPage />} />
         <Route path='unauthorised' element={<UnauthorisedPage />} />
       </Route>

@@ -1,6 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                   Imports                                  */
 /* -------------------------------------------------------------------------- */
+import { useSelector } from 'react-redux'
 import default_img from '../assets/img-placeholder.png'
 /* ---------------------------------- antd ---------------------------------- */
 import { Space, Typography, Col, Card, Avatar } from 'antd'
@@ -11,13 +12,18 @@ const { Meta } = Card
 /*                               ItemDisplayCard                              */
 /* -------------------------------------------------------------------------- */
 export const ItemDisplayCard = ({ itemDetails }) => {
+  const allUsers = useSelector((state) => state.iRentStuff.allUsers)
+  const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
+
+  console.log(userDetails)
+
   return (
     <Col xs={24} xl={8} key={itemDetails.id}>
       <Card
         title={
           <Meta
             avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
-            description={<Text>{itemDetails.ownerId}</Text>}
+            description={<Text>{userDetails ? userDetails.username : itemDetails.owner}</Text>}
           />
         }
         cover={
@@ -32,11 +38,17 @@ export const ItemDisplayCard = ({ itemDetails }) => {
         }
       >
         <Title level={3} ellipsis={true}>
-          {itemDetails.name}
+          {itemDetails.title}
         </Title>
         <Space direction='vertical'>
-          <Text>Rental Price (per day):</Text>
-          <Text strong>{`$${itemDetails.price_per_day}.00`}</Text>
+          <Text ellipsis={true}>
+            Rental Price (per day):
+            <Text strong>{` $${itemDetails.price_per_day}`}</Text>
+          </Text>
+          <Text ellipsis={true}>
+            Condition:
+            <Text strong>{` ${itemDetails.condition}`}</Text>
+          </Text>
         </Space>
       </Card>
     </Col>

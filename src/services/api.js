@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { apiURL, itemsURL } from './config'
+import { apiURL, itemsURL, usersURL } from './config'
 
 /* -------------------------------------------------------------------------- */
 /*                                    ITEMS                                   */
@@ -9,6 +9,41 @@ export async function getAllItems() {
     method: 'GET',
     //withCredentials: true,
     url: `${itemsURL}`
+  })
+
+  return data
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    USERS                                   */
+/* -------------------------------------------------------------------------- */
+export async function getAllUsers() {
+  const data = await axios({
+    method: 'GET',
+    //withCredentials: true,
+    url: `${usersURL}`
+  })
+
+  return data
+}
+
+export async function registerUser(payload) {
+  const data = await axios({
+    method: 'POST',
+    //withCredentials: true,
+    data: payload,
+    url: `${usersURL}`
+  })
+
+  return data
+}
+
+export async function getUserByEmailAndId(payload) {
+  const data = await axios({
+    method: 'GET',
+    //withCredentials: true,
+    data: payload,
+    url: `${usersURL}?username=${payload.username}?password=${payload.password}`
   })
 
   return data

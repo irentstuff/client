@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 /* -------------------------------- COMPONENT ------------------------------- */
-import { Space, Input, Row } from 'antd'
+import { Space, Input, Row, Pagination } from 'antd'
 import { ItemDisplayCard } from '../components/ItemDisplayCard'
 
 const { Search } = Input
@@ -25,10 +25,10 @@ export const HomePage = ({ myItems }) => {
       if (currentUser.authenticated == false) {
         navigate('/unauthorised')
       }
-      let getInitialDisplayItems = allItems.filter((item) => item.owner_id == currentUser.id)
+      let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.id)
       setInitialDisplayItems(getInitialDisplayItems)
     } else {
-      setInitialDisplayItems(allItems)
+      setInitialDisplayItems(allItems.results)
     }
   }, [allItems, myItems])
 
@@ -42,7 +42,7 @@ export const HomePage = ({ myItems }) => {
     if (searchedValue == '') {
       setSearchedItems(initialDisplayItems)
     } else {
-      let items = initialDisplayItems.filter((item) => item.name.toLowerCase().includes(searchedValue))
+      let items = initialDisplayItems.filter((item) => item.title.toLowerCase().includes(searchedValue))
       setSearchedItems(items)
     }
   }
