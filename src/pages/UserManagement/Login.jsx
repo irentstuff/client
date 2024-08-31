@@ -1,11 +1,65 @@
-import React from 'react'
+/* -------------------------------------------------------------------------- */
+/*                                   IMPORT                                   */
+/* -------------------------------------------------------------------------- */
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { updateCurrentUser, updateError, updateSuccess } from '../../redux/reducer'
+import { getUserByEmailAndId } from '../../services/api'
+/* -------------------------------- COMPONENT ------------------------------- */
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Form, Input, Flex, Typography, Row, Col, Space } from 'antd'
 const { Title } = Typography
 
 export const Login = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const loginUserLocal = async (payload) => {
+    try {
+      console.log(payload)
+      const response = await getUserByEmailAndId(payload)
+      console.log(response)
+      if (response.status === 200) {
+        dispatch(
+          updateSuccess({
+            status: true,
+            msg: `User is login successfully`
+          })
+        )
+        dispatch(
+          updateCurrentUser({
+            data: {
+              authenticated: true,
+              userDetails: response.data
+            }
+          })
+        )
+        navigate('/')
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
   const onFinish = (values) => {
     console.log('Received values of form: ', values)
+    const formattedPayload = {
+      username: values.username,
+      password: values.password
+    }
+    loginUserLocal(formattedPayload)
   }
 
   return (
@@ -54,7 +108,7 @@ export const Login = () => {
                   <Form.Item name='remember' valuePropName='checked' noStyle>
                     <Checkbox>Remember me</Checkbox>
                   </Form.Item>
-                  <a href=''>Forgot password</a>
+                  {/* <a href=''>Forgot password</a> */}
                 </Flex>
               </Form.Item>
 

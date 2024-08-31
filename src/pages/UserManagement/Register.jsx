@@ -2,7 +2,13 @@
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { updateError, updateSuccess } from '../../redux/reducer'
+
+/* ------------------------------- COMPONENTS ------------------------------- */
 import { Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
+import { registerUser } from '../../services/api'
 const { Title } = Typography
 
 const formItemLayout = {
@@ -41,8 +47,42 @@ const tailFormItemLayout = {
 /* -------------------------------------------------------------------------- */
 export const Register = () => {
   const [form] = Form.useForm()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const registerUserLocal = async (payload) => {
+    try {
+      const response = await registerUser(payload)
+      console.log(response)
+      if (response.status === 201) {
+        dispatch(
+          updateSuccess({
+            status: true,
+            msg: `User is registered successfully`
+          })
+        )
+        navigate('/Login')
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
   const onFinish = (values) => {
     console.log('Received values of form: ', values)
+    registerUserLocal(values)
   }
 
   return (
@@ -62,12 +102,8 @@ export const Register = () => {
               form={form}
               name='register'
               onFinish={onFinish}
-              initialValues={{
-                residence: ['zhejiang', 'hangzhou', 'xihu'],
-                prefix: '86'
-              }}
               style={{
-                maxWidth: 600
+                maxWidth: 800
               }}
               scrollToFirstError
             >
@@ -154,7 +190,7 @@ export const Register = () => {
                 <Input.Password />
               </Form.Item>
 
-              <Form.Item label='Captcha' extra='We must make sure that your are a human.'>
+              {/* <Form.Item label='Captcha' extra='We must make sure that your are a human.'>
                 <Row gutter={8}>
                   <Col span={12}>
                     <Form.Item
@@ -174,9 +210,9 @@ export const Register = () => {
                     <Button>Get captcha</Button>
                   </Col>
                 </Row>
-              </Form.Item>
+              </Form.Item> */}
 
-              <Form.Item
+              {/* <Form.Item
                 name='agreement'
                 valuePropName='checked'
                 rules={[
@@ -189,7 +225,7 @@ export const Register = () => {
                 <Checkbox>
                   I have read the <a href=''>agreement</a>
                 </Checkbox>
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item {...tailFormItemLayout}>
                 <Button type='primary' htmlType='submit'>
                   Register

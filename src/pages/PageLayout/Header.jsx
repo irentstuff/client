@@ -2,11 +2,12 @@
 /*                                   Imports                                  */
 /* -------------------------------------------------------------------------- */
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react'
 /* ---------------------------------- antd ---------------------------------- */
 import { HomeOutlined, MailOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons'
 import { Layout, Menu, Row, Col } from 'antd'
+import { updateCurrentUser } from '../../redux/reducer'
 
 const { Header } = Layout
 
@@ -14,6 +15,7 @@ const { Header } = Layout
 /*                                   HEADER                                   */
 /* -------------------------------------------------------------------------- */
 export const CustomHeader = () => {
+  const dispatch = useDispatch()
   const navigate = useNavigate()
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const [openMenu, setOpenMenu] = useState('')
@@ -51,8 +53,23 @@ export const CustomHeader = () => {
   }
 
   const openMenuItem = (e) => {
-    navigate(`${e.key}`)
-    setOpenMenu(e.key)
+    if (e.key != 'Logout') {
+      navigate(`${e.key}`)
+      setOpenMenu(e.key)
+    } else {
+      dispatch(
+        updateCurrentUser({
+          data: { authenticated: false }
+        })
+      )
+      dispatch(
+        updateSuccess({
+          status: true,
+          msg: `User is logout successfully`
+        })
+      )
+      navigate('/')
+    }
   }
 
   return (

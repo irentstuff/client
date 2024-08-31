@@ -27,6 +27,28 @@ export async function getAllUsers() {
   return data
 }
 
+export async function registerUser(payload) {
+  const data = await axios({
+    method: 'POST',
+    //withCredentials: true,
+    data: payload,
+    url: `${usersURL}`
+  })
+
+  return data
+}
+
+export async function getUserByEmailAndId(payload) {
+  const data = await axios({
+    method: 'GET',
+    //withCredentials: true,
+    data: payload,
+    url: `${usersURL}?username=${payload.username}?password=${payload.password}`
+  })
+
+  return data
+}
+
 /* -------------------------------------------------------------------------- */
 /*                           SAMPLE AXIOS FUNCTIONS                           */
 /* -------------------------------------------------------------------------- */

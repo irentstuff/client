@@ -16,5 +16,6 @@ export const apiType = {
 }
 
 export const apiLabels = {
-  allItems: 'ALL ITEMS'
+  allItems: 'ALL ITEMS',
+  allUsers: 'ALL USERS'
 }

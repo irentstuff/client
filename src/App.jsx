@@ -6,10 +6,10 @@ import './App.css'
 import { Routes, Route } from 'react-router-dom'
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
-import { updateError, updateSuccess, updateAllItems } from './redux/reducer'
+import { updateError, updateSuccess, updateAllItems, updateAllUsers } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems } from './services/api'
+import { getAllItems, getAllUsers } from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
@@ -25,11 +25,11 @@ function App() {
   const fetchDataAndSetGlobalState = async ({ item, apiService, updateGlobalState }) => {
     try {
       const response = await apiService()
-      console.log(response)
+      console.log(item, response)
       if (response.status === 200) {
         dispatch(
           updateGlobalState({
-            data: response.data.results,
+            data: response.data,
             type: apiType.initiate
           })
         )
@@ -57,6 +57,12 @@ function App() {
       item: apiLabels.allItems,
       apiService: getAllItems,
       updateGlobalState: updateAllItems
+    })
+    // all users
+    fetchDataAndSetGlobalState({
+      item: apiLabels.allUsers,
+      apiService: getAllUsers,
+      updateGlobalState: updateAllUsers
     })
   }, [])
 
