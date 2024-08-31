@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateCurrentUser, updateError, updateSuccess } from '../../redux/reducer'
 import { getUserByEmailAndId } from '../../services/api'
@@ -10,6 +10,9 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Form, Input, Flex, Typography, Row, Col, Space } from 'antd'
 const { Title } = Typography
 
+/* -------------------------------------------------------------------------- */
+/*                                    LOGIN                                   */
+/* -------------------------------------------------------------------------- */
 export const Login = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -20,21 +23,40 @@ export const Login = () => {
       const response = await getUserByEmailAndId(payload)
       console.log(response)
       if (response.status === 200) {
-        dispatch(
-          updateSuccess({
-            status: true,
-            msg: `User is login successfully`
-          })
-        )
-        dispatch(
-          updateCurrentUser({
-            data: {
+        if (response.data.length == 0) {
+          dispatch(
+            updateError({
+              status: true,
+              msg: 'User not found.'
+            })
+          )
+        } else {
+          dispatch(
+            updateSuccess({
+              status: true,
+              msg: `User is login successfully`
+            })
+          )
+          dispatch(
+            updateCurrentUser({
+              data: {
+                authenticated: true,
+                userDetails: response.data
+              }
+            })
+          )
+
+          // Persist user state in localStorage
+          localStorage.setItem(
+            'user',
+            JSON.stringify({
               authenticated: true,
               userDetails: response.data
-            }
-          })
-        )
-        navigate('/')
+            })
+          )
+
+          navigate('/')
+        }
       } else {
         dispatch(
           updateError({

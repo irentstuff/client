@@ -9,38 +9,8 @@ import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
 import { registerUser } from '../../services/api'
+import { formItemLayout, tailFormItemLayout } from '../../services/config'
 const { Title } = Typography
-
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24
-    },
-    sm: {
-      span: 8
-    }
-  },
-  wrapperCol: {
-    xs: {
-      span: 24
-    },
-    sm: {
-      span: 16
-    }
-  }
-}
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0
-    },
-    sm: {
-      span: 16,
-      offset: 8
-    }
-  }
-}
 
 /* -------------------------------------------------------------------------- */
 /*                                  REGISTER                                  */
@@ -103,7 +73,7 @@ export const Register = () => {
               name='register'
               onFinish={onFinish}
               style={{
-                maxWidth: 800
+                maxWidth: 850
               }}
               scrollToFirstError
             >
@@ -125,7 +95,7 @@ export const Register = () => {
               </Form.Item>
 
               <Form.Item
-                name='userName'
+                name='username'
                 label='Username'
                 rules={[
                   {

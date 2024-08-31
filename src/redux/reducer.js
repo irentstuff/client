@@ -8,7 +8,7 @@ export const iRentStuffSlice = createSlice({
     showError: { status: false, msg: '' },
     //AUTH
     allUsers: [],
-    currentUser: { authenticated: true, userDetails: {} },
+    currentUser: { authenticated: false, userDetails: [{}] },
     //ITEMS
     allItems: []
   },

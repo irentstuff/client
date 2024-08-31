@@ -21,14 +21,13 @@ export const HomePage = ({ myItems }) => {
   const [initialDisplayItems, setInitialDisplayItems] = useState([])
 
   useEffect(() => {
-    if (myItems) {
-      if (currentUser.authenticated == false) {
-        navigate('/unauthorised')
+    if (allItems?.results?.length >= 0) {
+      if (myItems) {
+        let getInitialDisplayItems = allItems.results.filter((item) => item.owner == currentUser.userDetails[0].id)
+        setInitialDisplayItems(getInitialDisplayItems)
+      } else {
+        setInitialDisplayItems(allItems.results)
       }
-      let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.id)
-      setInitialDisplayItems(getInitialDisplayItems)
-    } else {
-      setInitialDisplayItems(allItems.results)
     }
   }, [allItems, myItems])
 
@@ -58,7 +57,7 @@ export const HomePage = ({ myItems }) => {
     >
       <Search placeholder='Search for an item' allowClear onChange={onChange} />
       <Row gutter={[16, 24]}>
-        {searchedItems.length > 0 && searchedItems.map((item) => <ItemDisplayCard itemDetails={item} key={item.id} />)}
+        {searchedItems?.length > 0 && searchedItems.map((item) => <ItemDisplayCard itemDetails={item} key={item.id} />)}
       </Row>
     </Space>
   )

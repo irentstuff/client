@@ -15,8 +15,6 @@ export const ItemDisplayCard = ({ itemDetails }) => {
   const allUsers = useSelector((state) => state.iRentStuff.allUsers)
   const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
 
-  console.log(userDetails)
-
   return (
     <Col xs={24} xl={8} key={itemDetails.id}>
       <Card
