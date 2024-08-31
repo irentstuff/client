@@ -25,7 +25,7 @@ export const HomePage = ({ myItems }) => {
       if (currentUser.authenticated == false) {
         navigate('/unauthorised')
       }
-      let getInitialDisplayItems = allItems.filter((item) => item.owner_id == currentUser.id)
+      let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.id)
       setInitialDisplayItems(getInitialDisplayItems)
     } else {
       setInitialDisplayItems(allItems)
@@ -42,7 +42,7 @@ export const HomePage = ({ myItems }) => {
     if (searchedValue == '') {
       setSearchedItems(initialDisplayItems)
     } else {
-      let items = initialDisplayItems.filter((item) => item.name.toLowerCase().includes(searchedValue))
+      let items = initialDisplayItems.filter((item) => item.title.toLowerCase().includes(searchedValue))
       setSearchedItems(items)
     }
   }

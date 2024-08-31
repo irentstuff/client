@@ -25,10 +25,11 @@ function App() {
   const fetchDataAndSetGlobalState = async ({ item, apiService, updateGlobalState }) => {
     try {
       const response = await apiService()
+      console.log(response)
       if (response.status === 200) {
         dispatch(
           updateGlobalState({
-            data: response.data,
+            data: response.data.results,
             type: apiType.initiate
           })
         )
