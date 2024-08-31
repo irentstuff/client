@@ -20,6 +20,7 @@ export async function getAllItems() {
 export async function getAllUsers() {
   const data = await axios({
     method: 'GET',
+    mode: 'no-cors',
     //withCredentials: true,
     url: `${usersURL}`
   })
@@ -30,6 +31,7 @@ export async function getAllUsers() {
 export async function registerUser(payload) {
   const data = await axios({
     method: 'POST',
+    mode: 'no-cors',
     //withCredentials: true,
     data: payload,
     url: `${usersURL}`
@@ -41,6 +43,7 @@ export async function registerUser(payload) {
 export async function getUserByEmailAndId(payload) {
   const data = await axios({
     method: 'GET',
+    mode: 'no-cors',
     //withCredentials: true,
     data: payload,
     url: `${usersURL}?username=${payload.username}?password=${payload.password}`
