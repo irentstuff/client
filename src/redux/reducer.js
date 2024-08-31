@@ -31,7 +31,7 @@ export const iRentStuffSlice = createSlice({
     },
     //ITEMS
     updateAllItems: (state, action) => {
-      state.allItems = action.payload.data.results
+      state.allItems = action.payload.data
     }
   }
 })

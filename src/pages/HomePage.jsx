@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 /* -------------------------------- COMPONENT ------------------------------- */
-import { Space, Input, Row } from 'antd'
+import { Space, Input, Row, Pagination } from 'antd'
 import { ItemDisplayCard } from '../components/ItemDisplayCard'
 
 const { Search } = Input
@@ -28,7 +28,7 @@ export const HomePage = ({ myItems }) => {
       let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.id)
       setInitialDisplayItems(getInitialDisplayItems)
     } else {
-      setInitialDisplayItems(allItems)
+      setInitialDisplayItems(allItems.results)
     }
   }, [allItems, myItems])
 
