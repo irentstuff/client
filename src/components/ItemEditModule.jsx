@@ -1,16 +1,13 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Modal, Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
-import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../services/config'
+import { Modal, Col, Form, Input, Row, Select } from 'antd'
+import { formItemLayout, conditionOptions, availabilityOptions } from '../services/config'
 import { editItem } from '../services/api'
-
-const { Title } = Typography
 
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */

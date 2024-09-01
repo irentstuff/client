@@ -7,10 +7,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 import default_img from '../../assets/img-placeholder.png'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Popconfirm, Avatar, Button, Card, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
+import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography } from 'antd'
 import { UploadImage } from '../../components/UploadImage'
 import { deleteItem } from '../../services/api'
-import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../../services/config'
 import { ItemEditModule } from '../../components/ItemEditModule'
 const { Meta } = Card
 const { Title, Text } = Typography

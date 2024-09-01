@@ -1,15 +1,14 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
+import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
 import { UploadImage } from '../../components/UploadImage'
 import { createNewItem } from '../../services/api'
-import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../../services/config'
+import { formItemLayout, tailFormItemLayout, conditionOptions, availabilityOptions } from '../../services/config'
 const { Title } = Typography
 
 /* -------------------------------------------------------------------------- */
@@ -23,7 +22,6 @@ export const AddItem = () => {
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
   console.log(currentUser)
-  console.log(categoryOptions)
 
   const createNewItemLocal = async (payload) => {
     try {
