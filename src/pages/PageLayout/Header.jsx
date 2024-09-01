@@ -5,9 +5,9 @@ import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { useState } from 'react'
 /* ---------------------------------- antd ---------------------------------- */
-import { HomeOutlined, MailOutlined, LogoutOutlined, LoginOutlined } from '@ant-design/icons'
+import { HomeOutlined, MailOutlined, LogoutOutlined, LoginOutlined, PlusCircleOutlined } from '@ant-design/icons'
 import { Layout, Menu, Row, Col } from 'antd'
-import { updateCurrentUser } from '../../redux/reducer'
+import { updateSuccess, updateCurrentUser } from '../../redux/reducer'
 
 const { Header } = Layout
 
@@ -27,6 +27,13 @@ export const CustomHeader = () => {
       icon: <HomeOutlined />,
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
+    {
+      label: 'Add New Item',
+      key: 'AddItem',
+      icon: <PlusCircleOutlined />,
+      style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
+    },
+
     {
       label: 'Message',
       key: 'Message',
@@ -62,6 +69,7 @@ export const CustomHeader = () => {
           data: { authenticated: false }
         })
       )
+      localStorage.removeItem('user')
       dispatch(
         updateSuccess({
           status: true,

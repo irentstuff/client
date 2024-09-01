@@ -8,9 +8,10 @@ export const iRentStuffSlice = createSlice({
     showError: { status: false, msg: '' },
     //AUTH
     allUsers: [],
-    currentUser: { authenticated: true, userDetails: {} },
+    currentUser: { authenticated: false, userDetails: [{}] },
     //ITEMS
-    allItems: []
+    allItems: [],
+    allItemCategories: []
   },
   reducers: {
     //NOTIFICATION
@@ -32,11 +33,20 @@ export const iRentStuffSlice = createSlice({
     //ITEMS
     updateAllItems: (state, action) => {
       state.allItems = action.payload.data
+    },
+    updateAllItemCategories: (state, action) => {
+      const allItemCategories = action.payload.data
+      allItemCategories.map((cat) => {
+        ;(cat.value = cat.id), (cat.label = cat.name)
+      })
+      console.log(allItemCategories)
+      state.allItemCategories = allItemCategories
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { updateSuccess, updateError, updateAllUsers, updateCurrentUser, updateAllItems } = iRentStuffSlice.actions
+export const { updateSuccess, updateError, updateAllUsers, updateCurrentUser, updateAllItems, updateAllItemCategories } =
+  iRentStuffSlice.actions
 
 export default iRentStuffSlice.reducer

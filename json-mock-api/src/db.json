@@ -185,23 +185,7 @@
     {
       "id": "1eda",
       "email": "yingqi96@outlook.com",
-      "userName": "yingqi",
-      "nickname": "yingqi",
-      "password": "password",
-      "confirm": "password"
-    },
-    {
-      "id": "e738",
-      "email": "yingqi96@outlook.com",
-      "userName": "yingqi",
-      "nickname": "yingqi",
-      "password": "password",
-      "confirm": "password"
-    },
-    {
-      "id": "5425",
-      "email": "yingqi96@outlook.com",
-      "userName": "yingqi",
+      "username": "yingqi",
       "nickname": "yingqi",
       "password": "password",
       "confirm": "password"

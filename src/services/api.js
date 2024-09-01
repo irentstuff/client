@@ -14,6 +14,49 @@ export async function getAllItems() {
   return data
 }
 
+export async function getAllItemCategories() {
+  const data = await axios({
+    method: 'GET',
+    //withCredentials: true,
+    url: `${itemsURL}/cat`
+  })
+
+  return data
+}
+
+export async function createNewItem(payload) {
+  const data = await axios({
+    method: 'POST',
+    //withCredentials: true,
+    data: payload,
+    url: `${itemsURL}`
+  })
+
+  return data
+}
+
+export async function editItem(payload) {
+  const data = await axios({
+    method: 'PUT',
+    //withCredentials: true,
+    data: payload,
+    url: `${itemsURL}/${payload.id}`
+  })
+
+  return data
+}
+
+export async function deleteItem(payload) {
+  const data = await axios({
+    method: 'DELETE',
+    //withCredentials: true,
+    data: payload,
+    url: `${itemsURL}/${payload.id}`
+  })
+
+  return data
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                    USERS                                   */
 /* -------------------------------------------------------------------------- */
@@ -46,7 +89,7 @@ export async function getUserByEmailAndId(payload) {
     mode: 'no-cors',
     //withCredentials: true,
     data: payload,
-    url: `${usersURL}?username=${payload.username}?password=${payload.password}`
+    url: `${usersURL}?username=${payload.username}&&password=${payload.password}`
   })
 
   return data
