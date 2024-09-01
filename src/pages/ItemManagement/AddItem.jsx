@@ -63,7 +63,7 @@ export const AddItem = () => {
   }
 
   const onFinish = (values) => {
-    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails[0].id }
+    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails.username }
     console.log(formattedPayload)
     createNewItemLocal(formattedPayload)
   }
