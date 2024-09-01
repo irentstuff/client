@@ -18,7 +18,7 @@ import { HomePage } from './pages/HomePage'
 import { AddItem } from './pages/ItemManagement/AddItem'
 import { ViewItem } from './pages/ItemManagement/ViewItem'
 import { Login } from './pages/UserManagement/Login'
-import { Register } from './pages/UserManagement/Register'
+// import { Register } from './pages/UserManagement/RegisterWithAPI'
 
 function App() {
   const dispatch = useDispatch()
@@ -95,7 +95,7 @@ function App() {
         <Route path='AddItem' element={<AddItem />} />
         <Route path='ViewItem' element={<ViewItem />} />
         <Route path='Login' element={<Login />} />
-        <Route path='Register' element={<Register />} />
+        {/* <Route path='Register' element={<Register />} /> */}
         <Route path='*' element={<NoFoundPage />} />
         <Route path='unauthorised' element={<UnauthorisedPage />} />
       </Route>
