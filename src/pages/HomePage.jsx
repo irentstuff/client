@@ -3,7 +3,6 @@
 /* -------------------------------------------------------------------------- */
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 /* -------------------------------- COMPONENT ------------------------------- */
 import { Space, Input, Row, Pagination } from 'antd'
 import { ItemDisplayCard } from '../components/ItemDisplayCard'
@@ -14,19 +13,19 @@ const { Search } = Input
 /*                                  HOMEPAGE                                  */
 /* -------------------------------------------------------------------------- */
 export const HomePage = ({ myItems }) => {
-  const navigate = useNavigate()
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItems = useSelector((state) => state.iRentStuff.allItems)
   const [searchedItems, setSearchedItems] = useState([])
   const [initialDisplayItems, setInitialDisplayItems] = useState([])
+  console.log(allItems)
 
   useEffect(() => {
-    if (allItems?.results?.length >= 0) {
+    if (allItems) {
       if (myItems) {
-        let getInitialDisplayItems = allItems.results.filter((item) => item.owner == currentUser.userDetails[0].id)
+        let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.userDetails[0].id)
         setInitialDisplayItems(getInitialDisplayItems)
       } else {
-        setInitialDisplayItems(allItems.results)
+        setInitialDisplayItems(allItems)
       }
     }
   }, [allItems, myItems])

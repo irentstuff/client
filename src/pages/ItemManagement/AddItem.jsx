@@ -4,12 +4,12 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { updateError, updateSuccess } from '../redux/reducer'
+import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
-import { UploadImage } from '../components/UploadImage'
-import { createNewItem } from '../services/api'
-import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../services/config'
+import { UploadImage } from '../../components/UploadImage'
+import { createNewItem } from '../../services/api'
+import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../../services/config'
 const { Title } = Typography
 
 /* -------------------------------------------------------------------------- */
@@ -63,7 +63,7 @@ export const AddItem = () => {
   }
 
   const onFinish = (values) => {
-    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails[0].id }
+    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails[0].id, category: 1 }
     console.log(formattedPayload)
     createNewItemLocal(formattedPayload)
   }

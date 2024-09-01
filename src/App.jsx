@@ -15,7 +15,8 @@ import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
 import { PageLayout } from './pages/PageLayout/PageLayout'
 import { HomePage } from './pages/HomePage'
-import { AddItem } from './pages/AddItem'
+import { AddItem } from './pages/ItemManagement/AddItem'
+import { ViewItem } from './pages/ItemManagement/ViewItem'
 import { Login } from './pages/UserManagement/Login'
 import { Register } from './pages/UserManagement/Register'
 
@@ -84,7 +85,9 @@ function App() {
       <Route path='/' element={<PageLayout />}>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='MyItems' element={<HomePage myItems={true} />} />
+        <Route path='MyItems/ViewItem' element={<ViewItem />} />
         <Route path='AddItem' element={<AddItem />} />
+        <Route path='ViewItem' element={<ViewItem />} />
         <Route path='Login' element={<Login />} />
         <Route path='Register' element={<Register />} />
         <Route path='*' element={<NoFoundPage />} />

@@ -93,7 +93,6 @@ export const CustomHeader = () => {
         <Col span={18} style={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Menu onClick={(e) => openMenuItem(e)} theme='dark' mode='horizontal' items={items} selectedKeys={openMenu} />
         </Col>
-        {currentUser?.userDetails?.username}
       </Row>
     </Header>
   )

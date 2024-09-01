@@ -2,6 +2,7 @@
 /*                                   Imports                                  */
 /* -------------------------------------------------------------------------- */
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import default_img from '../assets/img-placeholder.png'
 /* ---------------------------------- antd ---------------------------------- */
 import { Space, Typography, Col, Card, Avatar } from 'antd'
@@ -12,8 +13,10 @@ const { Meta } = Card
 /*                               ItemDisplayCard                              */
 /* -------------------------------------------------------------------------- */
 export const ItemDisplayCard = ({ itemDetails }) => {
+  const navigate = useNavigate()
   const allUsers = useSelector((state) => state.iRentStuff.allUsers)
   const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
+  // console.log(itemDetails)
 
   return (
     <Col xs={24} xl={8} key={itemDetails.id}>
@@ -34,6 +37,8 @@ export const ItemDisplayCard = ({ itemDetails }) => {
             }}
           />
         }
+        hoverable
+        onClick={() => navigate('ViewItem', { state: itemDetails })}
       >
         <Title level={3} ellipsis={true}>
           {itemDetails.title}
