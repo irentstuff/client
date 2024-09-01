@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
 import { useAuthenticator } from '@aws-amplify/ui-react'
+import { ProtectedRoutes } from "./components/ProtectedRoutes"
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
 import { updateError, updateSuccess, updateAllItems, updateAllItemCategories, updateAllUsers, updateCurrentUser } from './redux/reducer'
@@ -103,12 +104,14 @@ function App() {
 
   return (
     <Routes>
-      <Route path='/' element={<PageLayout />}>
-        <Route path='/' element={<HomePage myItems={false} />} />
+      <Route element={<ProtectedRoutes authenticated={currentUser.authenticated} />}>
         <Route path='MyItems' element={<HomePage myItems={true} />} />
+        <Route path='ViewItem' element={<ViewItem />} />
         <Route path='MyItems/ViewItem' element={<ViewItem />} />
         <Route path='AddItem' element={<AddItem />} />
-        <Route path='ViewItem' element={<ViewItem />} />
+      </Route>
+      <Route path='/' element={<PageLayout />}>
+        <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />
         {/* <Route path='Register' element={<Register />} /> */}
         <Route path='*' element={<NoFoundPage />} />
