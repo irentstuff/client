@@ -14,12 +14,33 @@ export async function getAllItems() {
   return data
 }
 
+export async function getAllItemCategories() {
+  const data = await axios({
+    method: 'GET',
+    //withCredentials: true,
+    url: `${itemsURL}/cat`
+  })
+
+  return data
+}
+
 export async function createNewItem(payload) {
   const data = await axios({
     method: 'POST',
     //withCredentials: true,
     data: payload,
     url: `${itemsURL}`
+  })
+
+  return data
+}
+
+export async function editItem(payload) {
+  const data = await axios({
+    method: 'PUT',
+    //withCredentials: true,
+    data: payload,
+    url: `${itemsURL}/${payload.id}`
   })
 
   return data

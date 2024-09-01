@@ -6,10 +6,10 @@ import './App.css'
 import { Routes, Route } from 'react-router-dom'
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
-import { updateError, updateSuccess, updateAllItems, updateAllUsers, updateCurrentUser } from './redux/reducer'
+import { updateError, updateSuccess, updateAllItems, updateAllItemCategories, updateAllUsers, updateCurrentUser } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems, getAllUsers } from './services/api'
+import { getAllItems, getAllItemCategories, getAllUsers } from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
@@ -71,6 +71,12 @@ function App() {
       item: apiLabels.allItems,
       apiService: getAllItems,
       updateGlobalState: updateAllItems
+    })
+    // all item categories
+    fetchDataAndSetGlobalState({
+      item: apiLabels.allItemsCategories,
+      apiService: getAllItemCategories,
+      updateGlobalState: updateAllItemCategories
     })
     // all users
     fetchDataAndSetGlobalState({

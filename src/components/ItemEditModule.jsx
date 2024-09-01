@@ -4,36 +4,37 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { updateError, updateSuccess } from '../../redux/reducer'
+import { updateError, updateSuccess } from '../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
-import { UploadImage } from '../../components/UploadImage'
-import { createNewItem } from '../../services/api'
-import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../../services/config'
+import { Modal, Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
+import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../services/config'
+import { editItem } from '../services/api'
+
 const { Title } = Typography
 
 /* -------------------------------------------------------------------------- */
-/*                                  ADD ITEM                                  */
+/*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const AddItem = () => {
+export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
+  console.log(modalDetails)
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
-  console.log(currentUser)
-  console.log(categoryOptions)
 
-  const createNewItemLocal = async (payload) => {
+  const itemDetails = modalDetails?.data
+  console.log(itemDetails)
+
+  const editNewItemLocal = async (payload) => {
     try {
-      const response = await createNewItem(payload)
+      const response = await editItem(payload)
       console.log(response)
       if (response.status === 200) {
         dispatch(
           updateSuccess({
             status: true,
-            msg: `Item is added successfully`
+            msg: `Item is edited successfully`
           })
         )
         navigate('/MyItems')
@@ -56,38 +57,30 @@ export const AddItem = () => {
     }
   }
 
-  const normFile = (e) => {
-    console.log('Upload event:', e)
-    if (Array.isArray(e)) {
-      return e
-    }
-    return e?.fileList
-  }
-
-  const onFinish = (values) => {
-    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails[0].id }
+  const onFinish = () => {
+    const values = form.getFieldsValue()
+    const formattedPayload = { ...itemDetails, ...values }
     console.log(formattedPayload)
-    createNewItemLocal(formattedPayload)
+    editNewItemLocal(formattedPayload)
   }
 
   return (
     <>
-      <Space
-        direction='vertical'
-        size='large'
-        style={{
-          display: 'flex'
-        }}
+      <Modal
+        width={1000}
+        title={`Edit ${itemDetails.title}`}
+        open={modalDetails.state}
+        okText='Edit Item'
+        onOk={() => onFinish()}
+        onCancel={() => updateModalDetails({ state: false, data: {} })}
       >
-        <Title type={3}>Add New Item</Title>
         <Row justify='center'>
           <Col xs={24} xl={12}>
             <Form
               {...formItemLayout}
               form={form}
-              name='addNewItem'
-              initialValues={{ availability: 'available', description: '' }}
-              onFinish={onFinish}
+              name='editItem'
+              initialValues={itemDetails}
               style={{
                 maxWidth: 850
               }}
@@ -131,7 +124,11 @@ export const AddItem = () => {
                   }
                 ]}
               >
-                <Select defaultValue='' onChange={(value) => form.setFieldsValue({ category: value })} options={allItemCategories} />{' '}
+                <Select
+                  defaultValue={` ${allItemCategories.find((cat) => cat.id == itemDetails.category).label}`}
+                  onChange={(value) => form.setFieldsValue({ category: value })}
+                  options={allItemCategories}
+                />{' '}
               </Form.Item>
 
               <Form.Item
@@ -144,7 +141,11 @@ export const AddItem = () => {
                   }
                 ]}
               >
-                <Select defaultValue='' onChange={(value) => form.setFieldsValue({ condition: value })} options={conditionOptions} />{' '}
+                <Select
+                  defaultValue={itemDetails.condition}
+                  onChange={(value) => form.setFieldsValue({ condition: value })}
+                  options={conditionOptions}
+                />{' '}
               </Form.Item>
 
               <Form.Item
@@ -158,7 +159,7 @@ export const AddItem = () => {
                 ]}
               >
                 <Select
-                  defaultValue='available'
+                  defaultValue={itemDetails.availability}
                   onChange={(value) => form.setFieldsValue({ availability: value })}
                   options={availabilityOptions}
                 />{' '}
@@ -198,16 +199,10 @@ export const AddItem = () => {
               >
                 <UploadImage files={normFile} />
               </Form.Item> */}
-
-              <Form.Item {...tailFormItemLayout}>
-                <Button type='primary' htmlType='submit'>
-                  Add New Item
-                </Button>
-              </Form.Item>
             </Form>
           </Col>
         </Row>
-      </Space>
+      </Modal>
     </>
   )
 }

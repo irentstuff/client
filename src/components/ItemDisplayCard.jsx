@@ -16,6 +16,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
   const navigate = useNavigate()
   const allUsers = useSelector((state) => state.iRentStuff.allUsers)
   const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
+  const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
   // console.log(itemDetails)
 
   return (
@@ -45,12 +46,23 @@ export const ItemDisplayCard = ({ itemDetails }) => {
         </Title>
         <Space direction='vertical'>
           <Text ellipsis={true}>
-            Rental Price (per day):
-            <Text strong>{` $${itemDetails.price_per_day}`}</Text>
+            Category:
+            <Text strong>{` ${allItemCategories.find((cat) => cat.id == itemDetails.category).label}`}</Text>
           </Text>
+
           <Text ellipsis={true}>
             Condition:
             <Text strong>{` ${itemDetails.condition}`}</Text>
+          </Text>
+
+          <Text>
+            Rental Price (per day):
+            <Text strong>{` $${itemDetails.price_per_day}`}</Text>
+          </Text>
+
+          <Text>
+            Deposit Price (per day):
+            <Text strong>{` $${itemDetails.deposit}`}</Text>
           </Text>
         </Space>
       </Card>
