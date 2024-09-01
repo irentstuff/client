@@ -4,6 +4,7 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
+import { useAuthenticator } from '@aws-amplify/ui-react'
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
 import { updateError, updateSuccess, updateAllItems, updateAllItemCategories, updateAllUsers, updateCurrentUser } from './redux/reducer'
@@ -22,7 +23,9 @@ import { Login } from './pages/UserManagement/Login'
 
 function App() {
   const dispatch = useDispatch()
+  const { user } = useAuthenticator((context) => [context.user])
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
+
   console.log('CURRENTUSER', currentUser)
 
   /* ----------------- function to call get api and set redux ----------------- */
@@ -58,14 +61,14 @@ function App() {
   useEffect(() => {
     // current user
     // Retrieve user data from localStorage on component mount
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      dispatch(
-        updateCurrentUser({
-          data: JSON.parse(storedUser)
-        })
-      )
-    }
+    // const storedUser = localStorage.getItem('user')
+    // if (storedUser) {
+    //   dispatch(
+    //     updateCurrentUser({
+    //       data: JSON.parse(storedUser)
+    //     })
+    //   )
+    // }
     // all items
     fetchDataAndSetGlobalState({
       item: apiLabels.allItems,
@@ -78,13 +81,25 @@ function App() {
       apiService: getAllItemCategories,
       updateGlobalState: updateAllItemCategories
     })
-    // all users
-    fetchDataAndSetGlobalState({
-      item: apiLabels.allUsers,
-      apiService: getAllUsers,
-      updateGlobalState: updateAllUsers
-    })
+    // // all users
+    // fetchDataAndSetGlobalState({
+    //   item: apiLabels.allUsers,
+    //   apiService: getAllUsers,
+    //   updateGlobalState: updateAllUsers
+    // })
   }, [])
+
+  useEffect(() => {
+    console.log(user)
+
+    if (user != undefined) {
+      dispatch(
+        updateCurrentUser({
+          data: { authenticated: true, userDetails: user }
+        })
+      )
+    }
+  }, [user])
 
   return (
     <Routes>

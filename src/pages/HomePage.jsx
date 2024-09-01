@@ -22,7 +22,7 @@ export const HomePage = ({ myItems }) => {
   useEffect(() => {
     if (allItems) {
       if (myItems) {
-        let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.userDetails[0].id)
+        let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.userDetails.username)
         setInitialDisplayItems(getInitialDisplayItems)
       } else {
         setInitialDisplayItems(allItems)

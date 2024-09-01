@@ -32,7 +32,7 @@ export const ViewItem = () => {
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
 
-  const currentUserIsItemOwner = currentUser?.userDetails[0]?.id === itemDetails?.owner
+  const currentUserIsItemOwner = currentUser?.userDetails.username === itemDetails?.owner
 
   const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
 
