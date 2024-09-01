@@ -7,9 +7,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 import default_img from '../../assets/img-placeholder.png'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Avatar, Button, Card, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
+import { Popconfirm, Avatar, Button, Card, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
 import { UploadImage } from '../../components/UploadImage'
-import { createNewItem } from '../../services/api'
+import { deleteItem } from '../../services/api'
 import { formItemLayout, tailFormItemLayout, categoryOptions, conditionOptions, availabilityOptions } from '../../services/config'
 import { ItemEditModule } from '../../components/ItemEditModule'
 const { Meta } = Card
@@ -41,15 +41,15 @@ export const ViewItem = () => {
   console.log(currentUserIsItemOwner)
   console.log(editItemModule)
 
-  const createNewItemLocal = async (payload) => {
+  const deleteItemLocal = async (payload) => {
     try {
-      const response = await createNewItem(payload)
+      const response = await deleteItem(payload)
       console.log(response)
       if (response.status === 200) {
         dispatch(
           updateSuccess({
             status: true,
-            msg: `Item is added successfully`
+            msg: `Item is deleted successfully`
           })
         )
         navigate('/MyItems')
@@ -80,10 +80,9 @@ export const ViewItem = () => {
     return e?.fileList
   }
 
-  const onFinish = (values) => {
-    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails[0].id }
-    console.log(formattedPayload)
-    createNewItemLocal(formattedPayload)
+  const confirm = () => {
+    console.log(itemDetails)
+    deleteItemLocal(itemDetails)
   }
 
   return (
@@ -145,7 +144,22 @@ export const ViewItem = () => {
                 </Text>
 
                 {currentUserIsItemOwner ? (
-                  <Button onClick={() => setEditItemModule({ state: true, data: itemDetails })}>Edit Item</Button>
+                  <Row gutter={8}>
+                    <Col>
+                      <Button onClick={() => setEditItemModule({ state: true, data: itemDetails })}>Edit Item</Button>
+                    </Col>
+                    <Col>
+                      <Popconfirm
+                        title={`Delete item: ${itemDetails.title}`}
+                        description='Are you sure to delete this item?'
+                        onConfirm={confirm}
+                        okText='Yes'
+                        cancelText='No'
+                      >
+                        <Button danger>Delete Item</Button>
+                      </Popconfirm>
+                    </Col>
+                  </Row>
                 ) : (
                   <Button>Make Offer</Button>
                 )}

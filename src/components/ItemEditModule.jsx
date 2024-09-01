@@ -68,7 +68,7 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
     <>
       <Modal
         width={1000}
-        title={`Edit ${itemDetails.title}`}
+        title={`Edit Item`}
         open={modalDetails.state}
         okText='Edit Item'
         onOk={() => onFinish()}

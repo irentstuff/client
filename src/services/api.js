@@ -46,6 +46,17 @@ export async function editItem(payload) {
   return data
 }
 
+export async function deleteItem(payload) {
+  const data = await axios({
+    method: 'DELETE',
+    //withCredentials: true,
+    data: payload,
+    url: `${itemsURL}/${payload.id}`
+  })
+
+  return data
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                    USERS                                   */
 /* -------------------------------------------------------------------------- */
