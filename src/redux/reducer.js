@@ -8,7 +8,7 @@ export const iRentStuffSlice = createSlice({
     showError: { status: false, msg: '' },
     //AUTH
     allUsers: [],
-    currentUser: { authenticated: false, userDetails: [{}] },
+    currentUser: { authenticated: false, userDetails: {}, token: '' },
     //ITEMS
     allItems: [],
     allItemCategories: []
@@ -28,6 +28,7 @@ export const iRentStuffSlice = createSlice({
       state.allUsers = action.payload.data
     },
     updateCurrentUser: (state, action) => {
+      // console.log(action.payload.data)
       state.currentUser = action.payload.data
     },
     //ITEMS
@@ -39,7 +40,6 @@ export const iRentStuffSlice = createSlice({
       allItemCategories.map((cat) => {
         ;(cat.value = cat.id), (cat.label = cat.name)
       })
-      console.log(allItemCategories)
       state.allItemCategories = allItemCategories
     }
   }

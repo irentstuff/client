@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { apiURL, itemsURL, usersURL } from './config'
+import { store } from '../redux/store'
 
 /* -------------------------------------------------------------------------- */
 /*                                    ITEMS                                   */
@@ -7,7 +8,9 @@ import { apiURL, itemsURL, usersURL } from './config'
 export async function getAllItems() {
   const data = await axios({
     method: 'GET',
-    //withCredentials: true,
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
     url: `${itemsURL}`
   })
 
@@ -17,7 +20,9 @@ export async function getAllItems() {
 export async function getAllItemCategories() {
   const data = await axios({
     method: 'GET',
-    //withCredentials: true,
+    // headers: {
+    //   Authorization: `Bearer ${currentUser.token}` // Add the JWT token here
+    // },
     url: `${itemsURL}/cat`
   })
 
@@ -25,9 +30,14 @@ export async function getAllItemCategories() {
 }
 
 export async function createNewItem(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'POST',
-    //withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     data: payload,
     url: `${itemsURL}`
   })
@@ -36,9 +46,14 @@ export async function createNewItem(payload) {
 }
 
 export async function editItem(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'PUT',
-    //withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     data: payload,
     url: `${itemsURL}/${payload.id}`
   })
@@ -47,9 +62,14 @@ export async function editItem(payload) {
 }
 
 export async function deleteItem(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'DELETE',
-    //withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     data: payload,
     url: `${itemsURL}/${payload.id}`
   })
