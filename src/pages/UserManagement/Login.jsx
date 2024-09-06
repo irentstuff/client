@@ -24,14 +24,12 @@ export const Login = ({ signOut }) => {
   const { user } = useAuthenticator((context) => [context.user])
 
   useEffect(() => {
-    console.log(user)
-
     if (user != undefined) {
-      dispatch(
-        updateCurrentUser({
-          data: { authenticated: true, userDetails: user }
-        })
-      )
+      // dispatch(
+      //   updateCurrentUser({
+      //     data: { authenticated: true, userDetails: user}
+      //   })
+      // )
       navigate('/')
     }
   }, [user])

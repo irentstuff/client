@@ -59,17 +59,25 @@ function App() {
     }
   }
 
+  const getAccessTokenFromLocalStorage = () => {
+    // Get all keys from local storage
+    const allKeys = Object.keys(localStorage)
+
+    // Find the key that contains 'accessToken'
+    const accessTokenKey = allKeys.find((key) => key.endsWith('.accessToken'))
+
+    if (accessTokenKey) {
+      // Retrieve the token value
+      const token = localStorage.getItem(accessTokenKey)
+      // console.log('Access Token:', token)
+      return token
+    } else {
+      // console.error('Access token not found in local storage')
+      return null
+    }
+  }
+
   useEffect(() => {
-    // current user
-    // Retrieve user data from localStorage on component mount
-    // const storedUser = localStorage.getItem('user')
-    // if (storedUser) {
-    //   dispatch(
-    //     updateCurrentUser({
-    //       data: JSON.parse(storedUser)
-    //     })
-    //   )
-    // }
     // all items
     fetchDataAndSetGlobalState({
       item: apiLabels.allItems,
@@ -94,9 +102,11 @@ function App() {
     console.log(user)
 
     if (user != undefined) {
+      // Function to get the access token from local storage and set state
+      const token = getAccessTokenFromLocalStorage()
       dispatch(
         updateCurrentUser({
-          data: { authenticated: true, userDetails: user }
+          data: { authenticated: true, userDetails: user, token: token }
         })
       )
     }

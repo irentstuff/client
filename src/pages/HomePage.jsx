@@ -17,7 +17,7 @@ export const HomePage = ({ myItems }) => {
   const allItems = useSelector((state) => state.iRentStuff.allItems)
   const [searchedItems, setSearchedItems] = useState([])
   const [initialDisplayItems, setInitialDisplayItems] = useState([])
-  console.log(allItems)
+  // console.log(allItems)
 
   useEffect(() => {
     if (allItems) {

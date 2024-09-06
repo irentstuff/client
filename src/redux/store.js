@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import iRentStuffSlice from './reducer'
 
-export default configureStore({
+export const store = configureStore({
   reducer: { iRentStuff: iRentStuffSlice }
 })
