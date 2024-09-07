@@ -35,7 +35,7 @@ export const AddItem = () => {
           })
         )
         navigate('/MyItems')
-        window.location.reload()
+        // window.location.reload()
       } else {
         dispatch(
           updateError({
