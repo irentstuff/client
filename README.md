@@ -5,9 +5,9 @@
 3. npm run dev (run app local)
 4. npm run server (run mock apis on port:5000 - only work for node > 18.0)
 
-# HOSTED ON (doesnt work since apis are still local)
+# HOSTED ON 
 
-http://irentstuff-client.s3-website-ap-southeast-1.amazonaws.com/
+https://d2v4494vs7x6f4.cloudfront.net/
 
 # FRAMEWORKS
 
@@ -39,7 +39,7 @@ https://ant.design/
 - testing
 - npm audit
 - deploy to s3 :white_check_mark:
-- cloudfront
+- cloudfront :white_check_mark:
 
 resources:
 
