@@ -4,6 +4,8 @@
 import { useState, useEffect } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
+import { useAuthenticator } from '@aws-amplify/ui-react'
+import { ProtectedRoutes } from './components/ProtectedRoutes'
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
 import { updateError, updateSuccess, updateAllItems, updateAllItemCategories, updateAllUsers, updateCurrentUser } from './redux/reducer'
@@ -18,11 +20,13 @@ import { HomePage } from './pages/HomePage'
 import { AddItem } from './pages/ItemManagement/AddItem'
 import { ViewItem } from './pages/ItemManagement/ViewItem'
 import { Login } from './pages/UserManagement/Login'
-import { Register } from './pages/UserManagement/Register'
+// import { Register } from './pages/UserManagement/RegisterWithAPI'
 
 function App() {
   const dispatch = useDispatch()
+  const { user } = useAuthenticator((context) => [context.user])
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
+
   console.log('CURRENTUSER', currentUser)
 
   /* ----------------- function to call get api and set redux ----------------- */
@@ -55,17 +59,25 @@ function App() {
     }
   }
 
-  useEffect(() => {
-    // current user
-    // Retrieve user data from localStorage on component mount
-    const storedUser = localStorage.getItem('user')
-    if (storedUser) {
-      dispatch(
-        updateCurrentUser({
-          data: JSON.parse(storedUser)
-        })
-      )
+  const getAccessTokenFromLocalStorage = () => {
+    // Get all keys from local storage
+    const allKeys = Object.keys(localStorage)
+
+    // Find the key that contains 'accessToken'
+    const idTokenKey = allKeys.find((key) => key.endsWith('.idToken'))
+
+    if (idTokenKey) {
+      // Retrieve the token value
+      const token = localStorage.getItem(idTokenKey)
+      // console.log('Access Token:', token)
+      return token
+    } else {
+      // console.error('Access token not found in local storage')
+      return null
     }
+  }
+
+  useEffect(() => {
     // all items
     fetchDataAndSetGlobalState({
       item: apiLabels.allItems,
@@ -78,24 +90,40 @@ function App() {
       apiService: getAllItemCategories,
       updateGlobalState: updateAllItemCategories
     })
-    // all users
-    fetchDataAndSetGlobalState({
-      item: apiLabels.allUsers,
-      apiService: getAllUsers,
-      updateGlobalState: updateAllUsers
-    })
+    // // all users
+    // fetchDataAndSetGlobalState({
+    //   item: apiLabels.allUsers,
+    //   apiService: getAllUsers,
+    //   updateGlobalState: updateAllUsers
+    // })
   }, [])
+
+  useEffect(() => {
+    console.log(user)
+
+    if (user != undefined) {
+      // Function to get the access token from local storage and set state
+      const token = getAccessTokenFromLocalStorage()
+      dispatch(
+        updateCurrentUser({
+          data: { authenticated: true, userDetails: user, token: token }
+        })
+      )
+    }
+  }, [user])
 
   return (
     <Routes>
       <Route path='/' element={<PageLayout />}>
+        <Route element={<ProtectedRoutes authenticated={currentUser.authenticated} />}>
+          <Route path='MyItems' element={<HomePage myItems={true} />} />
+          <Route path='ViewItem' element={<ViewItem />} />
+          <Route path='MyItems/ViewItem' element={<ViewItem />} />
+          <Route path='AddItem' element={<AddItem />} />
+        </Route>
         <Route path='/' element={<HomePage myItems={false} />} />
-        <Route path='MyItems' element={<HomePage myItems={true} />} />
-        <Route path='MyItems/ViewItem' element={<ViewItem />} />
-        <Route path='AddItem' element={<AddItem />} />
-        <Route path='ViewItem' element={<ViewItem />} />
         <Route path='Login' element={<Login />} />
-        <Route path='Register' element={<Register />} />
+        {/* <Route path='Register' element={<Register />} /> */}
         <Route path='*' element={<NoFoundPage />} />
         <Route path='unauthorised' element={<UnauthorisedPage />} />
       </Route>

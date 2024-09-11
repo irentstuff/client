@@ -15,7 +15,7 @@ const { Title } = Typography
 /* -------------------------------------------------------------------------- */
 /*                                  REGISTER                                  */
 /* -------------------------------------------------------------------------- */
-export const Register = () => {
+export const RegisterWithAPI = () => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()

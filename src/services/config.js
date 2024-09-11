@@ -1,12 +1,12 @@
 /* -------------------------------------------------------------------------- */
 /*                                    APIS                                    */
 /* -------------------------------------------------------------------------- */
-const hostname = 'http://localhost:5000'
+// const hostname = 'http://localhost:5000'
+const hostname = 'https://pxgwc7gdz1.execute-api.ap-southeast-1.amazonaws.com/dev'
 
-export const apiURL = `${hostname}`
-// export const itemsURL = `${hostname}/items`
-export const itemsURL = 'https://mlkou5mk3a.execute-api.ap-southeast-1.amazonaws.com/dev/items'
 export const usersURL = `${hostname}/users`
+export const itemsURL = `${hostname}/items`
+export const reviewsURL = `${hostname}/reviews`
 
 export const apiType = {
   initiate: 'initiate',
@@ -59,24 +59,6 @@ export const tailFormItemLayout = {
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM FORM                                 */
 /* -------------------------------------------------------------------------- */
-export const categoryOptions = [
-  {
-    value: 'electronics',
-    label: 'Electronics'
-  },
-  {
-    value: 'fashion',
-    label: 'Fashion'
-  },
-  {
-    value: 'household',
-    label: 'Household'
-  },
-  {
-    value: 'others',
-    label: 'Others'
-  }
-]
 export const conditionOptions = [
   {
     value: 'excellent',

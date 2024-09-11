@@ -17,12 +17,12 @@ export const HomePage = ({ myItems }) => {
   const allItems = useSelector((state) => state.iRentStuff.allItems)
   const [searchedItems, setSearchedItems] = useState([])
   const [initialDisplayItems, setInitialDisplayItems] = useState([])
-  console.log(allItems)
+  // console.log(allItems)
 
   useEffect(() => {
     if (allItems) {
       if (myItems) {
-        let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.userDetails[0].id)
+        let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.userDetails.username)
         setInitialDisplayItems(getInitialDisplayItems)
       } else {
         setInitialDisplayItems(allItems)
