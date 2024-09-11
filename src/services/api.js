@@ -92,13 +92,13 @@ export async function deleteItem(payload) {
 /* -------------------------------------------------------------------------- */
 /*                                ITEMS IMAGES                                */
 /* -------------------------------------------------------------------------- */
-export async function getItemImage(payload) {
+export async function getItemImage(url) {
   const data = await axios({
     method: 'GET',
     // headers: {
     //   Authorization: `Bearer ${token}` // Add the JWT token here
     // },
-    url: `${assetsURL}/${payload.id}`
+    url: `${url}`
   })
 
   return data

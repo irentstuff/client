@@ -5,12 +5,11 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
-import default_img from '../../assets/img-placeholder.png'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography } from 'antd'
-import { UploadImage } from '../../components/UploadImage'
-import { deleteItem, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
+import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image } from 'antd'
+import { deleteItem, getItemImage, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
 import { ItemEditModule } from '../../components/ItemEditModule'
+import { assetsURL } from '../../services/config'
 const { Meta } = Card
 const { Title, Text } = Typography
 
@@ -35,8 +34,10 @@ export const ViewItem = () => {
   const currentUserIsItemOwner = currentUser?.userDetails.userId === itemDetails?.owner
 
   const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
+  const [itemImages, setItemImages] = useState([])
 
   console.log(itemDetails)
+  console.log(itemImages)
   console.log(currentUserIsItemOwner)
   console.log(editItemModule)
 
@@ -54,6 +55,33 @@ export const ViewItem = () => {
         )
         navigate('/MyItems')
         window.location.reload()
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
+  //get images
+  const getItemImageLocal = async (payload) => {
+    try {
+      const response = await getItemImage(payload)
+      console.log(response)
+      if (response.status === 200) {
+        if (response.data.length > 0 || response.data !== null) {
+          setItemImages(response.data)
+        }
       } else {
         dispatch(
           updateError({
@@ -133,6 +161,10 @@ export const ViewItem = () => {
   }
 
   useEffect(() => {
+    //get item images
+    if (itemDetails.image !== '') {
+      getItemImageLocal(itemDetails?.image)
+    }
     //get reviews for item on load
     // getAverageReviewsForItemLocal(itemDetails)
     // getReviewsForItemLocal(itemDetails)
@@ -163,14 +195,23 @@ export const ViewItem = () => {
         >
           <Row justify={'start'}>
             <Col xs={24} xl={8}>
-              <img
-                alt=''
-                src={itemDetails.img_path}
-                onError={(event) => {
-                  event.target.src = { default_img }
-                  event.onerror = null
-                }}
-              />
+              {itemImages.length === 0 ? (
+                <Image width={200} src={`${assetsURL}/common/no-img.jpg`} />
+              ) : (
+                <Image.PreviewGroup
+                  preview={{
+                    onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
+                  }}
+                >
+                  {itemImages.map((image) => (
+                    <Image
+                      key={image.Key}
+                      width={200}
+                      src={`${itemDetails.image}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`}
+                    />
+                  ))}
+                </Image.PreviewGroup>
+              )}
             </Col>
             <Col xs={24} xl={16}>
               <Space direction='vertical' size={'large'}>

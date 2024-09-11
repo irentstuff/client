@@ -24,8 +24,6 @@ export const AddItem = () => {
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
   const [uploadedFileList, setFileList] = useState([])
 
-  console.log(uploadedFileList)
-
   const createNewItemLocal = async (payload) => {
     try {
       const response = await createNewItem(payload)
@@ -57,11 +55,11 @@ export const AddItem = () => {
     }
   }
 
-  const uploadItemImageLocal = async (payload, imageFolderUrl) => {
+  const uploadItemImageLocal = async (payload, imageUrl) => {
     try {
-      console.log(payload, imageFolderUrl)
-      const imageUrl = `${imageFolderUrl}/${payload.originFileObj.name}`
-      const response = await uploadItemImage(payload.originFileObj, imageUrl)
+      console.log(payload, imageUrl)
+
+      const response = await uploadItemImage(payload, imageUrl)
       console.log(response)
       if (response.status === 200) {
         // window.location.reload()
@@ -94,8 +92,8 @@ export const AddItem = () => {
             msg: `Item is edited successfully`
           })
         )
-        navigate('/MyItems')
-        window.location.reload()
+        // navigate('/MyItems')
+        // window.location.reload()
       } else {
         dispatch(
           updateError({
@@ -119,11 +117,14 @@ export const AddItem = () => {
     console.log(formattedPayload)
     const createdResponsed = await createNewItemLocal(formattedPayload)
     const imageFolderUrl = `${assetsURL}/${createdResponsed.id}`
+    // const imageFolderUrl = `${assetsURL}/72`
 
     //upload image based on imageid created
+    console.log(uploadedFileList)
     if (imageFolderUrl !== undefined) {
       uploadedFileList.map((img) => {
-        uploadItemImageLocal(img, imageFolderUrl)
+        const imageUrl = `${imageFolderUrl}/${img.originFileObj.name}`
+        uploadItemImageLocal(img.originFileObj, imageUrl)
       })
     }
 
