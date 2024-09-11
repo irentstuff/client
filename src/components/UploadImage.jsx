@@ -16,29 +16,11 @@ const getBase64 = (file) =>
 /* -------------------------------------------------------------------------- */
 /*                                UPLOAD IMAGE                                */
 /* -------------------------------------------------------------------------- */
-export const UploadImage = () => {
+export const UploadImage = ({ fileList, setFileList }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
-  const [fileList, setFileList] = useState([
-    {
-      uid: '-1',
-      name: 'image.png',
-      status: 'done',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-xxx',
-      percent: 50,
-      name: 'image.png',
-      status: 'uploading',
-      url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'
-    },
-    {
-      uid: '-5',
-      name: 'image.png',
-      status: 'error'
-    }
-  ])
+  // const [fileList, setFileList] = useState([])
+
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj)
@@ -46,7 +28,9 @@ export const UploadImage = () => {
     setPreviewImage(file.url || file.preview)
     setPreviewOpen(true)
   }
+
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
+
   const uploadButton = (
     <button
       style={{
@@ -65,10 +49,19 @@ export const UploadImage = () => {
       </div>
     </button>
   )
+
   return (
     <>
-      <Upload listType='picture-card' fileList={fileList} onPreview={handlePreview} onChange={handleChange}>
-        {fileList.length >= 6 ? null : uploadButton}
+      <Upload
+        listType='picture-card'
+        accept='image/png, image/jpeg'
+        fileList={fileList}
+        onPreview={handlePreview}
+        onChange={handleChange}
+        multiple={true}
+        beforeUpload={() => false}
+      >
+        {fileList?.length >= 6 ? null : uploadButton}
       </Upload>
       {previewImage && (
         <Image

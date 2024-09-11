@@ -32,7 +32,7 @@ export const ViewItem = () => {
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
 
-  const currentUserIsItemOwner = currentUser?.userDetails.username === itemDetails?.owner
+  const currentUserIsItemOwner = currentUser?.userDetails.userId === itemDetails?.owner
 
   const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
 
@@ -134,8 +134,8 @@ export const ViewItem = () => {
 
   useEffect(() => {
     //get reviews for item on load
-    getAverageReviewsForItemLocal(itemDetails)
-    getReviewsForItemLocal(itemDetails)
+    // getAverageReviewsForItemLocal(itemDetails)
+    // getReviewsForItemLocal(itemDetails)
   }, [itemDetails])
 
   return (
@@ -152,7 +152,11 @@ export const ViewItem = () => {
           title={
             <Meta
               avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
-              description={<Text>{userDetails ? userDetails.username : itemDetails.owner}</Text>}
+              description={
+                <Text>
+                  {itemDetails.owner} {itemDetails.created_date}
+                </Text>
+              }
             />
           }
           style={{ textAlign: 'left' }}

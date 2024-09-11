@@ -25,7 +25,11 @@ export const ItemDisplayCard = ({ itemDetails }) => {
         title={
           <Meta
             avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
-            description={<Text>{userDetails ? userDetails.username : itemDetails.owner}</Text>}
+            description={
+              <Text>
+                {itemDetails.owner} {itemDetails.created_date}
+              </Text>
+            }
           />
         }
         cover={
