@@ -2,9 +2,8 @@
 /*                                    APIS                                    */
 /* -------------------------------------------------------------------------- */
 // const hostname = 'http://localhost:5000'
-const hostname = 'https://pxgwc7gdz1.execute-api.ap-southeast-1.amazonaws.com/dev/'
+const hostname = 'https://pxgwc7gdz1.execute-api.ap-southeast-1.amazonaws.com/dev'
 
-// export const apiURL = `${hostname}`
 export const usersURL = `${hostname}/users`
 export const itemsURL = `${hostname}/items`
 export const reviewsURL = `${hostname}/reviews`

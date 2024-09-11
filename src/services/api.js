@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { apiURL, itemsURL, reviewsURL, usersURL } from './config'
+import { itemsURL, reviewsURL, usersURL } from './config'
 import { store } from '../redux/store'
 
 /* -------------------------------------------------------------------------- */
@@ -81,11 +81,14 @@ export async function deleteItem(payload) {
 /*                                   REVIEWS                                  */
 /* -------------------------------------------------------------------------- */
 export async function getReviewsForItem(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'GET',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     url: `${reviewsURL}/items/${payload.id}`
   })
 
@@ -93,11 +96,14 @@ export async function getReviewsForItem(payload) {
 }
 
 export async function getAverageReviewsForItem(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'GET',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     url: `${reviewsURL}/items/${payload.id}/rating`
   })
 
@@ -105,11 +111,14 @@ export async function getAverageReviewsForItem(payload) {
 }
 
 export async function getReviewsForUser(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'GET',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     url: `${reviewsURL}/user/${payload.id}`
   })
 
@@ -117,11 +126,14 @@ export async function getReviewsForUser(payload) {
 }
 
 export async function getReviewsByReviewId(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'GET',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     url: `${reviewsURL}/${payload.id}`
   })
 

@@ -64,11 +64,11 @@ function App() {
     const allKeys = Object.keys(localStorage)
 
     // Find the key that contains 'accessToken'
-    const accessTokenKey = allKeys.find((key) => key.endsWith('.accessToken'))
+    const idTokenKey = allKeys.find((key) => key.endsWith('.idToken'))
 
-    if (accessTokenKey) {
+    if (idTokenKey) {
       // Retrieve the token value
-      const token = localStorage.getItem(accessTokenKey)
+      const token = localStorage.getItem(idTokenKey)
       // console.log('Access Token:', token)
       return token
     } else {

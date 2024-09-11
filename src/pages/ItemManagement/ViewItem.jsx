@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
@@ -9,7 +9,7 @@ import default_img from '../../assets/img-placeholder.png'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography } from 'antd'
 import { UploadImage } from '../../components/UploadImage'
-import { deleteItem } from '../../services/api'
+import { deleteItem, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
 import { ItemEditModule } from '../../components/ItemEditModule'
 const { Meta } = Card
 const { Title, Text } = Typography
@@ -40,6 +40,7 @@ export const ViewItem = () => {
   console.log(currentUserIsItemOwner)
   console.log(editItemModule)
 
+  /* ------------------------------ api services ------------------------------ */
   const deleteItemLocal = async (payload) => {
     try {
       const response = await deleteItem(payload)
@@ -71,6 +72,53 @@ export const ViewItem = () => {
     }
   }
 
+  //get reviews for item
+  const getAverageReviewsForItemLocal = async (payload) => {
+    try {
+      const response = await getAverageReviewsForItem(payload)
+      console.log(response)
+      if (response.status === 200) {
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+  const getReviewsForItemLocal = async (payload) => {
+    try {
+      const response = await getReviewsForItem(payload)
+      console.log(response)
+      if (response.status === 200) {
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
+  /* ----------------------------- page functions ----------------------------- */
   const normFile = (e) => {
     console.log('Upload event:', e)
     if (Array.isArray(e)) {
@@ -83,6 +131,12 @@ export const ViewItem = () => {
     console.log(itemDetails)
     deleteItemLocal(itemDetails)
   }
+
+  useEffect(() => {
+    //get reviews for item on load
+    getAverageReviewsForItemLocal(itemDetails)
+    getReviewsForItemLocal(itemDetails)
+  }, [itemDetails])
 
   return (
     <>
