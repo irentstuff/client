@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { itemsURL, reviewsURL, usersURL } from './config'
+import { itemsURL, reviewsURL, assetsURL, usersURL } from './config'
 import { store } from '../redux/store'
 
 /* -------------------------------------------------------------------------- */
@@ -12,6 +12,18 @@ export async function getAllItems() {
     //   Authorization: `Bearer ${token}` // Add the JWT token here
     // },
     url: `${itemsURL}`
+  })
+
+  return data
+}
+
+export async function getItemsByQueryParam(queryParam) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${itemsURL}?${queryParam}`
   })
 
   return data
@@ -72,6 +84,65 @@ export async function deleteItem(payload) {
     },
     data: payload,
     url: `${itemsURL}/${payload.id}`
+  })
+
+  return data
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                ITEMS IMAGES                                */
+/* -------------------------------------------------------------------------- */
+export async function getItemImage(url) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${url}`
+  })
+
+  return data
+}
+
+export async function getOneItemImage(url) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${url}?getOne=true`
+  })
+
+  return data
+}
+
+export async function uploadItemImage(payload, url) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': payload.type
+    },
+    data: payload,
+    url: `${url}`
+  })
+
+  return data
+}
+
+export async function deleteItemImage(url) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'DELETE',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${url}`
   })
 
   return data

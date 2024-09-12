@@ -8,10 +8,18 @@ import { useAuthenticator } from '@aws-amplify/ui-react'
 import { ProtectedRoutes } from './components/ProtectedRoutes'
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
-import { updateError, updateSuccess, updateAllItems, updateAllItemCategories, updateAllUsers, updateCurrentUser } from './redux/reducer'
+import {
+  updateError,
+  updateSuccess,
+  updateAllItems,
+  updateAllItemCategories,
+  updateAllItemsCreatedByCurrentUser,
+  updateAllUsers,
+  updateCurrentUser
+} from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems, getAllItemCategories, getAllUsers } from './services/api'
+import { getAllItems, getAllItemCategories, getItemsByQueryParam, getAllUsers } from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
@@ -30,9 +38,9 @@ function App() {
   console.log('CURRENTUSER', currentUser)
 
   /* ----------------- function to call get api and set redux ----------------- */
-  const fetchDataAndSetGlobalState = async ({ item, apiService, updateGlobalState }) => {
+  const fetchDataAndSetGlobalState = async ({ item, apiService, updateGlobalState, queryParam }) => {
     try {
-      const response = await apiService()
+      const response = await apiService(queryParam)
       console.log(item, response)
       if (response.status === 200) {
         dispatch(
@@ -111,6 +119,18 @@ function App() {
       )
     }
   }, [user])
+
+  useEffect(() => {
+    if (currentUser.authenticated) {
+      // all items created by current user
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allItemsCreatedByCurrentUser,
+        apiService: getItemsByQueryParam,
+        updateGlobalState: updateAllItemsCreatedByCurrentUser,
+        queryParam: `ownername=${currentUser.userDetails.username}&valid=0`
+      })
+    }
+  }, [currentUser])
 
   return (
     <Routes>

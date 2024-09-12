@@ -15,6 +15,7 @@ const { Search } = Input
 export const HomePage = ({ myItems }) => {
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItems = useSelector((state) => state.iRentStuff.allItems)
+  const allItemsCreatedByCurrentUser = useSelector((state) => state.iRentStuff.allItemsCreatedByCurrentUser)
   const [searchedItems, setSearchedItems] = useState([])
   const [initialDisplayItems, setInitialDisplayItems] = useState([])
   // console.log(allItems)
@@ -22,8 +23,8 @@ export const HomePage = ({ myItems }) => {
   useEffect(() => {
     if (allItems) {
       if (myItems) {
-        let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.userDetails.username)
-        setInitialDisplayItems(getInitialDisplayItems)
+        // let getInitialDisplayItems = allItems.filter((item) => item.owner == currentUser.userDetails.username)
+        setInitialDisplayItems(allItemsCreatedByCurrentUser)
       } else {
         setInitialDisplayItems(allItems)
       }

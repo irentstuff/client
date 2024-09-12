@@ -6,6 +6,7 @@ const hostname = 'https://pxgwc7gdz1.execute-api.ap-southeast-1.amazonaws.com/de
 
 export const usersURL = `${hostname}/users`
 export const itemsURL = `${hostname}/items`
+export const assetsURL = `${hostname}/assets/irentstuff-assets`
 export const reviewsURL = `${hostname}/reviews`
 
 export const apiType = {
@@ -18,6 +19,7 @@ export const apiType = {
 export const apiLabels = {
   allItems: 'ALL ITEMS',
   allItemsCategories: 'ALL ITEMS CATEGORIES',
+  allItemsCreatedByCurrentUser: 'ALL ITEMS BY CURRENT USER',
   allUsers: 'ALL USERS'
 }
 
