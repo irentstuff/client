@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { apiURL, itemsURL, usersURL } from './config'
+import { itemsURL, reviewsURL, assetsURL, usersURL } from './config'
 import { store } from '../redux/store'
 
 /* -------------------------------------------------------------------------- */
@@ -12,6 +12,18 @@ export async function getAllItems() {
     //   Authorization: `Bearer ${token}` // Add the JWT token here
     // },
     url: `${itemsURL}`
+  })
+
+  return data
+}
+
+export async function getItemsByQueryParam(queryParam) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${itemsURL}?${queryParam}`
   })
 
   return data
@@ -78,6 +90,176 @@ export async function deleteItem(payload) {
 }
 
 /* -------------------------------------------------------------------------- */
+/*                                ITEMS IMAGES                                */
+/* -------------------------------------------------------------------------- */
+export async function getItemImage(url) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${url}`
+  })
+
+  return data
+}
+
+export async function getOneItemImage(url) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${url}?getOne=true`
+  })
+
+  return data
+}
+
+export async function uploadItemImage(payload, url) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': payload.type
+    },
+    data: payload,
+    url: `${url}`
+  })
+
+  return data
+}
+
+export async function deleteItemImage(url) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'DELETE',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${url}`
+  })
+
+  return data
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   REVIEWS                                  */
+/* -------------------------------------------------------------------------- */
+export async function getReviewsForItem(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${reviewsURL}/items/${payload.id}`
+  })
+
+  return data
+}
+
+export async function getAverageReviewsForItem(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${reviewsURL}/items/${payload.id}/rating`
+  })
+
+  return data
+}
+
+export async function getReviewsForUser(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${reviewsURL}/user/${payload.id}`
+  })
+
+  return data
+}
+
+export async function getReviewsByReviewId(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${reviewsURL}/${payload.id}`
+  })
+
+  return data
+}
+
+export async function createNewReview(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    data: payload,
+    url: `${reviewsURL}`
+  })
+
+  return data
+}
+
+export async function editReview(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    data: payload,
+    url: `${reviewsURL}/update/${payload.id}`
+  })
+
+  return data
+}
+
+export async function deleteReviews(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    data: payload,
+    url: `${reviewsURL}/${payload.id}`
+  })
+
+  return data
+}
+
+/* -------------------------------------------------------------------------- */
 /*                                    USERS                                   */
 /* -------------------------------------------------------------------------- */
 export async function getAllUsers() {
@@ -110,51 +292,6 @@ export async function getUserByEmailAndId(payload) {
     //withCredentials: true,
     data: payload,
     url: `${usersURL}?username=${payload.username}&&password=${payload.password}`
-  })
-
-  return data
-}
-
-/* -------------------------------------------------------------------------- */
-/*                           SAMPLE AXIOS FUNCTIONS                           */
-/* -------------------------------------------------------------------------- */
-export async function getTestData(param) {
-  const data = await axios({
-    method: 'GET',
-    withCredentials: true,
-    url: `${apiURL}?param=${param}`
-  })
-
-  return data
-}
-
-export async function postTestData(payload) {
-  const data = await axios({
-    method: 'POST',
-    withCredentials: true,
-    data: payload,
-    url: `${apiURL}`
-  })
-
-  return data
-}
-
-export async function putTestData(payload) {
-  const data = await axios({
-    method: 'PUT',
-    withCredentials: true,
-    data: payload,
-    url: `${apiUrl}/${payload.id}`
-  })
-
-  return data
-}
-
-export async function deleteTestData(id) {
-  const data = await axios({
-    method: 'DELETE',
-    withCredentials: true,
-    url: `${apiURL}/${id}`
   })
 
   return data

@@ -11,7 +11,8 @@ export const iRentStuffSlice = createSlice({
     currentUser: { authenticated: false, userDetails: {}, token: '' },
     //ITEMS
     allItems: [],
-    allItemCategories: []
+    allItemCategories: [],
+    allItemsCreatedByCurrentUser: []
   },
   reducers: {
     //NOTIFICATION
@@ -41,12 +42,22 @@ export const iRentStuffSlice = createSlice({
         ;(cat.value = cat.id), (cat.label = cat.name)
       })
       state.allItemCategories = allItemCategories
+    },
+    updateAllItemsCreatedByCurrentUser: (state, action) => {
+      state.allItemsCreatedByCurrentUser = action.payload.data
     }
   }
 })
 
 // Action creators are generated for each case reducer function
-export const { updateSuccess, updateError, updateAllUsers, updateCurrentUser, updateAllItems, updateAllItemCategories } =
-  iRentStuffSlice.actions
+export const {
+  updateSuccess,
+  updateError,
+  updateAllUsers,
+  updateCurrentUser,
+  updateAllItems,
+  updateAllItemCategories,
+  updateAllItemsCreatedByCurrentUser
+} = iRentStuffSlice.actions
 
 export default iRentStuffSlice.reducer
