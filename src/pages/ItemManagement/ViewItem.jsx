@@ -31,12 +31,14 @@ export const ViewItem = () => {
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
 
-  const currentUserIsItemOwner = currentUser?.userDetails.userId === itemDetails?.owner
+  const currentUserIsItemOwner =
+    currentUser?.userDetails.userId === itemDetails?.owner || currentUser?.userDetails.username === itemDetails?.owner
 
   const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
-  const [itemImagePath, setItemImagePath] = useState('')
+  const [itemImagePath, setItemImagePath] = useState([])
 
   console.log(itemDetails)
+  console.log(itemImagePath)
   console.log(currentUserIsItemOwner)
   console.log(editItemModule)
 
@@ -202,7 +204,7 @@ export const ViewItem = () => {
         >
           <Row justify={'start'}>
             <Col xs={24} xl={8}>
-              {itemImagePath == '' ? (
+              {itemImagePath.length == 0 ? (
                 <Image className='centered-image' src={`${assetsURL}/common/no-img.jpg`} preview={false} />
               ) : (
                 <Image.PreviewGroup
@@ -247,7 +249,9 @@ export const ViewItem = () => {
                 {currentUserIsItemOwner ? (
                   <Row gutter={8}>
                     <Col>
-                      <Button onClick={() => setEditItemModule({ state: true, data: itemDetails })}>Edit Item</Button>
+                      <Button onClick={() => setEditItemModule({ state: true, data: itemDetails, itemImagePath: itemImagePath })}>
+                        Edit Item
+                      </Button>
                     </Col>
                     <Col>
                       <Popconfirm

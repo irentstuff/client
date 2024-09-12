@@ -123,9 +123,25 @@ export async function uploadItemImage(payload, url) {
   const data = await axios({
     method: 'PUT',
     headers: {
-      Authorization: `Bearer ${token}` // Add the JWT token here
+      Authorization: `Bearer ${token}`,
+      'Content-Type': payload.type
     },
     data: payload,
+    url: `${url}`
+  })
+
+  return data
+}
+
+export async function deleteItemImage(url) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'DELETE',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
     url: `${url}`
   })
 

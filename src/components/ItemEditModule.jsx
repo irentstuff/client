@@ -1,13 +1,15 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Modal, Col, Form, Input, Row, Select } from 'antd'
-import { formItemLayout, conditionOptions, availabilityOptions } from '../services/config'
-import { editItem } from '../services/api'
+import { UploadImage } from '../components/UploadImage'
+import { formItemLayout, conditionOptions, availabilityOptions, assetsURL } from '../services/config'
+import { editItem, uploadItemImage, deleteItemImage } from '../services/api'
 
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
@@ -18,10 +20,11 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
-
   const itemDetails = modalDetails?.data
-  console.log(itemDetails)
+  const itemImagePath = modalDetails?.itemImagePath
+
+  const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
+  const [uploadedFileList, setUploadedFileList] = useState([])
 
   const editNewItemLocal = async (payload) => {
     try {
@@ -35,6 +38,58 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
           })
         )
         navigate('/MyItems')
+        window.location.reload()
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
+  const uploadItemImageLocal = async (payload, imageUrl) => {
+    try {
+      console.log(payload, imageUrl)
+
+      const response = await uploadItemImage(payload, imageUrl)
+      console.log(response)
+      if (response.status === 200) {
+        // window.location.reload()
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
+  const deleteItemImageLocal = async (imageUrl) => {
+    try {
+      console.log(imageUrl)
+
+      const response = await deleteItemImage(imageUrl)
+      console.log(response)
+      if (response.status === 200) {
         // window.location.reload()
       } else {
         dispatch(
@@ -55,11 +110,64 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
   }
 
   const onFinish = () => {
+    let imageFolderUrl = ''
+    let uploadedImageUrl = []
+
+    //update images
+    if (
+      itemDetails.image.endsWith('.jpg') ||
+      itemDetails.image.endsWith('.jpeg') ||
+      itemDetails.image.endsWith('.png') ||
+      itemDetails.image == ''
+    ) {
+      imageFolderUrl = `${assetsURL}/${itemDetails.id}`
+    } else {
+      imageFolderUrl = itemDetails.image
+    }
+
+    console.log(imageFolderUrl)
+
+    if (imageFolderUrl !== undefined) {
+      console.log(uploadedFileList)
+
+      uploadedFileList.map((img) => {
+        let imageUrl = ''
+
+        if (img.hasOwnProperty('originFileObj')) {
+          imageUrl = `${imageFolderUrl}/${img.originFileObj.name}`
+          uploadItemImageLocal(img.originFileObj, imageUrl)
+        } else {
+          imageUrl = img.url
+        }
+
+        uploadedImageUrl.push(imageUrl)
+      })
+
+      //delete images that are not in uploadedFileList
+      const imagesToDelete = itemImagePath
+        .filter((item) => !uploadedImageUrl.includes(item))
+        .filter((imageUrl) => imageUrl.includes('irentstuff-assets'))
+      console.log(imagesToDelete)
+      imagesToDelete.map((img) => {
+        deleteItemImageLocal(img)
+      })
+    }
+
     const values = form.getFieldsValue()
-    const formattedPayload = { ...itemDetails, ...values }
+    const formattedPayload = { ...itemDetails, ...values, image: imageFolderUrl }
     console.log(formattedPayload)
     editNewItemLocal(formattedPayload)
   }
+
+  useEffect(() => {
+    let fileList = []
+    itemImagePath.map((item) => {
+      fileList.push({
+        url: item
+      })
+    })
+    setUploadedFileList(fileList)
+  }, [])
 
   return (
     <>
@@ -187,15 +295,9 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
                 <Input prefix='$' suffix='SGD' type='number' step='0.01' />
               </Form.Item>
 
-              {/* <Form.Item
-                name='upload'
-                label='Upload'
-                valuePropName='fileList'
-                tooltip='Only 6 images are allowed.'
-                getValueFromEvent={normFile}
-              >
-                <UploadImage files={normFile} />
-              </Form.Item> */}
+              <Form.Item name='upload' label='Upload' valuePropName='fileList' tooltip='Only 6 images are allowed.'>
+                <UploadImage uploadedFileList={uploadedFileList} setFileList={setUploadedFileList} />
+              </Form.Item>
             </Form>
           </Col>
         </Row>

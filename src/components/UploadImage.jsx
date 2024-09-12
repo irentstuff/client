@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import { Image, Upload } from 'antd'
 
@@ -16,10 +16,11 @@ const getBase64 = (file) =>
 /* -------------------------------------------------------------------------- */
 /*                                UPLOAD IMAGE                                */
 /* -------------------------------------------------------------------------- */
-export const UploadImage = ({ fileList, setFileList }) => {
+export const UploadImage = ({ uploadedFileList, setFileList }) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
-  // const [fileList, setFileList] = useState([])
+
+  console.log(uploadedFileList)
 
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
@@ -55,13 +56,13 @@ export const UploadImage = ({ fileList, setFileList }) => {
       <Upload
         listType='picture-card'
         accept='image/png, image/jpeg'
-        fileList={fileList}
+        fileList={uploadedFileList}
         onPreview={handlePreview}
         onChange={handleChange}
         multiple={true}
         beforeUpload={() => false}
       >
-        {fileList?.length >= 6 ? null : uploadButton}
+        {uploadedFileList?.length >= 6 ? null : uploadButton}
       </Upload>
       {previewImage && (
         <Image

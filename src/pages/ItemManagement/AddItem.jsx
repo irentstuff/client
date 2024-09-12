@@ -92,8 +92,8 @@ export const AddItem = () => {
             msg: `Item is edited successfully`
           })
         )
-        // navigate('/MyItems')
-        // window.location.reload()
+        navigate('/MyItems')
+        window.location.reload()
       } else {
         dispatch(
           updateError({
@@ -126,10 +126,10 @@ export const AddItem = () => {
         const imageUrl = `${imageFolderUrl}/${img.originFileObj.name}`
         uploadItemImageLocal(img.originFileObj, imageUrl)
       })
-    }
 
-    //update items with image path
-    editNewItemLocal({ ...createdResponsed, image: imageFolderUrl })
+      //update items with image path
+      editNewItemLocal({ ...createdResponsed, image: imageFolderUrl })
+    }
   }
 
   return (
@@ -252,7 +252,7 @@ export const AddItem = () => {
               </Form.Item>
 
               <Form.Item name='upload' label='Upload' valuePropName='fileList' tooltip='Only 6 images are allowed.'>
-                <UploadImage fileList={uploadedFileList} setFileList={setFileList} />
+                <UploadImage uploadedFileList={uploadedFileList} setFileList={setFileList} />
               </Form.Item>
 
               <Form.Item {...tailFormItemLayout}>
