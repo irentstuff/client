@@ -97,3 +97,11 @@ export const availabilityOptions = [
     label: 'Sold'
   }
 ]
+
+/* -------------------------------------------------------------------------- */
+/*                             calculate datetime                             */
+/* -------------------------------------------------------------------------- */
+export const dayDifference = (created_date) => {
+  const difference = new Date() - new Date(created_date)
+  return Math.ceil(difference / (1000 * 60 * 60 * 24))
+}

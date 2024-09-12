@@ -160,7 +160,7 @@ export async function getReviewsForItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/items/${payload.id}`
+    url: `${reviewsURL}/item/${payload.id}`
   })
 
   return data
@@ -175,7 +175,7 @@ export async function getAverageReviewsForItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/items/${payload.id}/rating`
+    url: `${reviewsURL}/item/${payload.id}/rating`
   })
 
   return data

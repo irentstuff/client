@@ -9,7 +9,8 @@ import { updateError, updateSuccess } from '../../redux/reducer'
 import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image } from 'antd'
 import { deleteItem, getItemImage, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
 import { ItemEditModule } from '../../components/ItemEditModule'
-import { assetsURL } from '../../services/config'
+import { ReviewsOverview } from '../../components/ReviewsOverview'
+import { assetsURL, dayDifference } from '../../services/config'
 const { Meta } = Card
 const { Title, Text } = Typography
 
@@ -24,9 +25,6 @@ export const ViewItem = () => {
   const { state } = location
 
   const itemDetails = state
-
-  // Calculate the difference in milliseconds
-  const diffInMs = new Date() - new Date(itemDetails.created_date)
 
   console.log(itemDetails)
 
@@ -110,52 +108,6 @@ export const ViewItem = () => {
     }
   }
 
-  //get reviews for item
-  const getAverageReviewsForItemLocal = async (payload) => {
-    try {
-      const response = await getAverageReviewsForItem(payload)
-      console.log(response)
-      if (response.status === 200) {
-      } else {
-        dispatch(
-          updateError({
-            status: true,
-            msg: response.statusText
-          })
-        )
-      }
-    } catch (error) {
-      dispatch(
-        updateError({
-          status: true,
-          msg: `${error.message}`
-        })
-      )
-    }
-  }
-  const getReviewsForItemLocal = async (payload) => {
-    try {
-      const response = await getReviewsForItem(payload)
-      console.log(response)
-      if (response.status === 200) {
-      } else {
-        dispatch(
-          updateError({
-            status: true,
-            msg: response.statusText
-          })
-        )
-      }
-    } catch (error) {
-      dispatch(
-        updateError({
-          status: true,
-          msg: `${error.message}`
-        })
-      )
-    }
-  }
-
   /* ----------------------------- page functions ----------------------------- */
   const normFile = (e) => {
     console.log('Upload event:', e)
@@ -177,10 +129,6 @@ export const ViewItem = () => {
     } else if (itemDetails.image !== '') {
       getItemImageLocal(itemDetails.image)
     }
-
-    //get reviews for item on load
-    // getAverageReviewsForItemLocal(itemDetails)
-    // getReviewsForItemLocal(itemDetails)
   }, [itemDetails])
 
   return (
@@ -199,7 +147,7 @@ export const ViewItem = () => {
               avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
               description={
                 <Text>
-                  Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
+                  Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
                 </Text>
               }
             />
@@ -275,6 +223,7 @@ export const ViewItem = () => {
               </Space>
             </Col>
           </Row>
+          <ReviewsOverview itemId={itemDetails.id} />
         </Card>
       </Space>
       {editItemModule.state && <ItemEditModule modalDetails={editItemModule} updateModalDetails={setEditItemModule} />}

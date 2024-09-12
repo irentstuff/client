@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { getOneItemImage } from '../services/api'
-import { assetsURL } from '../services/config'
+import { assetsURL, dayDifference } from '../services/config'
 import { updateError, updateSuccess } from '../redux/reducer'
 /* ---------------------------------- antd ---------------------------------- */
 import { Space, Typography, Col, Card, Avatar, Image } from 'antd'
@@ -72,7 +72,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
             avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
             description={
               <Text>
-                Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
+                Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
               </Text>
             }
           />
