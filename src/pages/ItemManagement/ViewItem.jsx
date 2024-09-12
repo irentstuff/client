@@ -24,6 +24,10 @@ export const ViewItem = () => {
   const { state } = location
 
   const itemDetails = state
+
+  // Calculate the difference in milliseconds
+  const diffInMs = new Date() - new Date(itemDetails.created_date)
+
   console.log(itemDetails)
 
   const allUsers = useSelector((state) => state.iRentStuff.allUsers)
@@ -195,7 +199,7 @@ export const ViewItem = () => {
               avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
               description={
                 <Text>
-                  {itemDetails.owner} {itemDetails.created_date}
+                  Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
                 </Text>
               }
             />

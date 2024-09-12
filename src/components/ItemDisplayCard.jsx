@@ -28,7 +28,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
   const getOneItemImageLocal = async (imageUrl) => {
     try {
       const response = await getOneItemImage(imageUrl)
-      console.log(response)
+      // console.log(response)
       if (response.status === 200) {
         if (response?.data) {
           const path = `${imageUrl}/${response.data.substring(response.data.lastIndexOf('/') + 1)}`
@@ -53,6 +53,9 @@ export const ItemDisplayCard = ({ itemDetails }) => {
     }
   }
 
+  // Calculate the difference in milliseconds
+  const diffInMs = new Date() - new Date(itemDetails.created_date)
+
   useEffect(() => {
     if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
       setImagePath(itemDetails.image)
@@ -69,7 +72,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
             avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
             description={
               <Text>
-                {itemDetails.owner} {itemDetails.created_date}
+                Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
               </Text>
             }
           />
