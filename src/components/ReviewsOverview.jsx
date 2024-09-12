@@ -2,7 +2,9 @@
 /*                                   IMPORTS                                  */
 /* -------------------------------------------------------------------------- */
 import { useState, useEffect } from 'react'
-import { Rate, Typography, Space, Avatar, List } from 'antd'
+import { Rate, Typography, Space, Avatar, List, Input } from 'antd'
+import { ReviewsForm } from './ReviewsForm'
+
 import { getReviewsForItem, getAverageReviewsForItem } from '../services/api'
 import { dayDifference } from '../services/config'
 
@@ -24,7 +26,9 @@ export const ReviewsOverview = ({ itemId }) => {
       const response = await getAverageReviewsForItem(payload)
       console.log(response)
       if (response.status === 200) {
-        setAverageReviews(response.data)
+        if (typeof response.data === 'object') {
+          setAverageReviews(response.data)
+        }
       } else {
         dispatch(
           updateError({
@@ -47,7 +51,9 @@ export const ReviewsOverview = ({ itemId }) => {
       const response = await getReviewsForItem(payload)
       console.log(response)
       if (response.status === 200) {
-        setTotalReviews(response.data)
+        if (Array.isArray(response.data)) {
+          setTotalReviews(response.data)
+        }
       } else {
         dispatch(
           updateError({
@@ -68,17 +74,15 @@ export const ReviewsOverview = ({ itemId }) => {
 
   useEffect(() => {
     //get reviews for item on load
-    // getAverageReviewsForItemLocal({ id: itemId })
-    // getReviewsForItemLocal({ id: itemId })
+    getAverageReviewsForItemLocal({ id: itemId })
+    getReviewsForItemLocal({ id: itemId })
   }, [])
 
   return (
     <Space direction='vertical' size='large' style={{ width: '70%' }}>
       <Title level={3}>{`Reviews (${averageReviews.total_reviews})`}</Title>
-      {/* <Space size={'large'}> */}
       <Rate disabled defaultValue={averageReviews.average_rating} />
-      <Text></Text>
-      {/* </Space> */}
+      <ReviewsForm item_id={itemId} />
       <List
         itemLayout='horizontal'
         dataSource={totalReviews}
