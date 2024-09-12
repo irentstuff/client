@@ -9,6 +9,13 @@
   padding: 2em;
 }
 
+.centered-image {
+  width: auto !important;
+  height: 300px !important;
+  display: block;
+  margin: 0 auto;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;

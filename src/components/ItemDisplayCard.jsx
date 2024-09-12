@@ -1,11 +1,14 @@
 /* -------------------------------------------------------------------------- */
 /*                                   Imports                                  */
 /* -------------------------------------------------------------------------- */
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import default_img from '../assets/img-placeholder.png'
+import { getOneItemImage } from '../services/api'
+import { assetsURL } from '../services/config'
+import { updateError, updateSuccess } from '../redux/reducer'
 /* ---------------------------------- antd ---------------------------------- */
-import { Space, Typography, Col, Card, Avatar } from 'antd'
+import { Space, Typography, Col, Card, Avatar, Image } from 'antd'
 const { Title, Text } = Typography
 const { Meta } = Card
 
@@ -14,10 +17,49 @@ const { Meta } = Card
 /* -------------------------------------------------------------------------- */
 export const ItemDisplayCard = ({ itemDetails }) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const allUsers = useSelector((state) => state.iRentStuff.allUsers)
   const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
+
+  const [imagePath, setImagePath] = useState('')
   // console.log(itemDetails)
+
+  const getOneItemImageLocal = async (imageUrl) => {
+    try {
+      const response = await getOneItemImage(imageUrl)
+      console.log(response)
+      if (response.status === 200) {
+        if (response?.data) {
+          const path = `${imageUrl}/${response.data.substring(response.data.lastIndexOf('/') + 1)}`
+          setImagePath(path)
+        }
+        // window.location.reload()
+      } else {
+        // dispatch(
+        //   updateError({
+        //     status: true,
+        //     msg: response.statusText
+        //   })
+        // )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
+  useEffect(() => {
+    if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
+      setImagePath(itemDetails.image)
+    } else if (itemDetails.image !== '') {
+      getOneItemImageLocal(itemDetails.image)
+    }
+  }, [itemDetails])
 
   return (
     <Col xs={24} xl={8} key={itemDetails.id}>
@@ -33,14 +75,11 @@ export const ItemDisplayCard = ({ itemDetails }) => {
           />
         }
         cover={
-          <img
-            alt=''
-            src={itemDetails.img_path}
-            onError={(event) => {
-              event.target.src = { default_img }
-              event.onerror = null
-            }}
-          />
+          imagePath == '' ? (
+            <Image className='centered-image' src={`${assetsURL}/common/no-img.jpg`} preview={false} />
+          ) : (
+            <Image className='centered-image' src={`${imagePath}`} preview={false} />
+          )
         }
         hoverable
         onClick={() => navigate('ViewItem', { state: itemDetails })}

@@ -34,10 +34,9 @@ export const ViewItem = () => {
   const currentUserIsItemOwner = currentUser?.userDetails.userId === itemDetails?.owner
 
   const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
-  const [itemImages, setItemImages] = useState([])
+  const [itemImagePath, setItemImagePath] = useState('')
 
   console.log(itemDetails)
-  console.log(itemImages)
   console.log(currentUserIsItemOwner)
   console.log(editItemModule)
 
@@ -74,13 +73,18 @@ export const ViewItem = () => {
   }
 
   //get images
-  const getItemImageLocal = async (payload) => {
+  const getItemImageLocal = async (imageUrl) => {
     try {
-      const response = await getItemImage(payload)
+      const response = await getItemImage(imageUrl)
       console.log(response)
       if (response.status === 200) {
-        if (response.data.length > 0 || response.data !== null) {
-          setItemImages(response.data)
+        if (response.data.length > 0 && response.data !== null) {
+          let imagePath = []
+          response.data.map((image) => {
+            const path = `${imageUrl}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`
+            imagePath.push(path)
+          })
+          setItemImagePath(imagePath)
         }
       } else {
         dispatch(
@@ -162,9 +166,12 @@ export const ViewItem = () => {
 
   useEffect(() => {
     //get item images
-    if (itemDetails.image !== '') {
-      getItemImageLocal(itemDetails?.image)
+    if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
+      setItemImagePath([itemDetails.image])
+    } else if (itemDetails.image !== '') {
+      getItemImageLocal(itemDetails.image)
     }
+
     //get reviews for item on load
     // getAverageReviewsForItemLocal(itemDetails)
     // getReviewsForItemLocal(itemDetails)
@@ -195,20 +202,16 @@ export const ViewItem = () => {
         >
           <Row justify={'start'}>
             <Col xs={24} xl={8}>
-              {itemImages.length === 0 ? (
-                <Image width={200} src={`${assetsURL}/common/no-img.jpg`} />
+              {itemImagePath == '' ? (
+                <Image className='centered-image' src={`${assetsURL}/common/no-img.jpg`} preview={false} />
               ) : (
                 <Image.PreviewGroup
                   preview={{
                     onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
                   }}
                 >
-                  {itemImages.map((image) => (
-                    <Image
-                      key={image.Key}
-                      width={200}
-                      src={`${itemDetails.image}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`}
-                    />
+                  {itemImagePath.map((imagePath) => (
+                    <Image key={imagePath} width={200} src={`${imagePath}`} />
                   ))}
                 </Image.PreviewGroup>
               )}

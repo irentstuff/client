@@ -104,6 +104,18 @@ export async function getItemImage(url) {
   return data
 }
 
+export async function getOneItemImage(url) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${url}?getOne=true`
+  })
+
+  return data
+}
+
 export async function uploadItemImage(payload, url) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
