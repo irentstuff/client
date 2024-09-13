@@ -4,9 +4,10 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { getOneItemImage } from '../services/api'
+import { assetsURL, dayDifference, availabilityOptions } from '../services/config'
 import { updateError, updateSuccess } from '../redux/reducer'
 import { getOneItemImage } from '../services/api'
-import { assetsURL, availabilityOptions } from '../services/config'
 /* ---------------------------------- antd ---------------------------------- */
 import { Space, Typography, Col, Card, Avatar, Image, Tag } from 'antd'
 const { Title, Text } = Typography
@@ -73,7 +74,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
             description={
               <>
                 <Text>
-                  Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
+                  Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
                 </Text>
                 <Tag
                   style={{ float: 'right' }}
