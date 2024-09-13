@@ -8,6 +8,8 @@ export const usersURL = `${hostname}/users`
 export const itemsURL = `${hostname}/items`
 export const assetsURL = `${hostname}/assets/irentstuff-assets`
 export const reviewsURL = `${hostname}/reviews`
+export const rentalsURL = `${hostname}/rentals`
+export const purchasesURL = `${hostname}/purchases`
 
 export const apiType = {
   initiate: 'initiate',

@@ -9,6 +9,7 @@ import { updateError, updateSuccess } from '../../redux/reducer'
 import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image } from 'antd'
 import { deleteItem, getItemImage, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
 import { ItemEditModule } from '../../components/ItemEditModule'
+import { MakeOfferModule } from '../../components/MakeOfferModule'
 import { assetsURL } from '../../services/config'
 const { Meta } = Card
 const { Title, Text } = Typography
@@ -39,6 +40,7 @@ export const ViewItem = () => {
     currentUser?.userDetails.userId === itemDetails?.owner || currentUser?.userDetails.username === itemDetails?.owner
 
   const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
+  const [makeOfferModule, setMakeOfferModule] = useState({ state: false, data: {} })
   const [itemImagePath, setItemImagePath] = useState([])
 
   console.log(itemDetails)
@@ -270,7 +272,7 @@ export const ViewItem = () => {
                     </Col>
                   </Row>
                 ) : (
-                  <Button>Make Offer</Button>
+                  <Button onClick={() => setMakeOfferModule({ state: true, data: itemDetails })}>Make Offer</Button>
                 )}
               </Space>
             </Col>
@@ -278,6 +280,7 @@ export const ViewItem = () => {
         </Card>
       </Space>
       {editItemModule.state && <ItemEditModule modalDetails={editItemModule} updateModalDetails={setEditItemModule} />}
+      {makeOfferModule.state && <MakeOfferModule modalDetails={makeOfferModule} updateModalDetails={setMakeOfferModule} />}
     </>
   )
 }
