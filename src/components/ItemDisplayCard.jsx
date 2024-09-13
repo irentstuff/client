@@ -4,11 +4,11 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getOneItemImage } from '../services/api'
-import { assetsURL } from '../services/config'
 import { updateError, updateSuccess } from '../redux/reducer'
+import { getOneItemImage } from '../services/api'
+import { assetsURL, availabilityOptions } from '../services/config'
 /* ---------------------------------- antd ---------------------------------- */
-import { Space, Typography, Col, Card, Avatar, Image } from 'antd'
+import { Space, Typography, Col, Card, Avatar, Image, Tag } from 'antd'
 const { Title, Text } = Typography
 const { Meta } = Card
 
@@ -71,9 +71,18 @@ export const ItemDisplayCard = ({ itemDetails }) => {
           <Meta
             avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
             description={
-              <Text>
-                Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
-              </Text>
+              <>
+                <Text>
+                  Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
+                </Text>
+                <Tag
+                  style={{ float: 'right' }}
+                  bordered={false}
+                  color={availabilityOptions.find((option) => option.value == itemDetails.availability).color}
+                >
+                  {availabilityOptions.find((option) => option.value == itemDetails.availability).label}
+                </Tag>
+              </>
             }
           />
         }

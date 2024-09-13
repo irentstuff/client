@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image } from 'antd'
+import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image, Tag } from 'antd'
 import { deleteItem, getItemImage, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
 import { ItemEditModule } from '../../components/ItemEditModule'
 import { MakeOfferModule } from '../../components/MakeOfferModule'
-import { assetsURL } from '../../services/config'
+import { assetsURL, availabilityOptions } from '../../services/config'
 const { Meta } = Card
 const { Title, Text } = Typography
 
@@ -200,9 +200,19 @@ export const ViewItem = () => {
             <Meta
               avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
               description={
-                <Text>
-                  Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
-                </Text>
+                <>
+                  {' '}
+                  <Text>
+                    Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
+                  </Text>
+                  <Tag
+                    style={{ float: 'right' }}
+                    bordered={false}
+                    color={availabilityOptions.find((option) => option.value == itemDetails.availability).color}
+                  >
+                    {availabilityOptions.find((option) => option.value == itemDetails.availability).label}
+                  </Tag>
+                </>
               }
             />
           }
