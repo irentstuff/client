@@ -8,6 +8,8 @@ export const usersURL = `${hostname}/users`
 export const itemsURL = `${hostname}/items`
 export const assetsURL = `${hostname}/assets/irentstuff-assets`
 export const reviewsURL = `${hostname}/reviews`
+export const rentalsURL = `${hostname}/rentals`
+export const purchasesURL = `${hostname}/purchases`
 
 export const apiType = {
   initiate: 'initiate',
@@ -82,18 +84,22 @@ export const conditionOptions = [
 export const availabilityOptions = [
   {
     value: 'available',
-    label: 'Available'
+    label: 'Available',
+    color: 'green'
   },
   {
     value: 'activeRental',
-    label: 'Active Rental'
+    label: 'Active Rental',
+    color: 'red'
   },
   {
     value: 'pendingPurchase',
-    label: 'Pending Purchase'
+    label: 'Pending Purchase',
+    color: 'orange'
   },
   {
     value: 'sold',
-    label: 'Sold'
+    label: 'Sold',
+    color: 'red'
   }
 ]

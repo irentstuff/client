@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { itemsURL, reviewsURL, assetsURL, usersURL } from './config'
+import { itemsURL, reviewsURL, assetsURL, usersURL, rentalsURL, purchasesURL } from './config'
 import { store } from '../redux/store'
 
 /* -------------------------------------------------------------------------- */
@@ -254,6 +254,121 @@ export async function deleteReviews(payload) {
     },
     data: payload,
     url: `${reviewsURL}/${payload.id}`
+  })
+
+  return data
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   RENTAL                                   */
+/* -------------------------------------------------------------------------- */
+export async function createNewRental(payload, item_id) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    data: payload,
+    url: `${rentalsURL}/${item_id}/add`
+  })
+
+  return data
+}
+
+export async function getRentalDetails(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${rentalsURL}/${payload.item_id}/${payload.rental_id}`
+  })
+
+  return data
+}
+
+/* --------------- patch actions = [confirm, cancel, start, complete] -------------- */
+export async function rentalPatch(payload) {
+  // const state = store.getState()
+  // const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'PATCH',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${rentalsURL}/${payload.item_id}/${payload.rental_id}/${payload.action}`
+  })
+
+  return data
+}
+
+export async function getRentalDetailsForUser(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${rentalsURL}/${payload.user_id}/rentals/`
+  })
+
+  return data
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                  PURCHASE                                  */
+/* -------------------------------------------------------------------------- */
+export async function createNewPurchase(payload, item_id) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    data: payload,
+    url: `${purchasesURL}/${item_id}/add`
+  })
+
+  return data
+}
+
+export async function getPurchaseDetails(payload) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${purchasesURL}/${payload.item_id}/${payload.purchase_id}`
+  })
+
+  return data
+}
+
+/* --------------- patch actions = [confirm, cancel, complete] -------------- */
+export async function purchasePatch(payload) {
+  // const state = store.getState()
+  // const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'PATCH',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${purchasesURL}/${payload.item_id}/${payload.purchase_id}/${payload.action}`
   })
 
   return data
