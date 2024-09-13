@@ -4,10 +4,9 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { getOneItemImage } from '../services/api'
-import { assetsURL, dayDifference, availabilityOptions } from '../services/config'
 import { updateError, updateSuccess } from '../redux/reducer'
 import { getOneItemImage } from '../services/api'
+import { assetsURL, dayDifference, availabilityOptions } from '../services/config'
 /* ---------------------------------- antd ---------------------------------- */
 import { Space, Typography, Col, Card, Avatar, Image, Tag } from 'antd'
 const { Title, Text } = Typography
