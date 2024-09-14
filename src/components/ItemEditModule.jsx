@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../redux/reducer'
+import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Modal, Col, Form, Input, Row, Select } from 'antd'
 import { UploadImage } from '../components/UploadImage'
@@ -134,7 +135,7 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
         let imageUrl = ''
 
         if (img.hasOwnProperty('originFileObj')) {
-          imageUrl = `${imageFolderUrl}/${img.originFileObj.name}`
+          const imageUrl = `${imageFolderUrl}/${img.originFileObj.uid}_${moment().format('YYYYMMDD_HH:mm:ss')}`
           uploadItemImageLocal(img.originFileObj, imageUrl)
         } else {
           imageUrl = img.url

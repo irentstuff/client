@@ -29,8 +29,6 @@ export const ViewItem = () => {
 
   console.log(itemDetails)
 
-  const allUsers = useSelector((state) => state.iRentStuff.allUsers)
-  const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
 

@@ -52,7 +52,7 @@ export const ReviewsForm = ({ item_id, rental_id }) => {
 
   const onFinish = () => {
     const values = form.getFieldsValue()
-    const formattedPayload = { ...values, item_id: item_id, user_id: currentUser.userDetails.userId }
+    const formattedPayload = { ...values, item_id: item_id, user_id: currentUser.userDetails.username }
     console.log(formattedPayload)
     createReviewsLocal(formattedPayload)
   }

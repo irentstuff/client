@@ -18,11 +18,14 @@ export async function getAllItems() {
 }
 
 export async function getItemsByQueryParam(queryParam) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
   const data = await axios({
     method: 'GET',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     url: `${itemsURL}?${queryParam}`
   })
 

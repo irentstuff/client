@@ -127,7 +127,7 @@ function App() {
         item: apiLabels.allItemsCreatedByCurrentUser,
         apiService: getItemsByQueryParam,
         updateGlobalState: updateAllItemsCreatedByCurrentUser,
-        queryParam: `ownername=${currentUser.userDetails.username}&valid=0`
+        queryParam: `owner=me&valid=0`
       })
     }
   }, [currentUser])

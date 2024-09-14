@@ -55,7 +55,7 @@ export const PurchaseForm = ({ itemDetails }) => {
     console.log(values)
 
     const formattedPayload = {
-      users: { owner_id: itemDetails.owner, buyer_id: currentUser.userDetails.userId },
+      users: { owner_id: itemDetails.owner, buyer_id: currentUser.userDetails.username },
       purchase_details: {
         purchase_price: values.purchase_price
       }
