@@ -89,6 +89,12 @@ export const CustomHeader = () => {
   }
 
   useEffect(() => {
+    if (window.innerWidth < 1200) {
+      setShowMenuButton(true)
+    } else {
+      setShowMenuButton(false)
+    }
+
     const handleResize = () => {
       if (window.innerWidth < 1200) {
         setShowMenuButton(true)
