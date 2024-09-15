@@ -8,14 +8,14 @@ import { updateError, updateSuccess } from '../redux/reducer'
 import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Modal, Col, Form, Input, Row, Select } from 'antd'
-import { UploadImage } from '../components/UploadImage'
+import { UploadImage } from './UploadImage'
 import { formItemLayout, conditionOptions, availabilityOptions, assetsURL } from '../services/config'
 import { editItem, uploadItemImage, deleteItemImage } from '../services/api'
 
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
+export const ItemEditModal = ({ modalDetails, updateModalDetails }) => {
   console.log(modalDetails)
   const [form] = Form.useForm()
   const dispatch = useDispatch()

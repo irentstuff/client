@@ -8,8 +8,8 @@ import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image, Tag } from 'antd'
 import { deleteItem, getItemImage, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
-import { ItemEditModule } from '../../components/ItemEditModule'
-import { MakeOfferModule } from '../../components/MakeOfferModule'
+import { ItemEditModal } from '../../components/ItemEditModal'
+import { MakeOfferModal } from '../../components/MakeOfferModal'
 import { ReviewsOverview } from '../../components/ReviewsOverview'
 import { assetsURL, availabilityOptions, dayDifference } from '../../services/config'
 const { Meta } = Card
@@ -35,14 +35,14 @@ export const ViewItem = () => {
   const currentUserIsItemOwner =
     currentUser?.userDetails.userId === itemDetails?.owner || currentUser?.userDetails.username === itemDetails?.owner
 
-  const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
-  const [makeOfferModule, setMakeOfferModule] = useState({ state: false, data: {} })
+  const [editItemModal, setEditItemModal] = useState({ state: false, data: {} })
+  const [makeOfferModal, setMakeOfferModal] = useState({ state: false, data: {} })
   const [itemImagePath, setItemImagePath] = useState([])
 
   console.log(itemDetails)
   console.log(itemImagePath)
   console.log(currentUserIsItemOwner)
-  console.log(editItemModule)
+  console.log(editItemModal)
 
   /* ------------------------------ api services ------------------------------ */
   const deleteItemLocal = async (payload) => {
@@ -211,7 +211,7 @@ export const ViewItem = () => {
                 {currentUserIsItemOwner ? (
                   <Row gutter={8}>
                     <Col>
-                      <Button onClick={() => setEditItemModule({ state: true, data: itemDetails, itemImagePath: itemImagePath })}>
+                      <Button onClick={() => setEditItemModal({ state: true, data: itemDetails, itemImagePath: itemImagePath })}>
                         Edit Item
                       </Button>
                     </Col>
@@ -228,7 +228,7 @@ export const ViewItem = () => {
                     </Col>
                   </Row>
                 ) : (
-                  <Button onClick={() => setMakeOfferModule({ state: true, data: itemDetails })}>Make Offer</Button>
+                  <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
                 )}
               </Space>
             </Col>
@@ -236,8 +236,8 @@ export const ViewItem = () => {
           <ReviewsOverview itemId={itemDetails.id} />
         </Card>
       </Space>
-      {editItemModule.state && <ItemEditModule modalDetails={editItemModule} updateModalDetails={setEditItemModule} />}
-      {makeOfferModule.state && <MakeOfferModule modalDetails={makeOfferModule} updateModalDetails={setMakeOfferModule} />}
+      {editItemModal.state && <ItemEditModal modalDetails={editItemModal} updateModalDetails={setEditItemModal} />}
+      {makeOfferModal.state && <MakeOfferModal modalDetails={makeOfferModal} updateModalDetails={setMakeOfferModal} />}
     </>
   )
 }

@@ -240,7 +240,7 @@ export async function editReview(payload) {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
     data: payload,
-    url: `${reviewsURL}/update/${payload.id}`
+    url: `${reviewsURL}/update/${payload.review_id}`
   })
 
   return data
@@ -256,7 +256,7 @@ export async function deleteReviews(payload) {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
     data: payload,
-    url: `${reviewsURL}/${payload.id}`
+    url: `${reviewsURL}/delete/${payload.review_id}`
   })
 
   return data
