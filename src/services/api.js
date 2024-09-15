@@ -32,6 +32,18 @@ export async function getItemsByQueryParam(queryParam) {
   return data
 }
 
+export async function getItemByItemId(payload) {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${itemsURL}/${payload.id}`
+  })
+
+  return data
+}
+
 export async function getAllItemCategories() {
   const data = await axios({
     method: 'GET',

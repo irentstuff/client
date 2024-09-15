@@ -15,7 +15,7 @@ import { editItem, uploadItemImage, deleteItemImage } from '../services/api'
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const ItemEditModal = ({ modalDetails, updateModalDetails }) => {
+export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAgain }) => {
   console.log(modalDetails)
   const [form] = Form.useForm()
   const dispatch = useDispatch()
@@ -38,8 +38,9 @@ export const ItemEditModal = ({ modalDetails, updateModalDetails }) => {
             msg: `Item is edited successfully`
           })
         )
-        navigate('/MyItems')
-        window.location.reload()
+        navigate('', { state: response.data })
+        setFetchDataAgain(true)
+        updateModalDetails({ state: false })
       } else {
         dispatch(
           updateError({

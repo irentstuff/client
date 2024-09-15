@@ -7,7 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image, Tag } from 'antd'
-import { deleteItem, getItemImage, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
+import { deleteItem, getItemImage, getItemByItemId, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
 import { ItemEditModal } from '../../components/ItemEditModal'
 import { MakeOfferModal } from '../../components/MakeOfferModal'
 import { ReviewsOverview } from '../../components/ReviewsOverview'
@@ -18,7 +18,7 @@ const { Title, Text } = Typography
 /* -------------------------------------------------------------------------- */
 /*                                  ADD ITEM                                  */
 /* -------------------------------------------------------------------------- */
-export const ViewItem = () => {
+export const ViewItem = ({ setFetchDataAgain }) => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -56,8 +56,8 @@ export const ViewItem = () => {
             msg: `Item is deleted successfully`
           })
         )
+        setFetchDataAgain(true)
         navigate('/MyItems')
-        window.location.reload()
       } else {
         dispatch(
           updateError({
@@ -82,7 +82,7 @@ export const ViewItem = () => {
       const response = await getItemImage(imageUrl)
       console.log(response)
       if (response.status === 200) {
-        if (response.data.length > 0 && response.data !== null) {
+        if (response.data !== null && response.data.length > 0) {
           let imagePath = []
           response.data.map((image) => {
             const path = `${imageUrl}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`
@@ -236,7 +236,9 @@ export const ViewItem = () => {
           <ReviewsOverview itemId={itemDetails.id} />
         </Card>
       </Space>
-      {editItemModal.state && <ItemEditModal modalDetails={editItemModal} updateModalDetails={setEditItemModal} />}
+      {editItemModal.state && (
+        <ItemEditModal modalDetails={editItemModal} updateModalDetails={setEditItemModal} setFetchDataAgain={setFetchDataAgain} />
+      )}
       {makeOfferModal.state && <MakeOfferModal modalDetails={makeOfferModal} updateModalDetails={setMakeOfferModal} />}
     </>
   )

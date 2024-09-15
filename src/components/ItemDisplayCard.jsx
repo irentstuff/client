@@ -30,7 +30,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
       const response = await getOneItemImage(imageUrl)
       // console.log(response)
       if (response.status === 200) {
-        if (response?.data) {
+        if (!response.data?.errorType) {
           const path = `${imageUrl}/${response.data.substring(response.data.lastIndexOf('/') + 1)}`
           setImagePath(path)
         }

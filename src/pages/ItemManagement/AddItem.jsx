@@ -16,7 +16,7 @@ const { Title } = Typography
 /* -------------------------------------------------------------------------- */
 /*                                  ADD ITEM                                  */
 /* -------------------------------------------------------------------------- */
-export const AddItem = () => {
+export const AddItem = ({ setFetchDataAgain }) => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -30,12 +30,12 @@ export const AddItem = () => {
       const response = await createNewItem(payload)
       console.log(response)
       if (response.status === 200) {
-        dispatch(
-          updateSuccess({
-            status: true,
-            msg: `Item is added successfully`
-          })
-        )
+        // dispatch(
+        //   updateSuccess({
+        //     status: true,
+        //     msg: `Item is added successfully`
+        //   })
+        // )
         return response.data
         // window.location.reload()
       } else {
@@ -90,11 +90,11 @@ export const AddItem = () => {
         dispatch(
           updateSuccess({
             status: true,
-            msg: `Item is edited successfully`
+            msg: `Item is added successfully`
           })
         )
+        setFetchDataAgain(true)
         navigate('/MyItems')
-        window.location.reload()
       } else {
         dispatch(
           updateError({
