@@ -68,7 +68,11 @@ export const ReviewsOverview = ({ itemId }) => {
       const response = await getReviewsForItem(payload)
       console.log(response)
       if (response.status === 200) {
-        setTotalReviews(response.data)
+        if (!response.data?.message) {
+          setTotalReviews(response.data)
+        } else {
+          setTotalReviews([])
+        }
       } else {
         dispatch(
           updateError({
