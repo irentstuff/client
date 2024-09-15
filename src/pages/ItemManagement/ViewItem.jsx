@@ -7,17 +7,18 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image, Tag } from 'antd'
-import { deleteItem, getItemImage, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
-import { ItemEditModule } from '../../components/ItemEditModule'
-import { MakeOfferModule } from '../../components/MakeOfferModule'
-import { assetsURL, availabilityOptions } from '../../services/config'
+import { deleteItem, getItemImage, getItemByItemId, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
+import { ItemEditModal } from '../../components/ItemEditModal'
+import { MakeOfferModal } from '../../components/MakeOfferModal'
+import { ReviewsOverview } from '../../components/ReviewsOverview'
+import { assetsURL, availabilityOptions, dayDifference } from '../../services/config'
 const { Meta } = Card
 const { Title, Text } = Typography
 
 /* -------------------------------------------------------------------------- */
 /*                                  ADD ITEM                                  */
 /* -------------------------------------------------------------------------- */
-export const ViewItem = () => {
+export const ViewItem = ({ setFetchDataAgain }) => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -26,27 +27,22 @@ export const ViewItem = () => {
 
   const itemDetails = state
 
-  // Calculate the difference in milliseconds
-  const diffInMs = new Date() - new Date(itemDetails.created_date)
-
   console.log(itemDetails)
 
-  const allUsers = useSelector((state) => state.iRentStuff.allUsers)
-  const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
 
   const currentUserIsItemOwner =
     currentUser?.userDetails.userId === itemDetails?.owner || currentUser?.userDetails.username === itemDetails?.owner
 
-  const [editItemModule, setEditItemModule] = useState({ state: false, data: {} })
-  const [makeOfferModule, setMakeOfferModule] = useState({ state: false, data: {} })
+  const [editItemModal, setEditItemModal] = useState({ state: false, data: {} })
+  const [makeOfferModal, setMakeOfferModal] = useState({ state: false, data: {} })
   const [itemImagePath, setItemImagePath] = useState([])
 
   console.log(itemDetails)
   console.log(itemImagePath)
   console.log(currentUserIsItemOwner)
-  console.log(editItemModule)
+  console.log(editItemModal)
 
   /* ------------------------------ api services ------------------------------ */
   const deleteItemLocal = async (payload) => {
@@ -60,8 +56,8 @@ export const ViewItem = () => {
             msg: `Item is deleted successfully`
           })
         )
+        setFetchDataAgain(true)
         navigate('/MyItems')
-        window.location.reload()
       } else {
         dispatch(
           updateError({
@@ -86,7 +82,7 @@ export const ViewItem = () => {
       const response = await getItemImage(imageUrl)
       console.log(response)
       if (response.status === 200) {
-        if (response.data.length > 0 && response.data !== null) {
+        if (response.data !== null && response.data.length > 0) {
           let imagePath = []
           response.data.map((image) => {
             const path = `${imageUrl}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`
@@ -94,52 +90,6 @@ export const ViewItem = () => {
           })
           setItemImagePath(imagePath)
         }
-      } else {
-        dispatch(
-          updateError({
-            status: true,
-            msg: response.statusText
-          })
-        )
-      }
-    } catch (error) {
-      dispatch(
-        updateError({
-          status: true,
-          msg: `${error.message}`
-        })
-      )
-    }
-  }
-
-  //get reviews for item
-  const getAverageReviewsForItemLocal = async (payload) => {
-    try {
-      const response = await getAverageReviewsForItem(payload)
-      console.log(response)
-      if (response.status === 200) {
-      } else {
-        dispatch(
-          updateError({
-            status: true,
-            msg: response.statusText
-          })
-        )
-      }
-    } catch (error) {
-      dispatch(
-        updateError({
-          status: true,
-          msg: `${error.message}`
-        })
-      )
-    }
-  }
-  const getReviewsForItemLocal = async (payload) => {
-    try {
-      const response = await getReviewsForItem(payload)
-      console.log(response)
-      if (response.status === 200) {
       } else {
         dispatch(
           updateError({
@@ -179,10 +129,6 @@ export const ViewItem = () => {
     } else if (itemDetails.image !== '') {
       getItemImageLocal(itemDetails.image)
     }
-
-    //get reviews for item on load
-    // getAverageReviewsForItemLocal(itemDetails)
-    // getReviewsForItemLocal(itemDetails)
   }, [itemDetails])
 
   return (
@@ -203,7 +149,7 @@ export const ViewItem = () => {
                 <>
                   {' '}
                   <Text>
-                    Listed {Math.ceil(diffInMs / (1000 * 60 * 60 * 24))} days ago by {itemDetails.owner}
+                    Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
                   </Text>
                   <Tag
                     style={{ float: 'right' }}
@@ -265,7 +211,7 @@ export const ViewItem = () => {
                 {currentUserIsItemOwner ? (
                   <Row gutter={8}>
                     <Col>
-                      <Button onClick={() => setEditItemModule({ state: true, data: itemDetails, itemImagePath: itemImagePath })}>
+                      <Button onClick={() => setEditItemModal({ state: true, data: itemDetails, itemImagePath: itemImagePath })}>
                         Edit Item
                       </Button>
                     </Col>
@@ -282,15 +228,18 @@ export const ViewItem = () => {
                     </Col>
                   </Row>
                 ) : (
-                  <Button onClick={() => setMakeOfferModule({ state: true, data: itemDetails })}>Make Offer</Button>
+                  <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
                 )}
               </Space>
             </Col>
           </Row>
+          <ReviewsOverview itemId={itemDetails.id} />
         </Card>
       </Space>
-      {editItemModule.state && <ItemEditModule modalDetails={editItemModule} updateModalDetails={setEditItemModule} />}
-      {makeOfferModule.state && <MakeOfferModule modalDetails={makeOfferModule} updateModalDetails={setMakeOfferModule} />}
+      {editItemModal.state && (
+        <ItemEditModal modalDetails={editItemModal} updateModalDetails={setEditItemModal} setFetchDataAgain={setFetchDataAgain} />
+      )}
+      {makeOfferModal.state && <MakeOfferModal modalDetails={makeOfferModal} updateModalDetails={setMakeOfferModal} />}
     </>
   )
 }

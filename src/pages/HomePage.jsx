@@ -29,7 +29,7 @@ export const HomePage = ({ myItems }) => {
         setInitialDisplayItems(allItems)
       }
     }
-  }, [allItems, myItems])
+  }, [allItems, allItemsCreatedByCurrentUser, myItems])
 
   useEffect(() => {
     setSearchedItems(initialDisplayItems)

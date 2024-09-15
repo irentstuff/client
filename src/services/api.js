@@ -18,12 +18,27 @@ export async function getAllItems() {
 }
 
 export async function getItemsByQueryParam(queryParam) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${itemsURL}?${queryParam}`
+  })
+
+  return data
+}
+
+export async function getItemByItemId(payload) {
   const data = await axios({
     method: 'GET',
     // headers: {
     //   Authorization: `Bearer ${token}` // Add the JWT token here
     // },
-    url: `${itemsURL}?${queryParam}`
+    url: `${itemsURL}/${payload.id}`
   })
 
   return data
@@ -160,7 +175,7 @@ export async function getReviewsForItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/items/${payload.id}`
+    url: `${reviewsURL}/item/${payload.id}`
   })
 
   return data
@@ -175,7 +190,7 @@ export async function getAverageReviewsForItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/items/${payload.id}/rating`
+    url: `${reviewsURL}/item/${payload.id}/rating`
   })
 
   return data
@@ -237,7 +252,7 @@ export async function editReview(payload) {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
     data: payload,
-    url: `${reviewsURL}/update/${payload.id}`
+    url: `${reviewsURL}/update/${payload.review_id}`
   })
 
   return data
@@ -253,7 +268,7 @@ export async function deleteReviews(payload) {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
     data: payload,
-    url: `${reviewsURL}/${payload.id}`
+    url: `${reviewsURL}/delete/${payload.review_id}`
   })
 
   return data

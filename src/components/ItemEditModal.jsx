@@ -5,16 +5,17 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../redux/reducer'
+import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Modal, Col, Form, Input, Row, Select } from 'antd'
-import { UploadImage } from '../components/UploadImage'
+import { UploadImage } from './UploadImage'
 import { formItemLayout, conditionOptions, availabilityOptions, assetsURL } from '../services/config'
 import { editItem, uploadItemImage, deleteItemImage } from '../services/api'
 
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
+export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAgain }) => {
   console.log(modalDetails)
   const [form] = Form.useForm()
   const dispatch = useDispatch()
@@ -37,8 +38,9 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
             msg: `Item is edited successfully`
           })
         )
-        navigate('/MyItems')
-        window.location.reload()
+        navigate('', { state: response.data })
+        setFetchDataAgain(true)
+        updateModalDetails({ state: false })
       } else {
         dispatch(
           updateError({
@@ -134,7 +136,7 @@ export const ItemEditModule = ({ modalDetails, updateModalDetails }) => {
         let imageUrl = ''
 
         if (img.hasOwnProperty('originFileObj')) {
-          imageUrl = `${imageFolderUrl}/${img.originFileObj.name}`
+          const imageUrl = `${imageFolderUrl}/${img.originFileObj.uid}_${moment().format('YYYYMMDD_HH:mm:ss')}`
           uploadItemImageLocal(img.originFileObj, imageUrl)
         } else {
           imageUrl = img.url

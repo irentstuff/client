@@ -55,12 +55,12 @@ export const RentalForm = ({ itemDetails }) => {
     const values = form.getFieldsValue()
 
     const formattedPayload = {
-      users: { owner_id: itemDetails.owner, renter_id: currentUser.userDetails.userId },
+      users: { owner_id: itemDetails.owner, renter_id: currentUser.userDetails.username },
       rental_details: {
         start_date: moment(values[0]).toDate(),
         end_date: moment(values[1]).toDate(),
         price_per_day: values.price_per_day,
-        depost: values.deposit,
+        deposit: values.deposit,
         loyalty_discount: false,
         loyalty_discount_percent: 0.0
       }

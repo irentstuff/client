@@ -34,6 +34,7 @@ function App() {
   const dispatch = useDispatch()
   const { user } = useAuthenticator((context) => [context.user])
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
+  const [fetchDataAgain, setFetchDataAgain] = useState(false)
 
   console.log('CURRENTUSER', currentUser)
 
@@ -127,19 +128,33 @@ function App() {
         item: apiLabels.allItemsCreatedByCurrentUser,
         apiService: getItemsByQueryParam,
         updateGlobalState: updateAllItemsCreatedByCurrentUser,
-        queryParam: `ownername=${currentUser.userDetails.username}&valid=0`
+        queryParam: `owner=me&valid=0`
       })
     }
   }, [currentUser])
+
+  useEffect(() => {
+    console.log('fetchDataAgain', fetchDataAgain)
+    if (fetchDataAgain) {
+      // all items created by current user
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allItemsCreatedByCurrentUser,
+        apiService: getItemsByQueryParam,
+        updateGlobalState: updateAllItemsCreatedByCurrentUser,
+        queryParam: `owner=me&valid=0`
+      })
+      setFetchDataAgain(false)
+    }
+  }, [fetchDataAgain])
 
   return (
     <Routes>
       <Route path='/' element={<PageLayout />}>
         <Route element={<ProtectedRoutes authenticated={currentUser.authenticated} />}>
-          <Route path='MyItems' element={<HomePage myItems={true} />} />
+          <Route path='MyItems' element={<HomePage myItems={true} setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='ViewItem' element={<ViewItem />} />
-          <Route path='MyItems/ViewItem' element={<ViewItem />} />
-          <Route path='AddItem' element={<AddItem />} />
+          <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
         </Route>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />

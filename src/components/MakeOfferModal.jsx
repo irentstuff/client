@@ -8,7 +8,7 @@ import { PurchaseForm } from './PurchaseForm'
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const MakeOfferModule = ({ modalDetails, updateModalDetails }) => {
+export const MakeOfferModal = ({ modalDetails, updateModalDetails }) => {
   console.log(modalDetails)
 
   const items = [

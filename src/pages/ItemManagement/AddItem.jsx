@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
+import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
 import { UploadImage } from '../../components/UploadImage'
@@ -15,7 +16,7 @@ const { Title } = Typography
 /* -------------------------------------------------------------------------- */
 /*                                  ADD ITEM                                  */
 /* -------------------------------------------------------------------------- */
-export const AddItem = () => {
+export const AddItem = ({ setFetchDataAgain }) => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -29,12 +30,12 @@ export const AddItem = () => {
       const response = await createNewItem(payload)
       console.log(response)
       if (response.status === 200) {
-        dispatch(
-          updateSuccess({
-            status: true,
-            msg: `Item is added successfully`
-          })
-        )
+        // dispatch(
+        //   updateSuccess({
+        //     status: true,
+        //     msg: `Item is added successfully`
+        //   })
+        // )
         return response.data
         // window.location.reload()
       } else {
@@ -89,11 +90,11 @@ export const AddItem = () => {
         dispatch(
           updateSuccess({
             status: true,
-            msg: `Item is edited successfully`
+            msg: `Item is added successfully`
           })
         )
+        setFetchDataAgain(true)
         navigate('/MyItems')
-        window.location.reload()
       } else {
         dispatch(
           updateError({
@@ -113,7 +114,7 @@ export const AddItem = () => {
   }
 
   const onFinish = async (values) => {
-    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails.userId }
+    const formattedPayload = { ...values, created_date: new Date(), owner: currentUser.userDetails.username }
     console.log(formattedPayload)
     const createdResponsed = await createNewItemLocal(formattedPayload)
     const imageFolderUrl = `${assetsURL}/${createdResponsed.id}`
@@ -123,7 +124,7 @@ export const AddItem = () => {
     console.log(uploadedFileList)
     if (imageFolderUrl !== undefined) {
       uploadedFileList.map((img) => {
-        const imageUrl = `${imageFolderUrl}/${img.originFileObj.name}`
+        const imageUrl = `${imageFolderUrl}/${img.originFileObj.uid}_${moment().format('YYYYMMDD_HH:mm:ss')}`
         uploadItemImageLocal(img.originFileObj, imageUrl)
       })
 

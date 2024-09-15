@@ -3,12 +3,12 @@
 /* -------------------------------------------------------------------------- */
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 /* --------------------------------- amplify -------------------------------- */
 import { signOut } from 'aws-amplify/auth'
 /* ---------------------------------- antd ---------------------------------- */
-import { HomeOutlined, MailOutlined, LogoutOutlined, LoginOutlined, PlusCircleOutlined } from '@ant-design/icons'
-import { Layout, Menu, Row, Col, Typography } from 'antd'
+import { HomeOutlined, MailOutlined, LogoutOutlined, LoginOutlined, PlusCircleOutlined, MenuOutlined } from '@ant-design/icons'
+import { Layout, Menu, Row, Col, Typography, Drawer, Button } from 'antd'
 import { updateSuccess, updateCurrentUser } from '../../redux/reducer'
 
 const { Header } = Layout
@@ -22,6 +22,8 @@ export const CustomHeader = () => {
   const navigate = useNavigate()
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const [openMenu, setOpenMenu] = useState('')
+  const [showMenuButton, setShowMenuButton] = useState(false)
+  const [drawerVisible, setDrawerVisible] = useState(false)
 
   const items = [
     {
@@ -44,7 +46,7 @@ export const CustomHeader = () => {
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
     {
-      label: 'Logout',
+      label: `Logout for ${currentUser?.userDetails?.username}`,
       key: 'Logout',
       icon: <LogoutOutlined />,
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
@@ -57,6 +59,15 @@ export const CustomHeader = () => {
     }
   ]
 
+  // Show the drawer
+  const showDrawer = () => {
+    setDrawerVisible(true)
+  }
+
+  // Close the drawer
+  const closeDrawer = () => {
+    setDrawerVisible(false)
+  }
   const openHomePage = () => {
     navigate('/')
     setOpenMenu('')
@@ -77,28 +88,71 @@ export const CustomHeader = () => {
     }
   }
 
+  useEffect(() => {
+    if (window.innerWidth < 1200) {
+      setShowMenuButton(true)
+    } else {
+      setShowMenuButton(false)
+    }
+
+    const handleResize = () => {
+      if (window.innerWidth < 1200) {
+        setShowMenuButton(true)
+      } else {
+        setShowMenuButton(false)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   return (
     <Header>
-      <Row>
+      <Row justify='space-between' wrap={false}>
         <Col
           onClick={(e) => openHomePage(e)}
-          span={6}
+          xs={22}
+          xl={6}
           style={{ color: 'white', opacity: '0.65', display: 'flex', justifyContent: 'flex-start' }}
         >
           iRentStuff
         </Col>
-        <Col span={15} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Menu onClick={(e) => openMenuItem(e)} theme='dark' mode='horizontal' items={items} selectedKeys={openMenu} />
-        </Col>
-        <Col
-          onClick={(e) => openHomePage(e)}
-          span={2}
-          offset={1}
-          style={{ color: 'white', opacity: '0.65', display: 'flex', justifyContent: 'flex-start' }}
-        >
-          {currentUser?.userDetails?.username ? currentUser?.userDetails?.username : 'guest'}
-        </Col>
+        {showMenuButton ? (
+          <Col span={2} style={{ textAlign: 'right' }}>
+            <Button
+              icon={<MenuOutlined style={{ fontSize: '20px', color: 'white' }} />}
+              onClick={showDrawer}
+              style={{ border: 'none', background: 'transparent' }}
+            />
+          </Col>
+        ) : (
+          <>
+            <Col span={15} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <Menu breakpoint='xs' onClick={(e) => openMenuItem(e)} theme='dark' mode='horizontal' items={items} selectedKeys={openMenu} />
+            </Col>
+            <Col
+              onClick={(e) => openHomePage(e)}
+              offset={1}
+              style={{ color: 'white', opacity: '0.65', display: 'flex', justifyContent: 'flex-start' }}
+            >
+              {currentUser?.userDetails?.username ? currentUser?.userDetails?.username : 'guest'}
+            </Col>
+          </>
+        )}
       </Row>
+
+      <Drawer title='Menu' placement='right' theme='dark' onClose={closeDrawer} open={drawerVisible}>
+        <Menu
+          mode='vertical'
+          items={items}
+          onClick={(e) => {
+            openMenuItem(e)
+            closeDrawer()
+          }}
+          selectedKeys={openMenu}
+        />
+      </Drawer>
     </Header>
   )
 }
