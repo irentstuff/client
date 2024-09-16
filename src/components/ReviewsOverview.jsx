@@ -165,7 +165,7 @@ export const ReviewsOverview = ({ itemId }) => {
               key={review.review_id}
               avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=8`} />}
               title={<Rate disabled value={review.rating} allowHalf />}
-              description={`${dayDifference(review.created_at)} days ago by ${review.user_id}`}
+              description={`${dayDifference(review.created_at) + 2} days ago by ${review.user_id}`}
             />
             {review.comment}
           </List.Item>

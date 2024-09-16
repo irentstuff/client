@@ -283,9 +283,9 @@ export async function createNewRental(payload, item_id) {
 
   const data = await axios({
     method: 'POST',
-    headers: {
-      Authorization: `Bearer ${token}` // Add the JWT token here
-    },
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
     data: payload,
     url: `${rentalsURL}/${item_id}/add`
   })
