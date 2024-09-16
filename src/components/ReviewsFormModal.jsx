@@ -83,7 +83,12 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails, setRefresh 
   const onFinish = () => {
     const values = form.getFieldsValue()
     if (!modalDetails.inEdit) {
-      const formattedPayload = { ...values, item_id: modalDetails.data.item_id, user_id: currentUser.userDetails.username }
+      const formattedPayload = {
+        ...values,
+        item_id: modalDetails.data.item_id,
+        user_id: currentUser.userDetails.username,
+        created: new Date()
+      }
       console.log(formattedPayload)
       createReviewsLocal(formattedPayload)
     } else {

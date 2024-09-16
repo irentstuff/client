@@ -57,12 +57,10 @@ export const RentalForm = ({ itemDetails }) => {
     const formattedPayload = {
       users: { owner_id: itemDetails.owner, renter_id: currentUser.userDetails.username },
       rental_details: {
-        start_date: moment(values[0]).toDate(),
-        end_date: moment(values[1]).toDate(),
-        price_per_day: values.price_per_day,
-        deposit: values.deposit,
-        loyalty_discount: false,
-        loyalty_discount_percent: 0.0
+        start_date: moment(values[0]).format('YYYY-MM-DD'),
+        end_date: moment(values[1]).format('YYYY-MM-DD'),
+        price_per_day: parseFloat(values.price_per_day),
+        deposit: parseFloat(values.deposit)
       }
     }
 
