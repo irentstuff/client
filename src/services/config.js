@@ -22,6 +22,7 @@ export const apiLabels = {
   allItems: 'ALL ITEMS',
   allItemsCategories: 'ALL ITEMS CATEGORIES',
   allItemsCreatedByCurrentUser: 'ALL ITEMS BY CURRENT USER',
+  allOffersMadeByCurrentUser: 'ALL OFFER MADE BY CURRENT USER',
   allUsers: 'ALL USERS'
 }
 
@@ -101,6 +102,17 @@ export const availabilityOptions = [
     value: 'sold',
     label: 'Sold',
     color: 'red'
+  }
+]
+
+/* -------------------------------------------------------------------------- */
+/*                                RENTAL STATUS                               */
+/* -------------------------------------------------------------------------- */
+export const rentalStatus = [
+  {
+    value: 'offered',
+    label: 'Offered',
+    color: 'orange'
   }
 ]
 

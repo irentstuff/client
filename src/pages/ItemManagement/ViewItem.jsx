@@ -204,7 +204,7 @@ export const ViewItem = ({ setFetchDataAgain }) => {
                 </Text>
 
                 <Text>
-                  Deposit Price (per day):
+                  Deposit Price:
                   <Text strong>{` $${itemDetails.deposit}`}</Text>
                 </Text>
 

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 
 export const iRentStuffSlice = createSlice({
   name: 'iRentStuff',
@@ -11,8 +11,11 @@ export const iRentStuffSlice = createSlice({
     currentUser: { authenticated: false, userDetails: {}, token: '' },
     //ITEMS
     allItems: [],
+    allItemsMap: {},
     allItemCategories: [],
-    allItemsCreatedByCurrentUser: []
+    allItemsCreatedByCurrentUser: [],
+    //RENTAL
+    allOffersMadeByCurrentUser: []
   },
   reducers: {
     //NOTIFICATION
@@ -34,7 +37,15 @@ export const iRentStuffSlice = createSlice({
     },
     //ITEMS
     updateAllItems: (state, action) => {
-      state.allItems = action.payload.data
+      const allItems = action.payload.data
+      state.allItems = allItems
+
+      const itemMap = allItems.reduce((map, item) => {
+        map[item.id] = item
+        return map
+      }, {})
+
+      state.allItemsMap = itemMap
     },
     updateAllItemCategories: (state, action) => {
       const allItemCategories = action.payload.data
@@ -45,6 +56,20 @@ export const iRentStuffSlice = createSlice({
     },
     updateAllItemsCreatedByCurrentUser: (state, action) => {
       state.allItemsCreatedByCurrentUser = action.payload.data
+    },
+    //RENTALS
+    updateAllOffersMadeByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      console.log(combinedList)
+
+      state.allOffersMadeByCurrentUser = combinedList
     }
   }
 })
@@ -57,7 +82,8 @@ export const {
   updateCurrentUser,
   updateAllItems,
   updateAllItemCategories,
-  updateAllItemsCreatedByCurrentUser
+  updateAllItemsCreatedByCurrentUser,
+  updateAllOffersMadeByCurrentUser
 } = iRentStuffSlice.actions
 
 export default iRentStuffSlice.reducer

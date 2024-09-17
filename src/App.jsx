@@ -14,12 +14,13 @@ import {
   updateAllItems,
   updateAllItemCategories,
   updateAllItemsCreatedByCurrentUser,
+  updateAllOffersMadeByCurrentUser,
   updateAllUsers,
   updateCurrentUser
 } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems, getAllItemCategories, getItemsByQueryParam, getAllUsers } from './services/api'
+import { getAllItems, getAllItemCategories, getItemsByQueryParam, getRentalDetailsForUser, getAllUsers } from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
@@ -28,6 +29,7 @@ import { HomePage } from './pages/HomePage'
 import { AddItem } from './pages/ItemManagement/AddItem'
 import { ViewItem } from './pages/ItemManagement/ViewItem'
 import { Login } from './pages/UserManagement/Login'
+import { OfferMade } from './pages/TransactionManagement/OfferMade'
 // import { Register } from './pages/UserManagement/RegisterWithAPI'
 
 function App() {
@@ -130,6 +132,14 @@ function App() {
         updateGlobalState: updateAllItemsCreatedByCurrentUser,
         queryParam: `owner=me&valid=0`
       })
+
+      //rentals offer made by user
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allOffersMadeByCurrentUser,
+        apiService: getRentalDetailsForUser,
+        updateGlobalState: updateAllOffersMadeByCurrentUser,
+        queryParam: `as=renter`
+      })
     }
   }, [currentUser])
 
@@ -155,6 +165,7 @@ function App() {
           <Route path='ViewItem' element={<ViewItem />} />
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='MyOffersMade' element={<OfferMade />} />
         </Route>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />

@@ -32,13 +32,13 @@ export async function getItemsByQueryParam(queryParam) {
   return data
 }
 
-export async function getItemByItemId(payload) {
+export async function getItemByItemId(itemDetails) {
   const data = await axios({
     method: 'GET',
     // headers: {
     //   Authorization: `Bearer ${token}` // Add the JWT token here
     // },
-    url: `${itemsURL}/${payload.id}`
+    url: `${itemsURL}/${itemDetails.id}`
   })
 
   return data
@@ -56,7 +56,7 @@ export async function getAllItemCategories() {
   return data
 }
 
-export async function createNewItem(payload) {
+export async function createNewItem(itemDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -65,14 +65,14 @@ export async function createNewItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    data: payload,
+    data: itemDetails,
     url: `${itemsURL}`
   })
 
   return data
 }
 
-export async function editItem(payload) {
+export async function editItem(itemDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -81,14 +81,14 @@ export async function editItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    data: payload,
+    data: itemDetails,
     url: `${itemsURL}/${payload.id}`
   })
 
   return data
 }
 
-export async function deleteItem(payload) {
+export async function deleteItem(itemDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -97,8 +97,8 @@ export async function deleteItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    data: payload,
-    url: `${itemsURL}/${payload.id}`
+    data: itemDetails,
+    url: `${itemsURL}/${itemDetails.id}`
   })
 
   return data
@@ -166,7 +166,7 @@ export async function deleteItemImage(url) {
 /* -------------------------------------------------------------------------- */
 /*                                   REVIEWS                                  */
 /* -------------------------------------------------------------------------- */
-export async function getReviewsForItem(payload) {
+export async function getReviewsForItem(itemDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -175,13 +175,13 @@ export async function getReviewsForItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/item/${payload.id}`
+    url: `${reviewsURL}/item/${itemDetails.id}`
   })
 
   return data
 }
 
-export async function getAverageReviewsForItem(payload) {
+export async function getAverageReviewsForItem(itemDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -190,13 +190,13 @@ export async function getAverageReviewsForItem(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/item/${payload.id}/rating`
+    url: `${reviewsURL}/item/${itemDetails.id}/rating`
   })
 
   return data
 }
 
-export async function getReviewsForUser(payload) {
+export async function getReviewsForUser(user_id) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -205,13 +205,13 @@ export async function getReviewsForUser(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/user/${payload.id}`
+    url: `${reviewsURL}/user/${user_id}`
   })
 
   return data
 }
 
-export async function getReviewsByReviewId(payload) {
+export async function getReviewsByReviewId(reviewDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -220,13 +220,13 @@ export async function getReviewsByReviewId(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${reviewsURL}/${payload.id}`
+    url: `${reviewsURL}/${reviewDetails.id}`
   })
 
   return data
 }
 
-export async function createNewReview(payload) {
+export async function createNewReview(reviewDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -235,14 +235,14 @@ export async function createNewReview(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    data: payload,
+    data: reviewDetails,
     url: `${reviewsURL}`
   })
 
   return data
 }
 
-export async function editReview(payload) {
+export async function editReview(reviewDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -252,13 +252,13 @@ export async function editReview(payload) {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
     data: payload,
-    url: `${reviewsURL}/update/${payload.review_id}`
+    url: `${reviewsURL}/update/${reviewDetails.review_id}`
   })
 
   return data
 }
 
-export async function deleteReviews(payload) {
+export async function deleteReviews(reviewDetails) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -268,7 +268,7 @@ export async function deleteReviews(payload) {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
     data: payload,
-    url: `${reviewsURL}/delete/${payload.review_id}`
+    url: `${reviewsURL}/delete/${reviewDetails.review_id}`
   })
 
   return data
@@ -277,23 +277,23 @@ export async function deleteReviews(payload) {
 /* -------------------------------------------------------------------------- */
 /*                                   RENTAL                                   */
 /* -------------------------------------------------------------------------- */
-export async function createNewRental(payload, item_id) {
+export async function createNewRental(rentalDetails, item_id) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
   const data = await axios({
     method: 'POST',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
-    data: payload,
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    data: rentalDetails,
     url: `${rentalsURL}/${item_id}/add`
   })
 
   return data
 }
 
-export async function getRentalDetails(payload) {
+export async function getRentalDetails(item_id, rental_id) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -302,7 +302,40 @@ export async function getRentalDetails(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${rentalsURL}/${payload.item_id}/${payload.rental_id}`
+    url: `${rentalsURL}/${item_id}/${rental_id}`
+  })
+
+  return data
+}
+
+export async function getRentalDetailsForUser(queryParam) {
+  const state = store.getState()
+  console.log(state.iRentStuff.currentUser)
+  const username = state.iRentStuff.currentUser.userDetails.username
+  console.log(username)
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${rentalsURL}/user/${username}?${queryParam}`
+  })
+
+  return data
+}
+
+export async function getRentalDetailsForItems(item_id, queryParam) {
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${rentalsURL}/${item_id}?${queryParam}`
   })
 
   return data
@@ -310,30 +343,15 @@ export async function getRentalDetails(payload) {
 
 /* --------------- patch actions = [confirm, cancel, start, complete] -------------- */
 export async function rentalPatch(payload) {
-  // const state = store.getState()
-  // const token = state.iRentStuff.currentUser.token
-
-  const data = await axios({
-    method: 'PATCH',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
-    url: `${rentalsURL}/${payload.item_id}/${payload.rental_id}/${payload.action}`
-  })
-
-  return data
-}
-
-export async function getRentalDetailsForUser(payload) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
   const data = await axios({
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${rentalsURL}/${payload.user_id}/rentals/`
+    url: `${rentalsURL}/${payload.item_id}/${payload.rental_id}/${payload.action}`
   })
 
   return data
@@ -358,7 +376,7 @@ export async function createNewPurchase(payload, item_id) {
   return data
 }
 
-export async function getPurchaseDetails(payload) {
+export async function getPurchaseDetails(item_id, purchase_id) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -367,7 +385,23 @@ export async function getPurchaseDetails(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${purchasesURL}/${payload.item_id}/${payload.purchase_id}`
+    url: `${purchasesURL}/${item_id}/${purchase_id}`
+  })
+
+  return data
+}
+
+export async function getPurchaseDetailsForUser(queryParam) {
+  const state = store.getState()
+  const username = state.iRentStuff.currentUser.userDetails.username
+  const token = state.iRentStuff.currentUser.token
+
+  const data = await axios({
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
+    url: `${purchasesURL}/user/${username}?${queryParam}`
   })
 
   return data
@@ -375,14 +409,14 @@ export async function getPurchaseDetails(payload) {
 
 /* --------------- patch actions = [confirm, cancel, complete] -------------- */
 export async function purchasePatch(payload) {
-  // const state = store.getState()
-  // const token = state.iRentStuff.currentUser.token
+  const state = store.getState()
+  const token = state.iRentStuff.currentUser.token
 
   const data = await axios({
     method: 'PATCH',
-    // headers: {
-    //   Authorization: `Bearer ${token}` // Add the JWT token here
-    // },
+    headers: {
+      Authorization: `Bearer ${token}` // Add the JWT token here
+    },
     url: `${purchasesURL}/${payload.item_id}/${payload.purchase_id}/${payload.action}`
   })
 
