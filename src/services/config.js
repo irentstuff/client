@@ -146,13 +146,19 @@ export const rentalStatus = [
     value: 'ongoing',
     text: 'Ongoing',
     label: 'Ongoing',
-    color: 'dark green'
+    color: 'cyan'
   },
   {
     value: 'confirmed',
     text: 'Confirmed',
     label: 'Confirmed',
     color: 'green'
+  },
+  {
+    value: 'completed',
+    text: 'Completed',
+    label: 'Completed',
+    color: 'default'
   }
 ]
 

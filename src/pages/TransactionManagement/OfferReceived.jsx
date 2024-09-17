@@ -11,17 +11,17 @@ import { ViewPurchases } from './ViewPurchases'
 /* -------------------------------------------------------------------------- */
 /*                                  OfferMade                                 */
 /* -------------------------------------------------------------------------- */
-export const OfferMade = ({ setFetchDataAgain }) => {
+export const OfferReceived = ({ setFetchDataAgain }) => {
   const items = [
     {
       key: '1',
       label: 'Rentals',
-      children: <ViewRentals setFetchDataAgain={setFetchDataAgain} isOwner={false} />
+      children: <ViewRentals setFetchDataAgain={setFetchDataAgain} isOwner={true} />
     },
     {
       key: '2',
       label: 'Purchase',
-      children: <ViewPurchases setFetchDataAgain={setFetchDataAgain} isOwner={false} />
+      children: <ViewPurchases setFetchDataAgain={setFetchDataAgain} isOwner={true} />
     }
   ]
 

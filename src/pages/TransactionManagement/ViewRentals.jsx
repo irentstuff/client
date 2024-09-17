@@ -16,18 +16,20 @@ import { ReviewsFormModal } from '../../components/ReviewsFormModal'
 /* -------------------------------------------------------------------------- */
 /*                                  ViewRentals                                 */
 /* -------------------------------------------------------------------------- */
-export const ViewRentals = ({ setFetchDataAgain, owner }) => {
+export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
   const dispatch = useDispatch()
 
-  const allRentalOffersMadeByCurrentUser = useSelector((state) => state.iRentStuff.allRentalOffersMadeByCurrentUser)
+  const allRentalOffers = isOwner
+    ? useSelector((state) => state.iRentStuff.allRentalOffersReceivedByCurrentUser)
+    : useSelector((state) => state.iRentStuff.allRentalOffersMadeByCurrentUser)
 
   const [searchText, setSearchText] = useState('')
-  const [searchData, setSearchData] = useState(allRentalOffersMadeByCurrentUser)
+  const [searchData, setSearchData] = useState([])
 
   const [viewItemModal, setViewItemModal] = useState({ state: false, data: {} })
   const [editReviewModal, setEditReviewModal] = useState({ state: false, data: {} })
 
-  const roleAllowedPatchActions = owner ? ownerCanPatchActions : userCanPatchActions
+  const roleAllowedPatchActions = isOwner ? ownerCanPatchActions : userCanPatchActions
 
   const getNestedValue = (obj, path) => {
     if (!path) return undefined
@@ -43,7 +45,7 @@ export const ViewRentals = ({ setFetchDataAgain, owner }) => {
   const handleReset = (clearFilters, close) => {
     clearFilters()
     setSearchText('')
-    setSearchData(allRentalOffersMadeByCurrentUser)
+    setSearchData(allRentalOffers)
     close()
   }
   const getColumnSearchProps = (dataIndex) => ({
@@ -114,54 +116,78 @@ export const ViewRentals = ({ setFetchDataAgain, owner }) => {
 
   const columns = [
     {
+      title: 'Renter',
+      dataIndex: 'renter_id',
+      key: 'renter_id',
+      // width: 100,
+      show: isOwner,
+      sorter: (a, b) => a.renter_id.localeCompare(b.renter_id),
+      ...getColumnSearchProps('renter_id')
+    },
+    {
       title: 'Item',
       dataIndex: ['itemDetails', 'title'],
       key: ['itemDetails', 'title'],
-      width: '15%',
+      show: true,
       sorter: (a, b) => a.itemDetails.title.localeCompare(b.itemDetails.title),
       ...getColumnSearchProps('itemDetails.title')
     },
-    {
-      title: 'Listed Deposit (SGD)',
-      dataIndex: ['itemDetails', 'deposit'],
-      key: ['itemDetails', 'deposit'],
-      sorter: (a, b) => a.itemDetails.deposit - b.itemDetails.deposit
-    },
+    // {
+    //   title: 'Listed Deposit (SGD)',
+    //   dataIndex: ['itemDetails', 'deposit'],
+    //   key: ['itemDetails', 'deposit'],
+    //   width: 150,
+    //   sorter: (a, b) => a.itemDetails.deposit - b.itemDetails.deposit,
+    // show: true
+    // },
     {
       title: 'Offered Deposit (SGD)',
       dataIndex: 'deposit',
       key: 'deposit',
+      width: 200,
+      show: true,
       sorter: (a, b) => a.deposit - b.deposit
     },
-    {
-      title: 'Listed Rental Price (Per Day) (SGD)',
-      dataIndex: ['itemDetails', 'price_per_day'],
-      key: ['itemDetails', 'price_per_day'],
-      sorter: (a, b) => a.itemDetails.price_per_day - b.itemDetails.price_per_day
-    },
+    // {
+    //   title: 'Listed Rental Price (Per Day) (SGD)',
+    //   dataIndex: ['itemDetails', 'price_per_day'],
+    //   key: ['itemDetails', 'price_per_day'],
+    //   width: 150,
+    //   sorter: (a, b) => a.itemDetails.price_per_day - b.itemDetails.price_per_day,
+    // show: true
+    // },
 
     {
       title: 'Offered Rental Price (Per Day) (SGD)',
       dataIndex: 'price_per_day',
       key: 'price_per_day',
+      width: 200,
+      show: true,
       sorter: (a, b) => a.price_per_day - b.price_per_day
     },
     {
       title: 'Start Date',
       dataIndex: 'start_date',
       key: 'start_date',
+      // width: 100,
+      show: true,
+
       sorter: (a, b) => a.start_date.localeCompare(b.start_date)
     },
     {
       title: 'End Date',
       dataIndex: 'end_date',
       key: 'end_date',
+      // width: 100,
+      show: true,
       sorter: (a, b) => a.end_date.localeCompare(b.end_date)
     },
     {
       title: 'Offered Date',
       dataIndex: 'updated_at',
       key: 'updated_at',
+      // width: 100,
+      show: true,
       render: (text, record, index) => moment(text).format('YYYY-MM-DD'),
       sorter: (a, b) => a.updated_at.localeCompare(b.updated_at)
     },
@@ -169,6 +195,7 @@ export const ViewRentals = ({ setFetchDataAgain, owner }) => {
       title: 'Status',
       key: 'status',
       dataIndex: 'status',
+      show: true,
       render: (text, record, index) => (
         <Tag style={{ float: 'right' }} bordered={false} color={rentalStatus.find((option) => option.value == text).color}>
           {rentalStatus.find((option) => option.value == text).label}
@@ -181,22 +208,13 @@ export const ViewRentals = ({ setFetchDataAgain, owner }) => {
     {
       title: 'Action',
       key: 'action',
+      show: true,
       render: (_, record) => (
         <Space size='middle'>
           <Button type='link' onClick={() => setViewItemModal({ state: true, data: record.itemDetails })}>
             View Item Details
           </Button>
-          {roleAllowedPatchActions.includes('cancel') && statusCanPatchActions.cancel.includes(record.status) && (
-            <Popconfirm
-              title='Delete rental offer'
-              description='Are you sure to delete this offer?'
-              onConfirm={() => cancelRental(record)}
-              okText='Yes'
-              cancelText='No'
-            >
-              <Button type='link'>Cancel</Button>
-            </Popconfirm>
-          )}
+
           {roleAllowedPatchActions.includes('review') && statusCanPatchActions.review.includes(record.status) && (
             <Button
               type='link'
@@ -207,20 +225,66 @@ export const ViewRentals = ({ setFetchDataAgain, owner }) => {
               Leave a Review
             </Button>
           )}
+
+          {/* UPDATE OFFER */}
+          {roleAllowedPatchActions.includes('cancel') && statusCanPatchActions.cancel.includes(record.status) && (
+            <Popconfirm
+              title='Delete rental offer'
+              description='Are you sure to delete this offer?'
+              onConfirm={() => updateRental(record, patchActions.cancel)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button type='link'>Cancel</Button>
+            </Popconfirm>
+          )}
+          {roleAllowedPatchActions.includes('confirm') && statusCanPatchActions.confirm.includes(record.status) && (
+            <Popconfirm
+              title='Confirm rental offer'
+              description='Are you sure to confirm this offer?'
+              onConfirm={() => updateRental(record, patchActions.confirm)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button type='link'>Confirm</Button>
+            </Popconfirm>
+          )}
+          {roleAllowedPatchActions.includes('start') && statusCanPatchActions.start.includes(record.status) && (
+            <Popconfirm
+              title='Start rental offer'
+              description='Are you sure to start this offer?'
+              onConfirm={() => updateRental(record, patchActions.start)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button type='link'>Start</Button>
+            </Popconfirm>
+          )}
+          {roleAllowedPatchActions.includes('complete') && statusCanPatchActions.complete.includes(record.status) && (
+            <Popconfirm
+              title='Complete rental offer'
+              description='Are you sure to complete this offer?'
+              onConfirm={() => updateRental(record, patchActions.complete)}
+              okText='Yes'
+              cancelText='No'
+            >
+              <Button type='link'>Complete</Button>
+            </Popconfirm>
+          )}
         </Space>
       )
     }
   ]
 
-  const cancelRental = async (record) => {
+  const updateRental = async (record, action) => {
     try {
-      const response = await rentalPatch(record.itemDetails.id, record.rental_id, patchActions.cancel)
+      const response = await rentalPatch(record.itemDetails.id, record.rental_id, action)
       console.log(response)
       if (response.status === 200) {
         dispatch(
           updateSuccess({
             status: true,
-            msg: `Rental offer is cancelled successfully`
+            msg: `Rental offer is updated to ${action} successfully`
           })
         )
         setFetchDataAgain(true)
@@ -242,9 +306,13 @@ export const ViewRentals = ({ setFetchDataAgain, owner }) => {
     }
   }
 
+  useEffect(() => {
+    setSearchData(allRentalOffers)
+  }, [allRentalOffers])
+
   return (
     <>
-      <Table columns={columns} dataSource={searchData} key={searchData.rental_id} />
+      <Table columns={columns.filter((col) => col.show)} dataSource={searchData} key={searchData.rental_id} scroll={{ x: 'max-content' }} />
       <Modal
         width={1000}
         footer={null}

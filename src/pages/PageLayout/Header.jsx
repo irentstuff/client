@@ -41,6 +41,12 @@ export const CustomHeader = () => {
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
     {
+      label: 'Offers Received',
+      key: 'OffersReceived',
+      icon: <DollarOutlined />,
+      style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
+    },
+    {
       label: 'My Items',
       key: 'MyItems',
       icon: <HomeOutlined />,

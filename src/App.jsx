@@ -40,6 +40,8 @@ import { AddItem } from './pages/ItemManagement/AddItem'
 import { ViewItem } from './pages/ItemManagement/ViewItem'
 import { Login } from './pages/UserManagement/Login'
 import { OfferMade } from './pages/TransactionManagement/OfferMade'
+import { OfferReceived } from './pages/TransactionManagement/OfferReceived'
+
 // import { Register } from './pages/UserManagement/RegisterWithAPI'
 
 function App() {
@@ -171,6 +173,15 @@ function App() {
 
       setFetchDataAgain(false)
     }
+
+    if (fetchDataAgain) {
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allItems,
+        apiService: getAllItems,
+        updateGlobalState: updateAllItems
+      })
+      setFetchDataAgain(false)
+    }
   }, [currentUser, fetchDataAgain])
 
   return (
@@ -182,6 +193,7 @@ function App() {
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='OffersMade' element={<OfferMade setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='OffersReceived' element={<OfferReceived setFetchDataAgain={setFetchDataAgain} />} />
         </Route>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />
