@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateError, updateSuccess } from '../redux/reducer'
+import { updateRefreshReviews, updateError, updateSuccess } from '../redux/reducer'
 import { Rate, Typography, Space, Avatar, List, Input, Modal, Button, Popconfirm } from 'antd'
 import { ReviewsFormModal } from './ReviewsFormModal'
 
@@ -25,9 +25,9 @@ export const ReviewsOverview = ({ itemId }) => {
   })
   const [totalReviews, setTotalReviews] = useState([])
   const [editReviewModal, setEditReviewModal] = useState({ state: false, data: {} })
-  const [refresh, setRefresh] = useState(true)
 
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
+  const refresh = useSelector((state) => state.iRentStuff.refreshReviews)
 
   console.log('REVIEWS :', averageReviews, totalReviews)
 
@@ -103,7 +103,11 @@ export const ReviewsOverview = ({ itemId }) => {
             msg: `Review is deleted successfully`
           })
         )
-        setRefresh(true)
+        dispatch(
+          updateRefreshReviews({
+            data: true
+          })
+        )
       } else {
         dispatch(
           updateError({
@@ -127,7 +131,11 @@ export const ReviewsOverview = ({ itemId }) => {
       //get reviews for item on load
       getAverageReviewsForItemLocal({ id: itemId })
       getReviewsForItemLocal({ id: itemId })
-      setRefresh(false)
+      dispatch(
+        updateRefreshReviews({
+          data: false
+        })
+      )
       setEditReviewModal({ state: false, data: {} })
     }
   }, [refresh])
@@ -170,9 +178,7 @@ export const ReviewsOverview = ({ itemId }) => {
           </List.Item>
         )}
       />
-      {editReviewModal.state && (
-        <ReviewsFormModal modalDetails={editReviewModal} updateModalDetails={setEditReviewModal} setRefresh={setRefresh} />
-      )}
+      {editReviewModal.state && <ReviewsFormModal modalDetails={editReviewModal} updateModalDetails={setEditReviewModal} />}
     </Space>
   )
 }

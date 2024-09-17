@@ -172,7 +172,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
           <Button type='link' onClick={() => setViewItemModal({ state: true, data: record.itemDetails })}>
             View Item Details
           </Button>
-          {statusCanPatchActions.review.includes(record.status) && (
+          {/* {statusCanPatchActions.review.includes(record.status) && (
             <Button
               type='link'
               onClick={() =>
@@ -181,7 +181,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
             >
               Leave a Review
             </Button>
-          )}
+          )} */}
 
           {/* UPDATE PURCHASE */}
           {roleAllowedPatchActions.includes('cancel') && statusCanPatchActions.cancel.includes(record.status) && (

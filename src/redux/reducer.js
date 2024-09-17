@@ -3,6 +3,8 @@ import { createSlice, current } from '@reduxjs/toolkit'
 export const iRentStuffSlice = createSlice({
   name: 'iRentStuff',
   initialState: {
+    //REFRESH
+    refreshReviews: true,
     //NOTIFICATION
     showSuccess: { status: false, msg: '' },
     showError: { status: false, msg: '' },
@@ -22,6 +24,10 @@ export const iRentStuffSlice = createSlice({
     allPurchaseOffersReceivedByCurrentUser: []
   },
   reducers: {
+    //REFRESH
+    updateRefreshReviews: (state, action) => {
+      state.refreshReviews = action.payload.data
+    },
     //NOTIFICATION
     updateSuccess: (state, action) => {
       state.showSuccess.status = action.payload.status
@@ -112,6 +118,7 @@ export const iRentStuffSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {
+  updateRefreshReviews,
   updateSuccess,
   updateError,
   updateAllUsers,

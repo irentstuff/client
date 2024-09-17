@@ -34,7 +34,7 @@ export const OfferMade = ({ setFetchDataAgain }) => {
         paddingTop: '25px'
       }}
     >
-      <Tabs type='card' items={items} size='large' />
+      <Tabs type='card' items={items} size='large' key={items.key} />
     </Space>
   )
 }
