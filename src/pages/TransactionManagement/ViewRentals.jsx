@@ -222,7 +222,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
                 setEditReviewModal({ state: true, inEdit: false, data: { item_id: record.item_id, rental_id: record.rental_id } })
               }
             >
-              Leave a Review
+              Review
             </Button>
           )}
 
