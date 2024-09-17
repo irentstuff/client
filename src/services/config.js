@@ -22,7 +22,10 @@ export const apiLabels = {
   allItems: 'ALL ITEMS',
   allItemsCategories: 'ALL ITEMS CATEGORIES',
   allItemsCreatedByCurrentUser: 'ALL ITEMS BY CURRENT USER',
-  allOffersMadeByCurrentUser: 'ALL OFFER MADE BY CURRENT USER',
+  allRentalOffersMadeByCurrentUser: 'ALL RENTAL OFFER MADE BY CURRENT USER',
+  allPurchaseOffersMadeByCurrentUser: 'ALL PURCHASE OFFER MADE BY CURRENT USER',
+  allRentalOffersReceivedByCurrentUser: 'ALL RENTAL OFFER RECEIVED BY CURRENT USER',
+  allPurchaseOffersReceivedByCurrentUser: 'ALL PURCHASE OFFER RECEIVED BY CURRENT USER',
   allUsers: 'ALL USERS'
 }
 

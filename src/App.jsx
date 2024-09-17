@@ -14,13 +14,23 @@ import {
   updateAllItems,
   updateAllItemCategories,
   updateAllItemsCreatedByCurrentUser,
-  updateAllOffersMadeByCurrentUser,
+  updateAllRentalOffersMadeByCurrentUser,
+  updateAllPurchaseOffersMadeByCurrentUser,
+  updateAllRentalOffersReceivedByCurrentUser,
+  updateAllPurchaseOffersReceivedByCurrentUser,
   updateAllUsers,
   updateCurrentUser
 } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems, getAllItemCategories, getItemsByQueryParam, getRentalDetailsForUser, getAllUsers } from './services/api'
+import {
+  getAllItems,
+  getAllItemCategories,
+  getItemsByQueryParam,
+  getRentalDetailsForUser,
+  getPurchaseDetailsForUser,
+  getAllUsers
+} from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
@@ -124,7 +134,7 @@ function App() {
   }, [user])
 
   useEffect(() => {
-    if (currentUser.authenticated) {
+    if (currentUser.authenticated || fetchDataAgain) {
       // all items created by current user
       fetchDataAndSetGlobalState({
         item: apiLabels.allItemsCreatedByCurrentUser,
@@ -133,38 +143,37 @@ function App() {
         queryParam: `owner=me&valid=0`
       })
 
-      //rentals offer made by user
+      //offer made by user
       fetchDataAndSetGlobalState({
-        item: apiLabels.allOffersMadeByCurrentUser,
+        item: apiLabels.allRentalOffersMadeByCurrentUser,
         apiService: getRentalDetailsForUser,
-        updateGlobalState: updateAllOffersMadeByCurrentUser,
+        updateGlobalState: updateAllRentalOffersMadeByCurrentUser,
         queryParam: `as=renter`
       })
-    }
-  }, [currentUser])
-
-  useEffect(() => {
-    console.log('fetchDataAgain', fetchDataAgain)
-    if (fetchDataAgain) {
-      // all items created by current user
       fetchDataAndSetGlobalState({
-        item: apiLabels.allItemsCreatedByCurrentUser,
-        apiService: getItemsByQueryParam,
-        updateGlobalState: updateAllItemsCreatedByCurrentUser,
-        queryParam: `owner=me&valid=0`
+        item: apiLabels.allPurchaseOffersMadeByCurrentUser,
+        apiService: getPurchaseDetailsForUser,
+        updateGlobalState: updateAllPurchaseOffersMadeByCurrentUser,
+        queryParam: `as=buyer`
       })
 
-      //rentals offer made by user
+      //offer received by user
       fetchDataAndSetGlobalState({
-        item: apiLabels.allOffersMadeByCurrentUser,
+        item: apiLabels.allRentalOffersReceivedByCurrentUser,
         apiService: getRentalDetailsForUser,
-        updateGlobalState: updateAllOffersMadeByCurrentUser,
-        queryParam: `as=renter`
+        updateGlobalState: updateAllRentalOffersReceivedByCurrentUser,
+        queryParam: `as=owner`
+      })
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allPurchaseOffersReceivedByCurrentUser,
+        apiService: getPurchaseDetailsForUser,
+        updateGlobalState: updateAllPurchaseOffersReceivedByCurrentUser,
+        queryParam: `as=owner`
       })
 
       setFetchDataAgain(false)
     }
-  }, [fetchDataAgain])
+  }, [currentUser, fetchDataAgain])
 
   return (
     <Routes>

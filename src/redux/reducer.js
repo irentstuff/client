@@ -14,8 +14,12 @@ export const iRentStuffSlice = createSlice({
     allItemsMap: {},
     allItemCategories: [],
     allItemsCreatedByCurrentUser: [],
-    //RENTAL
-    allOffersMadeByCurrentUser: []
+    //OFFERS MADE
+    allRentalOffersMadeByCurrentUser: [],
+    allPurchaseOffersMadeByCurrentUser: [],
+    //OFFERS RECEIVED
+    allRentalOffersReceivedByCurrentUser: [],
+    allPurchaseOffersReceivedByCurrentUser: []
   },
   reducers: {
     //NOTIFICATION
@@ -57,8 +61,8 @@ export const iRentStuffSlice = createSlice({
     updateAllItemsCreatedByCurrentUser: (state, action) => {
       state.allItemsCreatedByCurrentUser = action.payload.data
     },
-    //RENTALS
-    updateAllOffersMadeByCurrentUser: (state, action) => {
+    //OFFER MADE
+    updateAllRentalOffersMadeByCurrentUser: (state, action) => {
       const allOffersMade = action.payload.data
       const allItemsMap = current(state.allItemsMap)
 
@@ -69,7 +73,41 @@ export const iRentStuffSlice = createSlice({
 
       console.log(combinedList)
 
-      state.allOffersMadeByCurrentUser = combinedList
+      state.allRentalOffersMadeByCurrentUser = combinedList
+    },
+    updateAllPurchaseOffersMadeByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      state.allPurchaseOffersMadeByCurrentUser = combinedList
+    },
+    //OFFERS RECEIVED
+    updateAllRentalOffersReceivedByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      state.allRentalOffersReceivedByCurrentUser = combinedList
+    },
+    updateAllPurchaseOffersReceivedByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      state.allPurchaseOffersReceivedByCurrentUser = combinedList
     }
   }
 })
@@ -83,7 +121,10 @@ export const {
   updateAllItems,
   updateAllItemCategories,
   updateAllItemsCreatedByCurrentUser,
-  updateAllOffersMadeByCurrentUser
+  updateAllRentalOffersMadeByCurrentUser,
+  updateAllPurchaseOffersMadeByCurrentUser,
+  updateAllRentalOffersReceivedByCurrentUser,
+  updateAllPurchaseOffersReceivedByCurrentUser
 } = iRentStuffSlice.actions
 
 export default iRentStuffSlice.reducer
