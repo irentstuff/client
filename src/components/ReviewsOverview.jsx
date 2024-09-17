@@ -136,7 +136,6 @@ export const ReviewsOverview = ({ itemId }) => {
     <Space direction='vertical' size='large' style={{ width: '70%' }}>
       <Title level={3}>{`Reviews (${averageReviews.total_reviews})`}</Title>
       <Rate disabled value={averageReviews.average_rating} allowHalf />
-      <Button onClick={() => setEditReviewModal({ state: true, inEdit: false, data: { item_id: itemId } })}>Leave a Review </Button>
       <List
         itemLayout='horizontal'
         dataSource={totalReviews}
@@ -165,7 +164,7 @@ export const ReviewsOverview = ({ itemId }) => {
               key={review.review_id}
               avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=8`} />}
               title={<Rate disabled value={review.rating} allowHalf />}
-              description={`${dayDifference(review.created_at) + 2} days ago by ${review.user_id}`}
+              description={`${dayDifference(review.created_at)} day(s) ago by ${review.user_id}`}
             />
             {review.comment}
           </List.Item>

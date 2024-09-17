@@ -153,6 +153,15 @@ function App() {
         updateGlobalState: updateAllItemsCreatedByCurrentUser,
         queryParam: `owner=me&valid=0`
       })
+
+      //rentals offer made by user
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allOffersMadeByCurrentUser,
+        apiService: getRentalDetailsForUser,
+        updateGlobalState: updateAllOffersMadeByCurrentUser,
+        queryParam: `as=renter`
+      })
+
       setFetchDataAgain(false)
     }
   }, [fetchDataAgain])
@@ -165,7 +174,7 @@ function App() {
           <Route path='ViewItem' element={<ViewItem />} />
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
-          <Route path='MyOffersMade' element={<OfferMade />} />
+          <Route path='MyOffersMade' element={<OfferMade setFetchDataAgain={setFetchDataAgain} />} />
         </Route>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />

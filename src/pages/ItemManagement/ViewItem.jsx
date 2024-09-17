@@ -18,14 +18,14 @@ const { Title, Text } = Typography
 /* -------------------------------------------------------------------------- */
 /*                                  ADD ITEM                                  */
 /* -------------------------------------------------------------------------- */
-export const ViewItem = ({ setFetchDataAgain }) => {
+export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const { state } = location
 
-  const itemDetails = state
+  const itemDetails = itemDetailsFromOffer !== undefined ? itemDetailsFromOffer : state
 
   console.log(itemDetails)
 

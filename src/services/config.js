@@ -108,11 +108,45 @@ export const availabilityOptions = [
 /* -------------------------------------------------------------------------- */
 /*                                RENTAL STATUS                               */
 /* -------------------------------------------------------------------------- */
+export const patchActions = {
+  confirm: 'confirm',
+  cancel: 'cancel',
+  start: 'start',
+  complete: 'complete'
+}
+
+export const statusCanPatchActions = {
+  confirm: ['offered'],
+  cancel: ['offered', 'confirmed'],
+  start: ['confirmed'],
+  complete: ['ongoing'],
+  review: ['completed']
+}
+
 export const rentalStatus = [
   {
     value: 'offered',
+    text: 'Offered',
     label: 'Offered',
     color: 'orange'
+  },
+  {
+    value: 'cancelled',
+    text: 'Cancelled',
+    label: 'Cancelled',
+    color: 'red'
+  },
+  {
+    value: 'ongoing',
+    text: 'Ongoing',
+    label: 'Ongoing',
+    color: 'dark green'
+  },
+  {
+    value: 'confirmed',
+    text: 'Confirmed',
+    label: 'Confirmed',
+    color: 'green'
   }
 ]
 

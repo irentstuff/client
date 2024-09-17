@@ -1,28 +1,31 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORTS                                  */
 /* -------------------------------------------------------------------------- */
-import { useState, useEffect, useRef } from 'react'
-import { useSelector } from 'react-redux'
-import { dayDifference, rentalStatus } from '../../services/config'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateError, updateSuccess } from '../../redux/reducer'
+import { rentalStatus, patchActions, statusCanPatchActions } from '../../services/config'
+import { rentalPatch } from '../../services/api'
 import moment from 'moment'
 /* -------------------------------- COMPONENT ------------------------------- */
-import Highlighter from 'react-highlight-words'
-import { Space, Input, Row, Pagination, List, Avatar, Col, Typography, Table, Tag, Button } from 'antd'
+import { Space, Input, Table, Tag, Button, Modal } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
-
-const { Title, Text } = Typography
-const { Search } = Input
+import { ViewItem } from '../ItemManagement/ViewItem'
+import { ReviewsFormModal } from '../../components/ReviewsFormModal'
 
 /* -------------------------------------------------------------------------- */
 /*                                  OfferMade                                 */
 /* -------------------------------------------------------------------------- */
-export const OfferMade = ({ myItems }) => {
-  const currentUser = useSelector((state) => state.iRentStuff.currentUser)
-  const allItems = useSelector((state) => state.iRentStuff.allItems)
+export const OfferMade = ({ setFetchDataAgain }) => {
+  const dispatch = useDispatch()
+
   const allOffersMadeByCurrentUser = useSelector((state) => state.iRentStuff.allOffersMadeByCurrentUser)
 
   const [searchText, setSearchText] = useState('')
   const [searchData, setSearchData] = useState(allOffersMadeByCurrentUser)
+
+  const [viewItemModal, setViewItemModal] = useState({ state: false, data: {} })
+  const [editReviewModal, setEditReviewModal] = useState({ state: false, data: {} })
 
   const getNestedValue = (obj, path) => {
     if (!path) return undefined
@@ -30,21 +33,16 @@ export const OfferMade = ({ myItems }) => {
     const keys = path.split('.')
     return keys.reduce((acc, key) => acc && acc[key], obj)
   }
-
-  const handleSearch = (confirm, dataIndex) => {
+  const handleSearch = (confirm, dataIndex, close) => {
     confirm()
-    console.log(searchText)
-    console.log(
-      allOffersMadeByCurrentUser.filter((offer) => getNestedValue(offer, dataIndex).toLowerCase().includes(searchText.toLowerCase()))
-    )
-    setSearchData(
-      allOffersMadeByCurrentUser.filter((offer) => getNestedValue(offer, dataIndex).toLowerCase().includes(searchText.toLowerCase()))
-    )
+    setSearchData(searchData.filter((offer) => getNestedValue(offer, dataIndex).toLowerCase().includes(searchText.toLowerCase())))
+    close()
   }
-  const handleReset = (clearFilters) => {
+  const handleReset = (clearFilters, close) => {
     clearFilters()
     setSearchText('')
     setSearchData(allOffersMadeByCurrentUser)
+    close()
   }
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({ confirm, clearFilters, close }) => (
@@ -58,7 +56,7 @@ export const OfferMade = ({ myItems }) => {
           placeholder={`Search ${dataIndex}`}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          onPressEnter={(e) => handleSearch(confirm, dataIndex)}
+          onPressEnter={(e) => handleSearch(confirm, dataIndex, close)}
           style={{
             marginBottom: 8,
             display: 'block'
@@ -67,7 +65,7 @@ export const OfferMade = ({ myItems }) => {
         <Space>
           <Button
             type='primary'
-            onClick={(e) => handleSearch(confirm, dataIndex)}
+            onClick={(e) => handleSearch(confirm, dataIndex, close)}
             icon={<SearchOutlined />}
             size='small'
             style={{
@@ -77,7 +75,7 @@ export const OfferMade = ({ myItems }) => {
             Search
           </Button>
           <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
+            onClick={() => clearFilters && handleReset(clearFilters, close)}
             size='small'
             style={{
               width: 90
@@ -105,37 +103,19 @@ export const OfferMade = ({ myItems }) => {
         }}
       />
     ),
-    // onFilter: (value, record) => getNestedValue(record, dataIndex)?.toString().toLowerCase().includes(value.toLowerCase()),
     onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchText.current?.select(), 100)
       }
     }
-    // render: (text) =>
-    //   searchedColumn === dataIndex ? (
-    //     <Highlighter
-    //       highlightStyle={{
-    //         backgroundColor: '#ffc069',
-    //         padding: 0
-    //       }}
-    //       searchWords={[searchText]}
-    //       autoEscape
-    //       textToHighlight={text ? text.toString() : ''}
-    //     />
-    //   ) : (
-    //     text
-    //   )
   })
-
-  console.log(allItems)
-  console.log(allOffersMadeByCurrentUser)
 
   const columns = [
     {
       title: 'Item',
       dataIndex: ['itemDetails', 'title'],
       key: ['itemDetails', 'title'],
-      width: '20%',
+      width: '15%',
       sorter: (a, b) => a.itemDetails.title.localeCompare(b.itemDetails.title),
       ...getColumnSearchProps('itemDetails.title')
     },
@@ -192,19 +172,67 @@ export const OfferMade = ({ myItems }) => {
           {rentalStatus.find((option) => option.value == text).label}
         </Tag>
       ),
-      sorter: (a, b) => a.status.localeCompare(b.status)
+      sorter: (a, b) => a.status.localeCompare(b.status),
+      filters: rentalStatus,
+      onFilter: (value, record) => record.status.indexOf(status) === 0
     },
     {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
         <Space size='middle'>
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
+          <Button type='link' onClick={() => setViewItemModal({ state: true, data: record.itemDetails })}>
+            View Item Details
+          </Button>
+          {statusCanPatchActions.cancel.includes(record.status) && (
+            <Button type='link' onClick={() => cancelRental(record)}>
+              Cancel
+            </Button>
+          )}
+          {statusCanPatchActions.review.includes(record.status) && (
+            <Button
+              type='link'
+              onClick={() =>
+                setEditReviewModal({ state: true, inEdit: false, data: { item_id: record.item_id, rental_id: record.rental_id } })
+              }
+            >
+              Leave a Review
+            </Button>
+          )}
         </Space>
       )
     }
   ]
+
+  const cancelRental = async (record) => {
+    try {
+      const response = await rentalPatch(record.itemDetails.id, record.rental_id, patchActions.cancel)
+      console.log(response)
+      if (response.status === 200) {
+        dispatch(
+          updateSuccess({
+            status: true,
+            msg: `Rental offer is cancelled successfully`
+          })
+        )
+        setFetchDataAgain(true)
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
 
   return (
     <Space
@@ -216,6 +244,16 @@ export const OfferMade = ({ myItems }) => {
       }}
     >
       <Table columns={columns} dataSource={searchData} />
+      <Modal
+        width={1000}
+        footer={null}
+        title={`View Item Details`}
+        open={viewItemModal.state}
+        onCancel={() => setViewItemModal({ state: false, data: {} })}
+      >
+        <ViewItem itemDetailsFromOffer={viewItemModal.data} />
+      </Modal>
+      {editReviewModal.state && <ReviewsFormModal modalDetails={editReviewModal} updateModalDetails={setEditReviewModal} />}
     </Space>
   )
 }

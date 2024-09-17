@@ -31,7 +31,8 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails, setRefresh 
             msg: `Reviews is added successfully`
           })
         )
-        setRefresh(true)
+        updateModalDetails({ state: false, data: {} })
+        // setRefresh(true)
       } else {
         dispatch(
           updateError({
@@ -86,6 +87,7 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails, setRefresh 
       const formattedPayload = {
         ...values,
         item_id: modalDetails.data.item_id,
+        rental_id: modalDetails.data.rental_id,
         user_id: currentUser.userDetails.username,
         created: new Date()
       }

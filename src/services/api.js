@@ -251,7 +251,7 @@ export async function editReview(reviewDetails) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    data: payload,
+    data: reviewDetails,
     url: `${reviewsURL}/update/${reviewDetails.review_id}`
   })
 
@@ -267,7 +267,7 @@ export async function deleteReviews(reviewDetails) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    data: payload,
+    // data: reviewDetails,
     url: `${reviewsURL}/delete/${reviewDetails.review_id}`
   })
 
@@ -342,7 +342,7 @@ export async function getRentalDetailsForItems(item_id, queryParam) {
 }
 
 /* --------------- patch actions = [confirm, cancel, start, complete] -------------- */
-export async function rentalPatch(payload) {
+export async function rentalPatch(item_id, rental_id, action) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -351,7 +351,7 @@ export async function rentalPatch(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${rentalsURL}/${payload.item_id}/${payload.rental_id}/${payload.action}`
+    url: `${rentalsURL}/${item_id}/${rental_id}/${action}`
   })
 
   return data
@@ -408,7 +408,7 @@ export async function getPurchaseDetailsForUser(queryParam) {
 }
 
 /* --------------- patch actions = [confirm, cancel, complete] -------------- */
-export async function purchasePatch(payload) {
+export async function purchasePatch(item_id, rental_id, action) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 
@@ -417,7 +417,7 @@ export async function purchasePatch(payload) {
     headers: {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
-    url: `${purchasesURL}/${payload.item_id}/${payload.purchase_id}/${payload.action}`
+    url: `${purchasesURL}/${item_id}/${purchase_id}/${action}`
   })
 
   return data
