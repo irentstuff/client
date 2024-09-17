@@ -126,6 +126,9 @@ export const statusCanPatchActions = {
   review: ['completed']
 }
 
+export const ownerCanPatchActions = ['confirm', 'cancel', 'start', 'complete']
+export const userCanPatchActions = ['cancel', 'review']
+
 export const rentalStatus = [
   {
     value: 'offered',

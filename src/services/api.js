@@ -408,7 +408,7 @@ export async function getPurchaseDetailsForUser(queryParam) {
 }
 
 /* --------------- patch actions = [confirm, cancel, complete] -------------- */
-export async function purchasePatch(item_id, rental_id, action) {
+export async function purchasePatch(item_id, purchase_id, action) {
   const state = store.getState()
   const token = state.iRentStuff.currentUser.token
 

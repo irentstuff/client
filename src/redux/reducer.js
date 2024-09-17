@@ -71,8 +71,6 @@ export const iRentStuffSlice = createSlice({
         itemDetails: { ...allItemsMap[offer.item_id] }
       }))
 
-      console.log(combinedList)
-
       state.allRentalOffersMadeByCurrentUser = combinedList
     },
     updateAllPurchaseOffersMadeByCurrentUser: (state, action) => {

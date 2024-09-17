@@ -120,8 +120,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    console.log(user)
-
     if (user != undefined) {
       // Function to get the access token from local storage and set state
       const token = getAccessTokenFromLocalStorage()
@@ -183,7 +181,7 @@ function App() {
           <Route path='ViewItem' element={<ViewItem />} />
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
-          <Route path='MyOffersMade' element={<OfferMade setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='OffersMade' element={<OfferMade setFetchDataAgain={setFetchDataAgain} />} />
         </Route>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />

@@ -35,8 +35,8 @@ export const CustomHeader = () => {
 
   const items = [
     {
-      label: 'My Offers Made',
-      key: 'MyOffersMade',
+      label: 'Offers Made',
+      key: 'OffersMade',
       icon: <DollarOutlined />,
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
