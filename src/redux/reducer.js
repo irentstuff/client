@@ -1,8 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, current } from '@reduxjs/toolkit'
 
 export const iRentStuffSlice = createSlice({
   name: 'iRentStuff',
   initialState: {
+    //REFRESH
+    refreshReviews: true,
     //NOTIFICATION
     showSuccess: { status: false, msg: '' },
     showError: { status: false, msg: '' },
@@ -11,10 +13,21 @@ export const iRentStuffSlice = createSlice({
     currentUser: { authenticated: false, userDetails: {}, token: '' },
     //ITEMS
     allItems: [],
+    allItemsMap: {},
     allItemCategories: [],
-    allItemsCreatedByCurrentUser: []
+    allItemsCreatedByCurrentUser: [],
+    //OFFERS MADE
+    allRentalOffersMadeByCurrentUser: [],
+    allPurchaseOffersMadeByCurrentUser: [],
+    //OFFERS RECEIVED
+    allRentalOffersReceivedByCurrentUser: [],
+    allPurchaseOffersReceivedByCurrentUser: []
   },
   reducers: {
+    //REFRESH
+    updateRefreshReviews: (state, action) => {
+      state.refreshReviews = action.payload.data
+    },
     //NOTIFICATION
     updateSuccess: (state, action) => {
       state.showSuccess.status = action.payload.status
@@ -34,7 +47,15 @@ export const iRentStuffSlice = createSlice({
     },
     //ITEMS
     updateAllItems: (state, action) => {
-      state.allItems = action.payload.data
+      const allItems = action.payload.data
+      state.allItems = allItems
+
+      const itemMap = allItems.reduce((map, item) => {
+        map[item.id] = item
+        return map
+      }, {})
+
+      state.allItemsMap = itemMap
     },
     updateAllItemCategories: (state, action) => {
       const allItemCategories = action.payload.data
@@ -45,19 +66,70 @@ export const iRentStuffSlice = createSlice({
     },
     updateAllItemsCreatedByCurrentUser: (state, action) => {
       state.allItemsCreatedByCurrentUser = action.payload.data
+    },
+    //OFFER MADE
+    updateAllRentalOffersMadeByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      state.allRentalOffersMadeByCurrentUser = combinedList
+    },
+    updateAllPurchaseOffersMadeByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      state.allPurchaseOffersMadeByCurrentUser = combinedList
+    },
+    //OFFERS RECEIVED
+    updateAllRentalOffersReceivedByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      state.allRentalOffersReceivedByCurrentUser = combinedList
+    },
+    updateAllPurchaseOffersReceivedByCurrentUser: (state, action) => {
+      const allOffersMade = action.payload.data
+      const allItemsMap = current(state.allItemsMap)
+
+      const combinedList = allOffersMade.map((offer) => ({
+        ...offer,
+        itemDetails: { ...allItemsMap[offer.item_id] }
+      }))
+
+      state.allPurchaseOffersReceivedByCurrentUser = combinedList
     }
   }
 })
 
 // Action creators are generated for each case reducer function
 export const {
+  updateRefreshReviews,
   updateSuccess,
   updateError,
   updateAllUsers,
   updateCurrentUser,
   updateAllItems,
   updateAllItemCategories,
-  updateAllItemsCreatedByCurrentUser
+  updateAllItemsCreatedByCurrentUser,
+  updateAllRentalOffersMadeByCurrentUser,
+  updateAllPurchaseOffersMadeByCurrentUser,
+  updateAllRentalOffersReceivedByCurrentUser,
+  updateAllPurchaseOffersReceivedByCurrentUser
 } = iRentStuffSlice.actions
 
 export default iRentStuffSlice.reducer

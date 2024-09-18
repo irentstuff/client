@@ -37,7 +37,7 @@ export const RentalForm = ({ itemDetails }) => {
         dispatch(
           updateError({
             status: true,
-            msg: response.statusText
+            msg: `${response.statusText} - ${response.message}`
           })
         )
       }
@@ -57,8 +57,8 @@ export const RentalForm = ({ itemDetails }) => {
     const formattedPayload = {
       users: { owner_id: itemDetails.owner, renter_id: currentUser.userDetails.username },
       rental_details: {
-        start_date: moment(values[0]).format('YYYY-MM-DD'),
-        end_date: moment(values[1]).format('YYYY-MM-DD'),
+        start_date: moment(values.rental_dates[0], 'x').format('YYYY-MM-DD'),
+        end_date: moment(values.rental_dates[1], 'x').format('YYYY-MM-DD'),
         price_per_day: parseFloat(values.price_per_day),
         deposit: parseFloat(values.deposit)
       }

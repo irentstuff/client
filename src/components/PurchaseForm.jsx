@@ -29,14 +29,14 @@ export const PurchaseForm = ({ itemDetails }) => {
         dispatch(
           updateSuccess({
             status: true,
-            msg: `Item is edited successfully`
+            msg: `Purchase offer is made successfully`
           })
         )
       } else {
         dispatch(
           updateError({
             status: true,
-            msg: response.statusText
+            msg: `${response.statusText} - ${response.message}`
           })
         )
       }
@@ -57,7 +57,7 @@ export const PurchaseForm = ({ itemDetails }) => {
     const formattedPayload = {
       users: { owner_id: itemDetails.owner, buyer_id: currentUser.userDetails.username },
       purchase_details: {
-        purchase_price: values.purchase_price
+        purchase_price: parseFloat(values.purchase_price)
       }
     }
 

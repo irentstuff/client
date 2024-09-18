@@ -14,12 +14,23 @@ import {
   updateAllItems,
   updateAllItemCategories,
   updateAllItemsCreatedByCurrentUser,
+  updateAllRentalOffersMadeByCurrentUser,
+  updateAllPurchaseOffersMadeByCurrentUser,
+  updateAllRentalOffersReceivedByCurrentUser,
+  updateAllPurchaseOffersReceivedByCurrentUser,
   updateAllUsers,
   updateCurrentUser
 } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems, getAllItemCategories, getItemsByQueryParam, getAllUsers } from './services/api'
+import {
+  getAllItems,
+  getAllItemCategories,
+  getItemsByQueryParam,
+  getRentalDetailsForUser,
+  getPurchaseDetailsForUser,
+  getAllUsers
+} from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
@@ -28,6 +39,9 @@ import { HomePage } from './pages/HomePage'
 import { AddItem } from './pages/ItemManagement/AddItem'
 import { ViewItem } from './pages/ItemManagement/ViewItem'
 import { Login } from './pages/UserManagement/Login'
+import { OfferMade } from './pages/TransactionManagement/OfferMade'
+import { OfferReceived } from './pages/TransactionManagement/OfferReceived'
+
 // import { Register } from './pages/UserManagement/RegisterWithAPI'
 
 function App() {
@@ -108,8 +122,6 @@ function App() {
   }, [])
 
   useEffect(() => {
-    console.log(user)
-
     if (user != undefined) {
       // Function to get the access token from local storage and set state
       const token = getAccessTokenFromLocalStorage()
@@ -122,7 +134,7 @@ function App() {
   }, [user])
 
   useEffect(() => {
-    if (currentUser.authenticated) {
+    if (currentUser.authenticated || fetchDataAgain) {
       // all items created by current user
       fetchDataAndSetGlobalState({
         item: apiLabels.allItemsCreatedByCurrentUser,
@@ -130,22 +142,47 @@ function App() {
         updateGlobalState: updateAllItemsCreatedByCurrentUser,
         queryParam: `owner=me&valid=0`
       })
-    }
-  }, [currentUser])
 
-  useEffect(() => {
-    console.log('fetchDataAgain', fetchDataAgain)
-    if (fetchDataAgain) {
-      // all items created by current user
+      //offer made by user
       fetchDataAndSetGlobalState({
-        item: apiLabels.allItemsCreatedByCurrentUser,
-        apiService: getItemsByQueryParam,
-        updateGlobalState: updateAllItemsCreatedByCurrentUser,
-        queryParam: `owner=me&valid=0`
+        item: apiLabels.allRentalOffersMadeByCurrentUser,
+        apiService: getRentalDetailsForUser,
+        updateGlobalState: updateAllRentalOffersMadeByCurrentUser,
+        queryParam: `as=renter`
+      })
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allPurchaseOffersMadeByCurrentUser,
+        apiService: getPurchaseDetailsForUser,
+        updateGlobalState: updateAllPurchaseOffersMadeByCurrentUser,
+        queryParam: `as=buyer`
+      })
+
+      //offer received by user
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allRentalOffersReceivedByCurrentUser,
+        apiService: getRentalDetailsForUser,
+        updateGlobalState: updateAllRentalOffersReceivedByCurrentUser,
+        queryParam: `as=owner`
+      })
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allPurchaseOffersReceivedByCurrentUser,
+        apiService: getPurchaseDetailsForUser,
+        updateGlobalState: updateAllPurchaseOffersReceivedByCurrentUser,
+        queryParam: `as=owner`
+      })
+
+      setFetchDataAgain(false)
+    }
+
+    if (fetchDataAgain) {
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allItems,
+        apiService: getAllItems,
+        updateGlobalState: updateAllItems
       })
       setFetchDataAgain(false)
     }
-  }, [fetchDataAgain])
+  }, [currentUser, fetchDataAgain])
 
   return (
     <Routes>
@@ -155,6 +192,8 @@ function App() {
           <Route path='ViewItem' element={<ViewItem />} />
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='OffersMade' element={<OfferMade setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='OffersReceived' element={<OfferReceived setFetchDataAgain={setFetchDataAgain} />} />
         </Route>
         <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />

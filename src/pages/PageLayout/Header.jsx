@@ -7,7 +7,15 @@ import { useState, useEffect } from 'react'
 /* --------------------------------- amplify -------------------------------- */
 import { signOut } from 'aws-amplify/auth'
 /* ---------------------------------- antd ---------------------------------- */
-import { HomeOutlined, MailOutlined, LogoutOutlined, LoginOutlined, PlusCircleOutlined, MenuOutlined } from '@ant-design/icons'
+import {
+  HomeOutlined,
+  MailOutlined,
+  LogoutOutlined,
+  LoginOutlined,
+  PlusCircleOutlined,
+  MenuOutlined,
+  DollarOutlined
+} from '@ant-design/icons'
 import { Layout, Menu, Row, Col, Typography, Drawer, Button } from 'antd'
 import { updateSuccess, updateCurrentUser } from '../../redux/reducer'
 
@@ -26,6 +34,18 @@ export const CustomHeader = () => {
   const [drawerVisible, setDrawerVisible] = useState(false)
 
   const items = [
+    {
+      label: 'Offers Made',
+      key: 'OffersMade',
+      icon: <DollarOutlined />,
+      style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
+    },
+    {
+      label: 'Offers Received',
+      key: 'OffersReceived',
+      icon: <DollarOutlined />,
+      style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
+    },
     {
       label: 'My Items',
       key: 'MyItems',

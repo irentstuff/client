@@ -22,6 +22,10 @@ export const apiLabels = {
   allItems: 'ALL ITEMS',
   allItemsCategories: 'ALL ITEMS CATEGORIES',
   allItemsCreatedByCurrentUser: 'ALL ITEMS BY CURRENT USER',
+  allRentalOffersMadeByCurrentUser: 'ALL RENTAL OFFER MADE BY CURRENT USER',
+  allPurchaseOffersMadeByCurrentUser: 'ALL PURCHASE OFFER MADE BY CURRENT USER',
+  allRentalOffersReceivedByCurrentUser: 'ALL RENTAL OFFER RECEIVED BY CURRENT USER',
+  allPurchaseOffersReceivedByCurrentUser: 'ALL PURCHASE OFFER RECEIVED BY CURRENT USER',
   allUsers: 'ALL USERS'
 }
 
@@ -101,6 +105,60 @@ export const availabilityOptions = [
     value: 'sold',
     label: 'Sold',
     color: 'red'
+  }
+]
+
+/* -------------------------------------------------------------------------- */
+/*                                RENTAL STATUS                               */
+/* -------------------------------------------------------------------------- */
+export const patchActions = {
+  confirm: 'confirm',
+  cancel: 'cancel',
+  start: 'start',
+  complete: 'complete'
+}
+
+export const statusCanPatchActions = {
+  confirm: ['offered'],
+  cancel: ['offered', 'confirmed'],
+  start: ['confirmed'],
+  complete: ['ongoing'],
+  review: ['completed']
+}
+
+export const ownerCanPatchActions = ['confirm', 'cancel', 'start', 'complete']
+export const userCanPatchActions = ['cancel', 'review']
+
+export const rentalStatus = [
+  {
+    value: 'offered',
+    text: 'Offered',
+    label: 'Offered',
+    color: 'orange'
+  },
+  {
+    value: 'cancelled',
+    text: 'Cancelled',
+    label: 'Cancelled',
+    color: 'red'
+  },
+  {
+    value: 'ongoing',
+    text: 'Ongoing',
+    label: 'Ongoing',
+    color: 'cyan'
+  },
+  {
+    value: 'confirmed',
+    text: 'Confirmed',
+    label: 'Confirmed',
+    color: 'green'
+  },
+  {
+    value: 'completed',
+    text: 'Completed',
+    label: 'Completed',
+    color: 'default'
   }
 ]
 
