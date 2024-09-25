@@ -187,7 +187,8 @@ function App() {
   return (
     <Routes>
       <Route path='/' element={<PageLayout />}>
-        <Route element={<ProtectedRoutes authenticated={currentUser.authenticated} />}>
+        <Route path='/' element={<HomePage myItems={false} />} />
+        <Route element={<ProtectedRoutes />}>
           <Route path='MyItems' element={<HomePage myItems={true} setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='ViewItem' element={<ViewItem />} />
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
@@ -195,7 +196,6 @@ function App() {
           <Route path='OffersMade' element={<OfferMade setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='OffersReceived' element={<OfferReceived setFetchDataAgain={setFetchDataAgain} />} />
         </Route>
-        <Route path='/' element={<HomePage myItems={false} />} />
         <Route path='Login' element={<Login />} />
         {/* <Route path='Register' element={<Register />} /> */}
         <Route path='*' element={<NoFoundPage />} />
