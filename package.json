@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint --fix src/**/*.js src/**/*.jsx",
+    "lint": "eslint src/**/*.js src/**/*.jsx",
     "server": "npx json-server json-mock-api/src/db.json --watch --port 5000"
   },
   "lint-staged": {
@@ -16,6 +16,7 @@
     ]
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.1",
     "@aws-amplify/cli": "^12.12.6",
     "@aws-amplify/ui-react": "^6.2.1",
     "@reduxjs/toolkit": "^2.2.7",

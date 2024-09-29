@@ -4,13 +4,13 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateRefreshReviews, updateError, updateSuccess } from '../redux/reducer'
-import { Rate, Typography, Space, Avatar, List, Input, Modal, Button, Popconfirm } from 'antd'
+import { Rate, Typography, Space, Avatar, List, Popconfirm, Button } from 'antd'
 import { ReviewsFormModal } from './ReviewsFormModal'
 
 import { getReviewsForItem, getAverageReviewsForItem, deleteReviews } from '../services/api'
 import { dayDifference } from '../services/config'
 
-const { Title, Text } = Typography
+const { Title } = Typography
 
 /* -------------------------------------------------------------------------- */
 /*                              REVIEWS OVERVIEW                              */
@@ -149,28 +149,36 @@ export const ReviewsOverview = ({ itemId }) => {
         dataSource={totalReviews}
         renderItem={(review, index) => (
           <List.Item
+            key={index}
             actions={
-              currentUser.userDetails.username === review.user_id
-                ? [
-                    <a key='list-loadmore-edit' onClick={() => setEditReviewModal({ state: true, inEdit: true, data: review })}>
-                      edit
-                    </a>,
-                    <Popconfirm
-                      title='Delete review'
-                      description='Are you sure to delete this review?'
-                      onConfirm={() => deleteReview(review)}
-                      okText='Yes'
-                      cancelText='No'
-                    >
-                      <a key='list-loadmore-more'>delete</a>
-                    </Popconfirm>
-                  ]
-                : []
+              currentUser.userDetails.username === review.user_id && (
+                <>
+                  <Button
+                    type='link'
+                    key='list-loadmore-edit'
+                    onClick={() => setEditReviewModal({ state: true, inEdit: true, data: review })}
+                  >
+                    edit
+                  </Button>
+                  ,
+                  <Popconfirm
+                    title='Delete review'
+                    description='Are you sure to delete this review?'
+                    onConfirm={() => deleteReview(review)}
+                    okText='Yes'
+                    cancelText='No'
+                  >
+                    <Button type='link' key='list-loadmore-more'>
+                      delete
+                    </Button>
+                  </Popconfirm>
+                </>
+              )
             }
           >
             <List.Item.Meta
               key={review.review_id}
-              avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=8`} />}
+              avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
               title={<Rate disabled value={review.rating} allowHalf />}
               description={`${dayDifference(review.created_at)} day(s) ago by ${review.user_id}`}
             />

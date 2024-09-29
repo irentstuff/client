@@ -31,7 +31,9 @@ export const NotificationMsg = () => {
             })
           )
       })
-    } else return undefined
+    }
+
+    return undefined
   }, [successMsg])
 
   useEffect(() => {
@@ -47,6 +49,7 @@ export const NotificationMsg = () => {
             })
           )
       })
-    } else return undefined
+    }
+    return undefined
   }, [errorMsg])
 }

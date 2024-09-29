@@ -16,11 +16,10 @@ import {
   MenuOutlined,
   DollarOutlined
 } from '@ant-design/icons'
-import { Layout, Menu, Row, Col, Typography, Drawer, Button } from 'antd'
-import { updateSuccess, updateCurrentUser } from '../../redux/reducer'
+import { Layout, Menu, Row, Col, Drawer, Button } from 'antd'
+import { updateCurrentUser } from '../../redux/reducer'
 
 const { Header } = Layout
-const { Title } = Typography
 
 /* -------------------------------------------------------------------------- */
 /*                                   HEADER                                   */
@@ -94,7 +93,7 @@ export const CustomHeader = () => {
   }
 
   const openMenuItem = async (e) => {
-    if (e.key != 'Logout') {
+    if (e.key !== 'Logout') {
       navigate(`${e.key}`)
       setOpenMenu(e.key)
     } else {

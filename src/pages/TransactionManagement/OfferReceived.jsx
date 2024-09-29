@@ -1,10 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORTS                                  */
 /* -------------------------------------------------------------------------- */
-import { useState, useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-/* -------------------------------- COMPONENT ------------------------------- */
-import { Space, Tabs, Table, Tag, Button, Modal } from 'antd'
+import { Space, Tabs } from 'antd'
 import { ViewRentals } from './ViewRentals'
 import { ViewPurchases } from './ViewPurchases'
 
@@ -34,7 +31,7 @@ export const OfferReceived = ({ setFetchDataAgain }) => {
         paddingTop: '25px'
       }}
     >
-      <Tabs type='card' items={items} size='large' />
+      <Tabs type='card' items={items} size='large' key={items.key} />
     </Space>
   )
 }

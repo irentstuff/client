@@ -2,7 +2,6 @@
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../redux/reducer'
 import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
@@ -18,7 +17,6 @@ const { RangePicker } = DatePicker
 export const RentalForm = ({ itemDetails }) => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
-  const navigate = useNavigate()
 
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
 
@@ -69,77 +67,75 @@ export const RentalForm = ({ itemDetails }) => {
   }
 
   return (
-    <>
-      <Row justify='center' style={{ paddingTop: '2em' }}>
-        <Col xs={24} xl={12}>
-          <Form
-            {...formItemLayout}
-            form={form}
-            name='makeOffer'
-            style={{
-              maxWidth: 850
-            }}
-            scrollToFirstError
-            onFinish={onFinish}
-          >
-            <Space direction='vertical'>
-              <Form.Item
-                name='rental_dates'
-                label='Rental Dates'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your rental dates!'
-                  },
-                  {
-                    validator: (_, value) =>
-                      value && // Custom validation: check if the date is in the future
-                      Promise.resolve()
-                  }
-                ]}
-              >
-                <RangePicker
-                  disabledDate={(current) => {
-                    return moment().add(-1, 'days') >= current
-                  }}
-                />
-              </Form.Item>
+    <Row justify='center' style={{ paddingTop: '2em' }}>
+      <Col xs={24} xl={12}>
+        <Form
+          {...formItemLayout}
+          form={form}
+          name='makeOffer'
+          style={{
+            maxWidth: 850
+          }}
+          scrollToFirstError
+          onFinish={onFinish}
+        >
+          <Space direction='vertical'>
+            <Form.Item
+              name='rental_dates'
+              label='Rental Dates'
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your rental dates!'
+                },
+                {
+                  validator: (_, value) =>
+                    value && // Custom validation: check if the date is in the future
+                    Promise.resolve()
+                }
+              ]}
+            >
+              <RangePicker
+                disabledDate={(current) => {
+                  return moment().add(-1, 'days') >= current
+                }}
+              />
+            </Form.Item>
 
-              <Form.Item
-                name='price_per_day'
-                label='Price Per Day'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your rental price!'
-                  }
-                ]}
-              >
-                <Input prefix='$' suffix='SGD' type='number' step='0.01' placeholder={itemDetails.price_per_day} />
-              </Form.Item>
+            <Form.Item
+              name='price_per_day'
+              label='Price Per Day'
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your rental price!'
+                }
+              ]}
+            >
+              <Input prefix='$' suffix='SGD' type='number' step='0.01' placeholder={itemDetails.price_per_day} />
+            </Form.Item>
 
-              <Form.Item
-                name='deposit'
-                label='Deposit'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your deposit price!'
-                  }
-                ]}
-              >
-                <Input prefix='$' suffix='SGD' type='number' step='0.01' placeholder={itemDetails.deposit} />
-              </Form.Item>
+            <Form.Item
+              name='deposit'
+              label='Deposit'
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your deposit price!'
+                }
+              ]}
+            >
+              <Input prefix='$' suffix='SGD' type='number' step='0.01' placeholder={itemDetails.deposit} />
+            </Form.Item>
 
-              <Form.Item {...tailFormItemLayout}>
-                <Button type='primary' htmlType='submit'>
-                  Make Rental Offer
-                </Button>
-              </Form.Item>
-            </Space>
-          </Form>
-        </Col>
-      </Row>
-    </>
+            <Form.Item {...tailFormItemLayout}>
+              <Button type='primary' htmlType='submit'>
+                Make Rental Offer
+              </Button>
+            </Form.Item>
+          </Space>
+        </Form>
+      </Col>
+    </Row>
   )
 }

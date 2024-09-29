@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { configureStore } from '@reduxjs/toolkit'
 import iRentStuffSlice from './reducer'
 

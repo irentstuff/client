@@ -28,6 +28,19 @@ module.exports = {
   rules: {
     'no-unused-vars': ['warn', { vars: 'all', args: 'after-used', ignoreRestSiblings: false }],
     'prettier/prettier': ['error', {}, { usePrettierrc: true }],
-    'import/no-extraneous-dependencies': ['error', { devDependencies: true }]
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'import/prefer-default-export': 'off',
+    'react/prop-types': 'off',
+    'object-literal-shorthand': 'off',
+    'spaced-comment': 'off',
+    'react/jsx-boolean-value': 'off',
+    'import/order': 'off',
+    'react/function-component-definition': 'off',
+    'no-console': 'off',
+    'prefer-const': 'warn',
+    'react/jsx-props-no-spreading': 'off',
+    'no-param-reassign': 'warn',
+    camelcase: 'warn',
+    'react/no-unstable-nested-components': ['warn', { allowAsProps: true }]
   }
 }

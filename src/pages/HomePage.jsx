@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
 /* -------------------------------- COMPONENT ------------------------------- */
-import { Space, Input, Row, Pagination } from 'antd'
+import { Space, Input, Row } from 'antd'
 import { ItemDisplayCard } from '../components/ItemDisplayCard'
 
 const { Search } = Input
@@ -13,7 +13,6 @@ const { Search } = Input
 /*                                  HOMEPAGE                                  */
 /* -------------------------------------------------------------------------- */
 export const HomePage = ({ myItems }) => {
-  const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItems = useSelector((state) => state.iRentStuff.allItems)
   const allItemsCreatedByCurrentUser = useSelector((state) => state.iRentStuff.allItemsCreatedByCurrentUser)
   const [searchedItems, setSearchedItems] = useState([])
@@ -38,10 +37,10 @@ export const HomePage = ({ myItems }) => {
   const onChange = (e) => {
     const searchedValue = e.target.value.toLowerCase()
 
-    if (searchedValue == '') {
+    if (searchedValue === '') {
       setSearchedItems(initialDisplayItems)
     } else {
-      let items = initialDisplayItems.filter((item) => item.title.toLowerCase().includes(searchedValue))
+      const items = initialDisplayItems.filter((item) => item.title.toLowerCase().includes(searchedValue))
       setSearchedItems(items)
     }
   }

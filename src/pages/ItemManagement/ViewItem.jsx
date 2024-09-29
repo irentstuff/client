@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Popconfirm, Avatar, Button, Card, Col, Form, Row, Space, Typography, Image, Tag } from 'antd'
-import { deleteItem, getItemImage, getItemByItemId, getReviewsForItem, getAverageReviewsForItem } from '../../services/api'
+import { Popconfirm, Avatar, Button, Card, Col, Row, Space, Typography, Image, Tag } from 'antd'
+import { deleteItem, getItemImage } from '../../services/api'
 import { ItemEditModal } from '../../components/ItemEditModal'
 import { MakeOfferModal } from '../../components/MakeOfferModal'
 import { ReviewsOverview } from '../../components/ReviewsOverview'
 import { assetsURL, availabilityOptions, dayDifference } from '../../services/config'
+
 const { Meta } = Card
 const { Title, Text } = Typography
 
@@ -19,7 +20,6 @@ const { Title, Text } = Typography
 /*                                  ADD ITEM                                  */
 /* -------------------------------------------------------------------------- */
 export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
-  const [form] = Form.useForm()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
@@ -29,8 +29,8 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
 
   console.log(itemDetails)
 
-  const currentUser = useSelector((state) => state.iRentStuff.currentUser)
-  const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
+  const currentUser = useSelector((storeState) => storeState.iRentStuff.currentUser)
+  const allItemCategories = useSelector((storeState) => storeState.iRentStuff.allItemCategories)
 
   const currentUserIsItemOwner =
     currentUser?.userDetails.userId === itemDetails?.owner || currentUser?.userDetails.username === itemDetails?.owner
@@ -83,10 +83,9 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
       console.log(response)
       if (response.status === 200) {
         if (response.data !== null && response.data.length > 0) {
-          let imagePath = []
-          response.data.map((image) => {
+          const imagePath = response.data.map((image) => {
             const path = `${imageUrl}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`
-            imagePath.push(path)
+            return path
           })
           setItemImagePath(imagePath)
         }
@@ -109,14 +108,6 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   }
 
   /* ----------------------------- page functions ----------------------------- */
-  const normFile = (e) => {
-    console.log('Upload event:', e)
-    if (Array.isArray(e)) {
-      return e
-    }
-    return e?.fileList
-  }
-
   const confirm = () => {
     console.log(itemDetails)
     deleteItemLocal(itemDetails)
@@ -154,9 +145,9 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
                   <Tag
                     style={{ float: 'right' }}
                     bordered={false}
-                    color={availabilityOptions.find((option) => option.value == itemDetails.availability).color}
+                    color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
                   >
-                    {availabilityOptions.find((option) => option.value == itemDetails.availability).label}
+                    {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
                   </Tag>
                 </>
               }
@@ -164,9 +155,9 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
           }
           style={{ textAlign: 'left' }}
         >
-          <Row justify={'start'}>
+          <Row justify='start'>
             <Col xs={24} xl={8}>
-              {itemImagePath.length == 0 ? (
+              {itemImagePath.length === 0 ? (
                 <Image className='centered-image' src={`${assetsURL}/common/no-img.jpg`} preview={false} />
               ) : (
                 <Image.PreviewGroup
@@ -181,12 +172,12 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
               )}
             </Col>
             <Col xs={24} xl={16}>
-              <Space direction='vertical' size={'large'}>
+              <Space direction='vertical' size='large'>
                 <Title level={3}>{itemDetails.title}</Title>
 
                 <Text ellipsis={true}>
                   Category:
-                  <Text strong>{` ${allItemCategories.find((cat) => cat.id == itemDetails.category).label}`}</Text>
+                  <Text strong>{` ${allItemCategories.find((cat) => cat.value === itemDetails.category).label}`}</Text>
                 </Text>
 
                 <Text>
@@ -211,9 +202,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
                 {currentUserIsItemOwner ? (
                   <Row gutter={8}>
                     <Col>
-                      <Button onClick={() => setEditItemModal({ state: true, data: itemDetails, itemImagePath: itemImagePath })}>
-                        Edit Item
-                      </Button>
+                      <Button onClick={() => setEditItemModal({ state: true, data: itemDetails, itemImagePath })}>Edit Item</Button>
                     </Col>
                     <Col>
                       <Popconfirm

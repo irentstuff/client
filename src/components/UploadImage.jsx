@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { PlusOutlined } from '@ant-design/icons'
 import { Image, Upload } from 'antd'
 

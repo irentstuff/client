@@ -5,12 +5,10 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { Routes, Route } from 'react-router-dom'
 import { useAuthenticator } from '@aws-amplify/ui-react'
-import { ProtectedRoutes } from './components/ProtectedRoutes'
 /* --------------------------------- REDUCER -------------------------------- */
 import { useDispatch, useSelector } from 'react-redux'
 import {
   updateError,
-  updateSuccess,
   updateAllItems,
   updateAllItemCategories,
   updateAllItemsCreatedByCurrentUser,
@@ -18,20 +16,13 @@ import {
   updateAllPurchaseOffersMadeByCurrentUser,
   updateAllRentalOffersReceivedByCurrentUser,
   updateAllPurchaseOffersReceivedByCurrentUser,
-  updateAllUsers,
   updateCurrentUser
 } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import {
-  getAllItems,
-  getAllItemCategories,
-  getItemsByQueryParam,
-  getRentalDetailsForUser,
-  getPurchaseDetailsForUser,
-  getAllUsers
-} from './services/api'
+import { getAllItems, getAllItemCategories, getItemsByQueryParam, getRentalDetailsForUser, getPurchaseDetailsForUser } from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
+import { ProtectedRoutes } from './components/ProtectedRoutes'
 import { NoFoundPage } from './pages/NoFoundPage'
 import { UnauthorisedPage } from './pages/UnauthorisedPage'
 import { PageLayout } from './pages/PageLayout/PageLayout'
@@ -94,10 +85,9 @@ function App() {
       const token = localStorage.getItem(idTokenKey)
       // console.log('Access Token:', token)
       return token
-    } else {
-      // console.error('Access token not found in local storage')
-      return null
     }
+    // console.error('Access token not found in local storage')
+    return null
   }
 
   useEffect(() => {
@@ -122,12 +112,12 @@ function App() {
   }, [])
 
   useEffect(() => {
-    if (user != undefined) {
+    if (user !== undefined) {
       // Function to get the access token from local storage and set state
       const token = getAccessTokenFromLocalStorage()
       dispatch(
         updateCurrentUser({
-          data: { authenticated: true, userDetails: user, token: token }
+          data: { authenticated: true, userDetails: user, token }
         })
       )
     }

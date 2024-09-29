@@ -1,15 +1,15 @@
 /* -------------------------------------------------------------------------- */
 /*                                   IMPORT                                   */
 /* -------------------------------------------------------------------------- */
-import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError, updateSuccess } from '../../redux/reducer'
 
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Button, Checkbox, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
+import { Button, Col, Form, Input, Row, Space, Typography } from 'antd'
 import { registerUser } from '../../services/api'
 import { formItemLayout, tailFormItemLayout } from '../../services/config'
+
 const { Title } = Typography
 
 /* -------------------------------------------------------------------------- */
@@ -56,111 +56,110 @@ export const RegisterWithAPI = () => {
   }
 
   return (
-    <>
-      <Space
-        direction='vertical'
-        size='large'
-        style={{
-          display: 'flex'
-        }}
-      >
-        <Title type={3}>Register</Title>
-        <Row justify='center'>
-          <Col xs={24} xl={12}>
-            <Form
-              {...formItemLayout}
-              form={form}
-              name='register'
-              onFinish={onFinish}
-              style={{
-                maxWidth: 850
-              }}
-              scrollToFirstError
+    <Space
+      direction='vertical'
+      size='large'
+      style={{
+        display: 'flex'
+      }}
+    >
+      <Title type={3}>Register</Title>
+      <Row justify='center'>
+        <Col xs={24} xl={12}>
+          <Form
+            {...formItemLayout}
+            form={form}
+            name='register'
+            onFinish={onFinish}
+            style={{
+              maxWidth: 850
+            }}
+            scrollToFirstError
+          >
+            <Form.Item
+              name='email'
+              label='E-mail'
+              rules={[
+                {
+                  type: 'email',
+                  message: 'The input is not valid E-mail!'
+                },
+                {
+                  required: true,
+                  message: 'Please input your E-mail!'
+                }
+              ]}
             >
-              <Form.Item
-                name='email'
-                label='E-mail'
-                rules={[
-                  {
-                    type: 'email',
-                    message: 'The input is not valid E-mail!'
-                  },
-                  {
-                    required: true,
-                    message: 'Please input your E-mail!'
-                  }
-                ]}
-              >
-                <Input />
-              </Form.Item>
+              <Input />
+            </Form.Item>
 
-              <Form.Item
-                name='username'
-                label='Username'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your username!',
-                    whitespace: true
-                  }
-                ]}
-              >
-                <Input />
-              </Form.Item>
+            <Form.Item
+              name='username'
+              label='Username'
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your username!',
+                  whitespace: true
+                }
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-              <Form.Item
-                name='nickname'
-                label='Nickname'
-                tooltip='What do you want others to call you?'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your nickname!',
-                    whitespace: true
-                  }
-                ]}
-              >
-                <Input />
-              </Form.Item>
+            <Form.Item
+              name='nickname'
+              label='Nickname'
+              tooltip='What do you want others to call you?'
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your nickname!',
+                  whitespace: true
+                }
+              ]}
+            >
+              <Input />
+            </Form.Item>
 
-              <Form.Item
-                name='password'
-                label='Password'
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please input your password!'
-                  }
-                ]}
-                hasFeedback
-              >
-                <Input.Password />
-              </Form.Item>
+            <Form.Item
+              name='password'
+              label='Password'
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input your password!'
+                }
+              ]}
+              hasFeedback
+            >
+              <Input.Password />
+            </Form.Item>
 
-              <Form.Item
-                name='confirm'
-                label='Confirm Password'
-                dependencies={['password']}
-                hasFeedback
-                rules={[
-                  {
-                    required: true,
-                    message: 'Please confirm your password!'
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
-                        return Promise.resolve()
-                      }
-                      return Promise.reject(new Error('The new password that you entered do not match!'))
+            <Form.Item
+              name='confirm'
+              label='Confirm Password'
+              dependencies={['password']}
+              hasFeedback
+              rules={[
+                {
+                  required: true,
+                  message: 'Please confirm your password!'
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue('password') === value) {
+                      return Promise.resolve()
                     }
-                  })
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
+                    return Promise.reject(new Error('The new password that you entered do not match!'))
+                  }
+                })
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
 
-              {/* <Form.Item label='Captcha' extra='We must make sure that your are a human.'>
+            {/* <Form.Item label='Captcha' extra='We must make sure that your are a human.'>
                 <Row gutter={8}>
                   <Col span={12}>
                     <Form.Item
@@ -182,7 +181,7 @@ export const RegisterWithAPI = () => {
                 </Row>
               </Form.Item> */}
 
-              {/* <Form.Item
+            {/* <Form.Item
                 name='agreement'
                 valuePropName='checked'
                 rules={[
@@ -196,15 +195,14 @@ export const RegisterWithAPI = () => {
                   I have read the <a href=''>agreement</a>
                 </Checkbox>
               </Form.Item> */}
-              <Form.Item {...tailFormItemLayout}>
-                <Button type='primary' htmlType='submit'>
-                  Register
-                </Button>
-              </Form.Item>
-            </Form>
-          </Col>
-        </Row>
-      </Space>
-    </>
+            <Form.Item {...tailFormItemLayout}>
+              <Button type='primary' htmlType='submit'>
+                Register
+              </Button>
+            </Form.Item>
+          </Form>
+        </Col>
+      </Row>
+    </Space>
   )
 }

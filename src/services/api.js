@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { itemsURL, reviewsURL, assetsURL, usersURL, rentalsURL, purchasesURL } from './config'
+import { itemsURL, reviewsURL, usersURL, rentalsURL, purchasesURL } from './config'
 import { store } from '../redux/store'
 
 /* -------------------------------------------------------------------------- */
@@ -19,7 +19,7 @@ export async function getAllItems() {
 
 export async function getItemsByQueryParam(queryParam) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -58,7 +58,7 @@ export async function getAllItemCategories() {
 
 export async function createNewItem(itemDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'POST',
@@ -74,7 +74,7 @@ export async function createNewItem(itemDetails) {
 
 export async function editItem(itemDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'PUT',
@@ -82,7 +82,7 @@ export async function editItem(itemDetails) {
       Authorization: `Bearer ${token}` // Add the JWT token here
     },
     data: itemDetails,
-    url: `${itemsURL}/${payload.id}`
+    url: `${itemsURL}/${itemDetails.id}`
   })
 
   return data
@@ -90,7 +90,7 @@ export async function editItem(itemDetails) {
 
 export async function deleteItem(itemDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'DELETE',
@@ -133,7 +133,7 @@ export async function getOneItemImage(url) {
 
 export async function uploadItemImage(payload, url) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'PUT',
@@ -149,9 +149,6 @@ export async function uploadItemImage(payload, url) {
 }
 
 export async function deleteItemImage(url) {
-  const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
-
   const data = await axios({
     method: 'DELETE',
     // headers: {
@@ -168,7 +165,7 @@ export async function deleteItemImage(url) {
 /* -------------------------------------------------------------------------- */
 export async function getReviewsForItem(itemDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -183,7 +180,7 @@ export async function getReviewsForItem(itemDetails) {
 
 export async function getAverageReviewsForItem(itemDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -198,7 +195,7 @@ export async function getAverageReviewsForItem(itemDetails) {
 
 export async function getReviewsForUser(user_id) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -213,7 +210,7 @@ export async function getReviewsForUser(user_id) {
 
 export async function getReviewsByReviewId(reviewDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -228,7 +225,7 @@ export async function getReviewsByReviewId(reviewDetails) {
 
 export async function createNewReview(reviewDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'POST',
@@ -244,7 +241,7 @@ export async function createNewReview(reviewDetails) {
 
 export async function editReview(reviewDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'PUT',
@@ -260,7 +257,7 @@ export async function editReview(reviewDetails) {
 
 export async function deleteReviews(reviewDetails) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'DELETE',
@@ -279,7 +276,7 @@ export async function deleteReviews(reviewDetails) {
 /* -------------------------------------------------------------------------- */
 export async function createNewRental(rentalDetails, item_id) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'POST',
@@ -295,7 +292,7 @@ export async function createNewRental(rentalDetails, item_id) {
 
 export async function getRentalDetails(item_id, rental_id) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -311,9 +308,9 @@ export async function getRentalDetails(item_id, rental_id) {
 export async function getRentalDetailsForUser(queryParam) {
   const state = store.getState()
   console.log(state.iRentStuff.currentUser)
-  const username = state.iRentStuff.currentUser.userDetails.username
+  const { username } = state.iRentStuff.currentUser.userDetails
   console.log(username)
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -328,7 +325,7 @@ export async function getRentalDetailsForUser(queryParam) {
 
 export async function getRentalDetailsForItems(item_id, queryParam) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -344,7 +341,7 @@ export async function getRentalDetailsForItems(item_id, queryParam) {
 /* --------------- patch actions = [confirm, cancel, start, complete] -------------- */
 export async function rentalPatch(item_id, rental_id, action) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'PATCH',
@@ -362,7 +359,7 @@ export async function rentalPatch(item_id, rental_id, action) {
 /* -------------------------------------------------------------------------- */
 export async function createNewPurchase(payload, item_id) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'POST',
@@ -378,7 +375,7 @@ export async function createNewPurchase(payload, item_id) {
 
 export async function getPurchaseDetails(item_id, purchase_id) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -393,8 +390,8 @@ export async function getPurchaseDetails(item_id, purchase_id) {
 
 export async function getPurchaseDetailsForUser(queryParam) {
   const state = store.getState()
-  const username = state.iRentStuff.currentUser.userDetails.username
-  const token = state.iRentStuff.currentUser.token
+  const { username } = state.iRentStuff.currentUser.userDetails
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'GET',
@@ -410,7 +407,7 @@ export async function getPurchaseDetailsForUser(queryParam) {
 /* --------------- patch actions = [confirm, cancel, complete] -------------- */
 export async function purchasePatch(item_id, purchase_id, action) {
   const state = store.getState()
-  const token = state.iRentStuff.currentUser.token
+  const { token } = state.iRentStuff.currentUser
 
   const data = await axios({
     method: 'PATCH',

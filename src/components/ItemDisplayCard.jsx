@@ -4,11 +4,12 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { updateError, updateSuccess } from '../redux/reducer'
+import { updateError } from '../redux/reducer'
 import { getOneItemImage } from '../services/api'
 import { assetsURL, dayDifference, availabilityOptions } from '../services/config'
 /* ---------------------------------- antd ---------------------------------- */
 import { Space, Typography, Col, Card, Avatar, Image, Tag } from 'antd'
+
 const { Title, Text } = Typography
 const { Meta } = Card
 
@@ -18,8 +19,6 @@ const { Meta } = Card
 export const ItemDisplayCard = ({ itemDetails }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const allUsers = useSelector((state) => state.iRentStuff.allUsers)
-  const userDetails = allUsers.find((user) => user.id === itemDetails.owner)
   const allItemCategories = useSelector((state) => state.iRentStuff.allItemCategories)
 
   const [imagePath, setImagePath] = useState('')
@@ -53,9 +52,6 @@ export const ItemDisplayCard = ({ itemDetails }) => {
     }
   }
 
-  // Calculate the difference in milliseconds
-  const diffInMs = new Date() - new Date(itemDetails.created_date)
-
   useEffect(() => {
     if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
       setImagePath(itemDetails.image)
@@ -78,16 +74,16 @@ export const ItemDisplayCard = ({ itemDetails }) => {
                 <Tag
                   style={{ float: 'right' }}
                   bordered={false}
-                  color={availabilityOptions.find((option) => option.value == itemDetails.availability).color}
+                  color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
                 >
-                  {availabilityOptions.find((option) => option.value == itemDetails.availability).label}
+                  {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
                 </Tag>
               </>
             }
           />
         }
         cover={
-          imagePath == '' ? (
+          imagePath === '' ? (
             <Image className='centered-image' src={`${assetsURL}/common/no-img.jpg`} preview={false} />
           ) : (
             <Image className='centered-image' src={`${imagePath}`} preview={false} />
@@ -102,7 +98,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
         <Space direction='vertical'>
           <Text ellipsis={true}>
             Category:
-            <Text strong>{` ${allItemCategories.find((cat) => cat.id == itemDetails.category).label}`}</Text>
+            <Text strong>{` ${allItemCategories.find((cat) => cat.value === itemDetails.category).label}`}</Text>
           </Text>
 
           <Text ellipsis={true}>

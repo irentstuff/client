@@ -46,7 +46,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
   const handleReset = (clearFilters, close) => {
     clearFilters()
     setSearchText('')
-    setSearchData(allPurchaseOffersMadeByCurrentUser)
+    setSearchData(allPurchaseOffers)
     close()
   }
   const getColumnSearchProps = (dataIndex) => ({
@@ -56,12 +56,14 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
           padding: 8
         }}
         onKeyDown={(e) => e.stopPropagation()}
+        role='button'
+        tabIndex={0}
       >
         <Input
           placeholder={`Search ${dataIndex}`}
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          onPressEnter={(e) => handleSearch(confirm, dataIndex, close)}
+          onPressEnter={() => handleSearch(confirm, dataIndex, close)}
           style={{
             marginBottom: 8,
             display: 'block'
@@ -70,7 +72,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
         <Space>
           <Button
             type='primary'
-            onClick={(e) => handleSearch(confirm, dataIndex, close)}
+            onClick={() => handleSearch(confirm, dataIndex, close)}
             icon={<SearchOutlined />}
             size='small'
             style={{
@@ -115,6 +117,36 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
     }
   })
 
+  const updatePurchase = async (record, action) => {
+    try {
+      const response = await purchasePatch(record.itemDetails.id, record.purchase_id, action)
+      console.log(response)
+      if (response.status === 200) {
+        dispatch(
+          updateSuccess({
+            status: true,
+            msg: `Purchase offer is updated to ${action} successfully`
+          })
+        )
+        setFetchDataAgain(true)
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
   const columns = [
     {
       title: 'Buyer',
@@ -146,7 +178,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
       dataIndex: 'updated_at',
       key: 'updated_at',
       show: true,
-      render: (text, record, index) => moment(text).format('YYYY-MM-DD'),
+      render: (text) => moment(text).format('YYYY-MM-DD'),
       sorter: (a, b) => a.updated_at.localeCompare(b.updated_at)
     },
     {
@@ -154,14 +186,14 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
       key: 'status',
       dataIndex: 'status',
       show: true,
-      render: (text, record, index) => (
-        <Tag style={{ float: 'right' }} bordered={false} color={rentalStatus.find((option) => option.value == text).color}>
-          {rentalStatus.find((option) => option.value == text).label}
+      render: (text) => (
+        <Tag style={{ float: 'right' }} bordered={false} color={rentalStatus.find((option) => option.value === text).color}>
+          {rentalStatus.find((option) => option.value === text).label}
         </Tag>
       ),
       sorter: (a, b) => a.status.localeCompare(b.status),
       filters: rentalStatus,
-      onFilter: (value, record) => record.status.indexOf(status) === 0
+      onFilter: (value, record) => record.status.indexOf(value) === 0
     },
     {
       title: 'Action',
@@ -222,36 +254,6 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
     }
   ]
 
-  const updatePurchase = async (record, action) => {
-    try {
-      const response = await purchasePatch(record.itemDetails.id, record.purchase_id, action)
-      console.log(response)
-      if (response.status === 200) {
-        dispatch(
-          updateSuccess({
-            status: true,
-            msg: `Purchase offer is updated to ${action} successfully`
-          })
-        )
-        setFetchDataAgain(true)
-      } else {
-        dispatch(
-          updateError({
-            status: true,
-            msg: response.statusText
-          })
-        )
-      }
-    } catch (error) {
-      dispatch(
-        updateError({
-          status: true,
-          msg: `${error.message}`
-        })
-      )
-    }
-  }
-
   useEffect(() => {
     setSearchData(allPurchaseOffers)
   }, [allPurchaseOffers])
@@ -267,7 +269,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
       <Modal
         width={1000}
         footer={null}
-        title={`View Item Details`}
+        title='View Item Details'
         open={viewItemModal.state}
         onCancel={() => setViewItemModal({ state: false, data: {} })}
       >

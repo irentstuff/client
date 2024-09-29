@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { createSlice, current } from '@reduxjs/toolkit'
 
 export const iRentStuffSlice = createSlice({
@@ -60,7 +61,7 @@ export const iRentStuffSlice = createSlice({
     updateAllItemCategories: (state, action) => {
       const allItemCategories = action.payload.data
       allItemCategories.map((cat) => {
-        ;(cat.value = cat.id), (cat.label = cat.name)
+        ;(cat.value = cat.id.toString()), (cat.label = cat.name)
       })
       state.allItemCategories = allItemCategories
     },
