@@ -7,6 +7,7 @@ import { Space } from 'antd'
 /* --------------------------------- AMPLIFY -------------------------------- */
 import { Amplify } from 'aws-amplify'
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react'
+import '@aws-amplify/ui-react/styles.css'
 import awsExports from '../../services/aws-exports'
 
 Amplify.configure(awsExports)
