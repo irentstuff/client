@@ -1,0 +1,32 @@
+name: SAST with Semgrep
+
+# Trigger this workflow when a repository dispatch event occurs with event_type 'run-semgrep'
+on:
+  repository_dispatch:
+    types: [run-semgrep]
+
+jobs:
+  semgrep_analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Semgrep analysis
+        run: |
+          semgrep --config p/ci --error --json > semgrep-report.json  # Run Semgrep with default CI rules
+
+      - name: Upload Semgrep report
+        uses: actions/upload-artifact@v4
+        with:
+          name: semgrep-report
+          path: semgrep-report.json
