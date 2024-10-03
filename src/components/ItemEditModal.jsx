@@ -9,13 +9,13 @@ import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Modal, Col, Form, Input, Row, Select } from 'antd'
 import { UploadImage } from './UploadImage'
-import { formItemLayout, conditionOptions, availabilityOptions, assetsURL } from '../services/config'
+import { formItemLayout, conditionOptions, availabilityOptions, assetsURL, getCategoryLabel } from '../services/config'
 import { editItem, uploadItemImage, deleteItemImage } from '../services/api'
 
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAgain }) => {
+export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAgain, setGetImageAgain }) => {
   console.log(modalDetails)
   const [form] = Form.useForm()
   const dispatch = useDispatch()
@@ -67,6 +67,7 @@ export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAg
       console.log(response)
       if (response.status === 200) {
         // window.location.reload()
+        setGetImageAgain(true)
       } else {
         dispatch(
           updateError({
@@ -93,6 +94,7 @@ export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAg
       console.log(response)
       if (response.status === 200) {
         // window.location.reload()
+        setGetImageAgain(true)
       } else {
         dispatch(
           updateError({
@@ -228,7 +230,8 @@ export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAg
               ]}
             >
               <Select
-                defaultValue={` ${allItemCategories.find((cat) => cat.id === itemDetails.category).label}`}
+                // defaultValue={` ${allItemCategories.find((cat) => cat.value === itemDetails.category || cat.id === itemDetails.category).label}`}
+                defaultValue={` ${getCategoryLabel(allItemCategories, itemDetails.category)}`}
                 onChange={(value) => form.setFieldsValue({ category: value })}
                 options={allItemCategories}
               />{' '}

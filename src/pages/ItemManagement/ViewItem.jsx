@@ -11,7 +11,7 @@ import { deleteItem, getItemImage } from '../../services/api'
 import { ItemEditModal } from '../../components/ItemEditModal'
 import { MakeOfferModal } from '../../components/MakeOfferModal'
 import { ReviewsOverview } from '../../components/ReviewsOverview'
-import { assetsURL, availabilityOptions, dayDifference } from '../../services/config'
+import { assetsURL, availabilityOptions, dayDifference, getCategoryLabel } from '../../services/config'
 
 const { Meta } = Card
 const { Title, Text } = Typography
@@ -38,6 +38,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   const [editItemModal, setEditItemModal] = useState({ state: false, data: {} })
   const [makeOfferModal, setMakeOfferModal] = useState({ state: false, data: {} })
   const [itemImagePath, setItemImagePath] = useState([])
+  const [getImageAgain, setGetImageAgain] = useState(false)
 
   console.log(itemDetails)
   console.log(itemImagePath)
@@ -88,6 +89,8 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
             return path
           })
           setItemImagePath(imagePath)
+        } else {
+          setItemImagePath([])
         }
       } else {
         dispatch(
@@ -118,9 +121,10 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
     if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
       setItemImagePath([itemDetails.image])
     } else if (itemDetails.image !== '') {
-      getItemImageLocal(itemDetails.image)
+      getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
     }
-  }, [itemDetails])
+    setGetImageAgain(false)
+  }, [itemDetails, getImageAgain])
 
   return (
     <>
@@ -177,7 +181,10 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
 
                 <Text ellipsis={true}>
                   Category:
-                  <Text strong>{` ${allItemCategories.find((cat) => cat.value === itemDetails.category).label}`}</Text>
+                  <Text strong>
+                    {/* {` ${allItemCategories.find((cat) => cat.value === itemDetails.category || cat.id === itemDetails.category).label}`}*/}
+                    {` ${getCategoryLabel(allItemCategories, itemDetails.category)}`}
+                  </Text>
                 </Text>
 
                 <Text>
@@ -226,7 +233,12 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
         </Card>
       </Space>
       {editItemModal.state && (
-        <ItemEditModal modalDetails={editItemModal} updateModalDetails={setEditItemModal} setFetchDataAgain={setFetchDataAgain} />
+        <ItemEditModal
+          modalDetails={editItemModal}
+          updateModalDetails={setEditItemModal}
+          setFetchDataAgain={setFetchDataAgain}
+          setGetImageAgain={setGetImageAgain}
+        />
       )}
       {makeOfferModal.state && <MakeOfferModal modalDetails={makeOfferModal} updateModalDetails={setMakeOfferModal} />}
     </>

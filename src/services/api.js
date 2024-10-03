@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { itemsURL, reviewsURL, usersURL, rentalsURL, purchasesURL } from './config'
+import { assetsURL, itemsURL, reviewsURL, usersURL, rentalsURL, purchasesURL } from './config'
 import { store } from '../redux/store'
 
 /* -------------------------------------------------------------------------- */
@@ -119,13 +119,13 @@ export async function getItemImage(url) {
   return data
 }
 
-export async function getOneItemImage(url) {
+export async function getOneItemImage(folderPath) {
   const data = await axios({
     method: 'GET',
     // headers: {
     //   Authorization: `Bearer ${token}` // Add the JWT token here
     // },
-    url: `${url}?getOne=true`
+    url: `${assetsURL}/${folderPath}?getOne=true`
   })
 
   return data
