@@ -187,6 +187,7 @@ function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path='MyItems' element={<HomePage myItems={true} setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='ViewItem' element={<ViewItem />} />
+          <Route path='ViewItem/:itemId' element={<ViewItem />} />
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
           <Route path='OffersMade' element={<OfferMade setFetchDataAgain={setFetchTransactionDataAgain} />} />

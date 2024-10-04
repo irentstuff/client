@@ -3,10 +3,10 @@
 /* -------------------------------------------------------------------------- */
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import { updateError, updateSuccess, updateRefreshReviews } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Popconfirm, Avatar, Button, Card, Col, Row, Space, Typography, Image, Tag } from 'antd'
+import { Popconfirm, Avatar, Button, Card, Col, Row, Space, Typography, Image, Tag, Empty } from 'antd'
 import { deleteItem, getItemImage } from '../../services/api'
 import { ItemEditModal } from '../../components/ItemEditModal'
 import { MakeOfferModal } from '../../components/MakeOfferModal'
@@ -23,14 +23,17 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
+  const params = useParams()
   const { state } = location
+  const { itemId } = params
 
-  const itemDetails = itemDetailsFromOffer !== undefined ? itemDetailsFromOffer : state
-
-  console.log(itemDetails)
+  console.log(itemId)
 
   const currentUser = useSelector((storeState) => storeState.iRentStuff.currentUser)
   const allItemCategories = useSelector((storeState) => storeState.iRentStuff.allItemCategories)
+  const allItemsMap = useSelector((storeState) => storeState.iRentStuff.allItemsMap)
+
+  const [itemDetails, setItemDetails] = useState({})
 
   const currentUserIsItemOwner =
     currentUser?.userDetails.userId === itemDetails?.owner || currentUser?.userDetails.username === itemDetails?.owner
@@ -117,18 +120,34 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   }
 
   useEffect(() => {
+    if (itemDetailsFromOffer !== undefined) {
+      setItemDetails(itemDetailsFromOffer)
+    }
+
+    setItemDetails(state)
+  }, [])
+
+  useEffect(() => {
+    if (itemId !== undefined) {
+      setItemDetails(allItemsMap[itemId])
+    }
+  }, [itemId, allItemsMap])
+
+  useEffect(() => {
     //update reviews refresh
     dispatch(
       updateRefreshReviews({
         data: true
       })
     ) //get item images
-    if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
-      setItemImagePath([itemDetails.image])
-    } else if (itemDetails.image !== '') {
-      getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
+    if (itemDetails?.image) {
+      if (itemDetails?.image.endsWith('.jpg') || itemDetails?.image.endsWith('.jpeg') || itemDetails?.image.endsWith('.png')) {
+        setItemImagePath([itemDetails.image])
+      } else if (itemDetails?.image !== '') {
+        getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
+      }
+      setGetImageAgain(false)
     }
-    setGetImageAgain(false)
   }, [itemDetails, getImageAgain])
 
   return (
@@ -141,110 +160,114 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
           paddingTop: '25px'
         }}
       >
-        <Card
-          title={
-            <Meta
-              avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
-              description={
-                <>
-                  {' '}
-                  <Text>
-                    Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
-                  </Text>
-                  <Tag
-                    style={{ float: 'right' }}
-                    bordered={false}
-                    color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
-                  >
-                    {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
-                  </Tag>
-                </>
-              }
-            />
-          }
-          style={{ textAlign: 'left' }}
-        >
-          <Row justify='start'>
-            <Col xs={24} xl={8}>
-              {itemImagePath.length === 0 ? (
-                <Image className='centered-image' src={`${assetsURL}/common/no-img.jpg`} preview={false} />
-              ) : (
-                <Image.PreviewGroup
-                  preview={{
-                    onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
-                  }}
-                >
-                  {itemImagePath.map((imagePath) => (
-                    <Image key={imagePath} width={200} src={`${imagePath}`} />
-                  ))}
-                </Image.PreviewGroup>
-              )}
-            </Col>
-            <Col xs={24} xl={16}>
-              <Space direction='vertical' size='large'>
-                <Title level={3}>{itemDetails.title}</Title>
-
-                <Text ellipsis={true}>
-                  Category:
-                  <Text strong>
-                    {/* {` ${allItemCategories.find((cat) => cat.value === itemDetails.category || cat.id === itemDetails.category).label}`}*/}
-                    {` ${getCategoryLabel(allItemCategories, itemDetails.category)}`}
-                  </Text>
-                </Text>
-
-                <Text>
-                  Description: <Text strong>{`${itemDetails.description}`}</Text>
-                </Text>
-
-                <Text>
-                  Condition:
-                  <Text strong>{` ${itemDetails.condition}`}</Text>
-                </Text>
-
-                <Text>
-                  Rental Price (per day):
-                  <Text strong>{` $${itemDetails.price_per_day}`}</Text>
-                </Text>
-
-                <Text>
-                  Deposit Price:
-                  <Text strong>{` $${itemDetails.deposit}`}</Text>
-                </Text>
-
-                {currentUserIsItemOwner ? (
-                  <Row gutter={8}>
-                    <Col>
-                      <Button onClick={() => setEditItemModal({ state: true, data: itemDetails, itemImagePath })}>Edit Item</Button>
-                    </Col>
-                    <Col>
-                      <Popconfirm
-                        title={`Delete item: ${itemDetails.title}`}
-                        description='Are you sure to delete this item?'
-                        onConfirm={confirm}
-                        okText='Yes'
-                        cancelText='No'
-                      >
-                        <Button danger>Delete Item</Button>
-                      </Popconfirm>
-                    </Col>
-                  </Row>
-                ) : (
-                  <Space>
-                    <Button
-                      onClick={() =>
-                        window.location.assign(`../messaging/?item=${itemDetails.id}&renter=${currentUser.userDetails.username}`)
-                      }
+        {itemDetails == undefined ? (
+          <Empty />
+        ) : (
+          <Card
+            title={
+              <Meta
+                avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
+                description={
+                  <>
+                    {' '}
+                    <Text>
+                      Listed {dayDifference(itemDetails?.created_date)} days ago by {itemDetails?.owner}
+                    </Text>
+                    <Tag
+                      style={{ float: 'right' }}
+                      bordered={false}
+                      color={availabilityOptions.find((option) => option.value === itemDetails?.availability)?.color}
                     >
-                      Enquire
-                    </Button>
-                    <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
-                  </Space>
+                      {availabilityOptions.find((option) => option.value === itemDetails?.availability)?.label}
+                    </Tag>
+                  </>
+                }
+              />
+            }
+            style={{ textAlign: 'left' }}
+          >
+            <Row justify='start'>
+              <Col xs={24} xl={8}>
+                {itemImagePath.length === 0 ? (
+                  <Image className='centered-image' src={`${assetsURL}/common/no-img.jpg`} preview={false} />
+                ) : (
+                  <Image.PreviewGroup
+                    preview={{
+                      onChange: (current, prev) => console.log(`current index: ${current}, prev index: ${prev}`)
+                    }}
+                  >
+                    {itemImagePath.map((imagePath) => (
+                      <Image key={imagePath} width={200} src={`${imagePath}`} />
+                    ))}
+                  </Image.PreviewGroup>
                 )}
-              </Space>
-            </Col>
-          </Row>
-          <ReviewsOverview itemId={itemDetails.id} />
-        </Card>
+              </Col>
+              <Col xs={24} xl={16}>
+                <Space direction='vertical' size='large'>
+                  <Title level={3}>{itemDetails?.title}</Title>
+
+                  <Text ellipsis={true}>
+                    Category:
+                    <Text strong>
+                      {/* {` ${allItemCategories.find((cat) => cat.value === itemDetails.category || cat.id === itemDetails.category).label}`}*/}
+                      {` ${getCategoryLabel(allItemCategories, itemDetails?.category)}`}
+                    </Text>
+                  </Text>
+
+                  <Text>
+                    Description: <Text strong>{`${itemDetails?.description}`}</Text>
+                  </Text>
+
+                  <Text>
+                    Condition:
+                    <Text strong>{` ${itemDetails?.condition}`}</Text>
+                  </Text>
+
+                  <Text>
+                    Rental Price (per day):
+                    <Text strong>{` $${itemDetails?.price_per_day}`}</Text>
+                  </Text>
+
+                  <Text>
+                    Deposit Price:
+                    <Text strong>{` $${itemDetails?.deposit}`}</Text>
+                  </Text>
+
+                  {currentUserIsItemOwner ? (
+                    <Row gutter={8}>
+                      <Col>
+                        <Button onClick={() => setEditItemModal({ state: true, data: itemDetails, itemImagePath })}>Edit Item</Button>
+                      </Col>
+                      <Col>
+                        <Popconfirm
+                          title={`Delete item: ${itemDetails?.title}`}
+                          description='Are you sure to delete this item?'
+                          onConfirm={confirm}
+                          okText='Yes'
+                          cancelText='No'
+                        >
+                          <Button danger>Delete Item</Button>
+                        </Popconfirm>
+                      </Col>
+                    </Row>
+                  ) : (
+                    <Space>
+                      <Button
+                        onClick={() =>
+                          window.location.assign(`../messaging/?item=${itemDetails.id}&renter=${currentUser.userDetails.username}`)
+                        }
+                      >
+                        Enquire
+                      </Button>
+                      <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
+                    </Space>
+                  )}
+                </Space>
+              </Col>
+            </Row>
+            <ReviewsOverview itemId={itemDetails?.id} />
+          </Card>
+        )}
       </Space>
       {editItemModal.state && (
         <ItemEditModal
