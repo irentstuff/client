@@ -224,7 +224,12 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
                     </Col>
                   </Row>
                 ) : (
-                  <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
+                  <Space>
+                    <Button onClick={() => navigate(`../messaging/?item=${itemDetails.id}&renter=${currentUser.userDetails.username}`)}>
+                      Enquire
+                    </Button>
+                    <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
+                  </Space>
                 )}
               </Space>
             </Col>
