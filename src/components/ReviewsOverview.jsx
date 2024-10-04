@@ -29,7 +29,7 @@ export const ReviewsOverview = ({ itemId }) => {
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const refresh = useSelector((state) => state.iRentStuff.refreshReviews)
 
-  console.log('REVIEWS :', averageReviews, totalReviews)
+  console.log('REVIEWS :', refresh, averageReviews, totalReviews)
 
   //get reviews for item
   const getAverageReviewsForItemLocal = async (payload) => {

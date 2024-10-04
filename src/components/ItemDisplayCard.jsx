@@ -43,12 +43,12 @@ export const ItemDisplayCard = ({ itemDetails }) => {
         // )
       }
     } catch (error) {
-      dispatch(
-        updateError({
-          status: true,
-          msg: `${error.message}`
-        })
-      )
+      // dispatch(
+      //   updateError({
+      //     status: true,
+      //     msg: `${error.message}`
+      //   })
+      // )
     }
   }
 

@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { updateError, updateSuccess } from '../../redux/reducer'
+import { updateError, updateSuccess, updateRefreshReviews } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Popconfirm, Avatar, Button, Card, Col, Row, Space, Typography, Image, Tag } from 'antd'
 import { deleteItem, getItemImage } from '../../services/api'
@@ -117,7 +117,12 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   }
 
   useEffect(() => {
-    //get item images
+    //update reviews refresh
+    dispatch(
+      updateRefreshReviews({
+        data: true
+      })
+    ) //get item images
     if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
       setItemImagePath([itemDetails.image])
     } else if (itemDetails.image !== '') {
