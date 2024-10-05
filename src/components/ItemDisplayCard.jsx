@@ -90,6 +90,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
           )
         }
         hoverable
+        // onClick={() => navigate(`ViewItem/${itemDetails.id}`, { state: itemDetails })}
         onClick={() => navigate('ViewItem', { state: itemDetails })}
       >
         <Title level={3} ellipsis={true}>

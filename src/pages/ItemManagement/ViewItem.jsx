@@ -124,6 +124,8 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
       setItemDetails(itemDetailsFromOffer)
     }
 
+    console.log(itemDetailsFromOffer, state)
+
     setItemDetails(state)
   }, [])
 
