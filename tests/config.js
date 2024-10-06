@@ -9,6 +9,8 @@ const newItemForm = {
   title: 'test_item',
   category: 'Electronics',
   condition: 'Excellent',
+  condition: 'Excellent',
+  availability: 'Available',
   price_per_day: 10,
   deposit: 50
 }

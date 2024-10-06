@@ -7,7 +7,7 @@ class LoginPage {
   }
 
   async navigate() {
-    await this.driver.get(`${config.baseUrl}/login`)
+    await this.driver.get(`${config.baseUrl}/#/login`)
     await this.driver.wait(until.elementLocated(By.name('username')))
   }
 

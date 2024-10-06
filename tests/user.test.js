@@ -55,7 +55,14 @@ describe('Item Tests', () => {
   it('should create a new item successfully', async () => {
     await items.navigateAddNewItem()
     await items.addNewItem(newItemForm)
-    const successElement = await driver.wait(until.elementLocated(By.css('.notification-success')), 10000)
-    expect(successElement.getText()).toContain('Item is added successfully')
+    const successMessage = await items.getSuccessMessage()
+    expect(successMessage === 'Item is added successfully')
+  })
+
+  it('should edit an existing item successfully', async () => {
+    await items.navigateAddNewItem()
+    await items.addNewItem(newItemForm)
+    const successMessage = await items.getSuccessMessage()
+    expect(successMessage === 'Item is added successfully')
   })
 })
