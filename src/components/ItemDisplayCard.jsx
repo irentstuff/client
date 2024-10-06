@@ -64,23 +64,23 @@ export const ItemDisplayCard = ({ itemDetails }) => {
     <Col xs={24} xl={6} key={itemDetails.id}>
       <Card
         title={
-          <Meta
-            avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
-            description={
-              <>
-                <Text>
-                  Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
-                </Text>
-                <Tag
-                  style={{ float: 'right' }}
-                  bordered={false}
-                  color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
-                >
-                  {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
-                </Tag>
-              </>
-            }
-          />
+          // <Meta
+          // avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
+          // description={
+          <>
+            <Text>
+              Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
+            </Text>
+            <Tag
+              style={{ float: 'right' }}
+              bordered={false}
+              color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
+            >
+              {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
+            </Tag>
+          </>
+          // }
+          // />
         }
         cover={
           imagePath === '' ? (
@@ -90,8 +90,8 @@ export const ItemDisplayCard = ({ itemDetails }) => {
           )
         }
         hoverable
-        // onClick={() => navigate(`ViewItem/${itemDetails.id}`, { state: itemDetails })}
-        onClick={() => navigate('ViewItem', { state: itemDetails })}
+        onClick={() => window.location.assign(`#/ViewItem/${itemDetails.id}`, { state: itemDetails })}
+        // onClick={() => navigate('ViewItem', { state: itemDetails })}
       >
         <Title level={3} ellipsis={true}>
           {itemDetails.title}

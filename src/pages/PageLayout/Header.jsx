@@ -88,7 +88,8 @@ export const CustomHeader = () => {
     setDrawerVisible(false)
   }
   const openHomePage = () => {
-    navigate('/')
+    window.location.assign('/')
+    // navigate('/')
     setOpenMenu('')
   }
 
