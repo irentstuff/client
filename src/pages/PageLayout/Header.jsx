@@ -60,7 +60,7 @@ export const CustomHeader = () => {
 
     {
       label: 'Message',
-      key: 'Message',
+      key: 'Messaging',
       icon: <MailOutlined />,
       style: { display: currentUser.authenticated ? 'inline-block' : 'none' }
     },
@@ -95,8 +95,12 @@ export const CustomHeader = () => {
 
   const openMenuItem = async (e) => {
     if (e.key !== 'Logout') {
-      navigate(`${e.key}`)
-      setOpenMenu(e.key)
+      if (e.key == 'Messaging') {
+        window.location.assign(`../messaging`)
+      } else {
+        navigate(`${e.key}`)
+        setOpenMenu(e.key)
+      }
     } else {
       await signOut()
       dispatch(
