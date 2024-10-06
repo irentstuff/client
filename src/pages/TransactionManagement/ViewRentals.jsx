@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateError, updateSuccess } from '../../redux/reducer'
-import { rentalStatus, patchActions, statusCanPatchActions, ownerCanPatchActions, userCanPatchActions } from '../../services/config'
+import { rentalStatus, patchActions, statusCanPatchActions_rental, ownerCanPatchActions, userCanPatchActions } from '../../services/config'
 import { rentalPatch } from '../../services/api'
 import moment from 'moment'
 /* -------------------------------- COMPONENT ------------------------------- */
@@ -247,7 +247,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
             View Item Details
           </Button>
 
-          {roleAllowedPatchActions.includes('review') && statusCanPatchActions.review.includes(record.status) && (
+          {roleAllowedPatchActions.includes('review') && statusCanPatchActions_rental.review.includes(record.status) && (
             <Button
               type='link'
               onClick={() =>
@@ -259,7 +259,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
           )}
 
           {/* UPDATE OFFER */}
-          {roleAllowedPatchActions.includes('cancel') && statusCanPatchActions.cancel.includes(record.status) && (
+          {roleAllowedPatchActions.includes('cancel') && statusCanPatchActions_rental.cancel.includes(record.status) && (
             <Popconfirm
               title='Delete rental offer'
               description='Are you sure to delete this offer?'
@@ -270,7 +270,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
               <Button type='link'>Cancel</Button>
             </Popconfirm>
           )}
-          {roleAllowedPatchActions.includes('confirm') && statusCanPatchActions.confirm.includes(record.status) && (
+          {roleAllowedPatchActions.includes('confirm') && statusCanPatchActions_rental.confirm.includes(record.status) && (
             <Popconfirm
               title='Confirm rental offer'
               description='Are you sure to confirm this offer?'
@@ -281,7 +281,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
               <Button type='link'>Confirm</Button>
             </Popconfirm>
           )}
-          {roleAllowedPatchActions.includes('start') && statusCanPatchActions.start.includes(record.status) && (
+          {roleAllowedPatchActions.includes('start') && statusCanPatchActions_rental.start.includes(record.status) && (
             <Popconfirm
               title='Start rental offer'
               description='Are you sure to start this offer?'
@@ -292,7 +292,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
               <Button type='link'>Start</Button>
             </Popconfirm>
           )}
-          {roleAllowedPatchActions.includes('complete') && statusCanPatchActions.complete.includes(record.status) && (
+          {roleAllowedPatchActions.includes('complete') && statusCanPatchActions_rental.complete.includes(record.status) && (
             <Popconfirm
               title='Complete rental offer'
               description='Are you sure to complete this offer?'

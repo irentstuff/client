@@ -40,6 +40,7 @@ function App() {
   const { user } = useAuthenticator((context) => [context.user])
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const [fetchDataAgain, setFetchDataAgain] = useState(false)
+  const [fetchTransactionDataAgain, setFetchTransactionDataAgain] = useState(false)
 
   console.log('CURRENTUSER', currentUser)
 
@@ -132,7 +133,20 @@ function App() {
         updateGlobalState: updateAllItemsCreatedByCurrentUser,
         queryParam: `owner=me&valid=0`
       })
+    }
 
+    if (fetchDataAgain) {
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allItems,
+        apiService: getAllItems,
+        updateGlobalState: updateAllItems
+      })
+      setFetchDataAgain(false)
+    }
+  }, [currentUser, fetchDataAgain])
+
+  useEffect(() => {
+    if (currentUser.authenticated || fetchTransactionDataAgain) {
       //offer made by user
       fetchDataAndSetGlobalState({
         item: apiLabels.allRentalOffersMadeByCurrentUser,
@@ -161,30 +175,24 @@ function App() {
         queryParam: `as=owner`
       })
 
-      setFetchDataAgain(false)
+      setFetchTransactionDataAgain(false)
     }
-
-    if (fetchDataAgain) {
-      fetchDataAndSetGlobalState({
-        item: apiLabels.allItems,
-        apiService: getAllItems,
-        updateGlobalState: updateAllItems
-      })
-      setFetchDataAgain(false)
-    }
-  }, [currentUser, fetchDataAgain])
+  }, [currentUser, fetchTransactionDataAgain])
 
   return (
     <Routes>
       <Route path='/' element={<PageLayout />}>
         <Route path='/' element={<HomePage myItems={false} />} />
+
         <Route element={<ProtectedRoutes />}>
           <Route path='MyItems' element={<HomePage myItems={true} setFetchDataAgain={setFetchDataAgain} />} />
-          <Route path='ViewItem' element={<ViewItem />} />
           <Route path='MyItems/ViewItem' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='MyItems/ViewItem/:itemId' element={<ViewItem setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='ViewItem' element={<ViewItem />} />
+          <Route path='ViewItem/:itemId' element={<ViewItem />} />
           <Route path='AddItem' element={<AddItem setFetchDataAgain={setFetchDataAgain} />} />
-          <Route path='OffersMade' element={<OfferMade setFetchDataAgain={setFetchDataAgain} />} />
-          <Route path='OffersReceived' element={<OfferReceived setFetchDataAgain={setFetchDataAgain} />} />
+          <Route path='OffersMade' element={<OfferMade setFetchDataAgain={setFetchTransactionDataAgain} />} />
+          <Route path='OffersReceived' element={<OfferReceived setFetchDataAgain={setFetchTransactionDataAgain} />} />
         </Route>
         <Route path='Login' element={<Login />} />
         {/* <Route path='Register' element={<Register />} /> */}

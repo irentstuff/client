@@ -16,7 +16,7 @@ export const PageLayout = () => {
     <Layout>
       <NotificationMsg />
       <CustomHeader />
-      <Content style={{ overflow: 'initial', paddingLeft: '50px', paddingRight: '50px', minHeight: '100vh' }}>
+      <Content style={{ overflow: 'initial', paddingLeft: '20px', paddingRight: '20px', minHeight: '100vh' }}>
         <Outlet />
       </Content>
       <Footer>Ant Design ©{new Date().getFullYear()} Created by Ant UED</Footer>

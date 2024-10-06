@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { updateError } from '../redux/reducer'
 import { getOneItemImage } from '../services/api'
-import { assetsURL, dayDifference, availabilityOptions } from '../services/config'
+import { assetsURL, dayDifference, availabilityOptions, getCategoryLabel } from '../services/config'
 /* ---------------------------------- antd ---------------------------------- */
 import { Space, Typography, Col, Card, Avatar, Image, Tag } from 'antd'
 
@@ -24,13 +24,13 @@ export const ItemDisplayCard = ({ itemDetails }) => {
   const [imagePath, setImagePath] = useState('')
   // console.log(itemDetails)
 
-  const getOneItemImageLocal = async (imageUrl) => {
+  const getOneItemImageLocal = async (itemId) => {
     try {
-      const response = await getOneItemImage(imageUrl)
+      const response = await getOneItemImage(itemId)
       // console.log(response)
       if (response.status === 200) {
         if (!response.data?.errorType) {
-          const path = `${imageUrl}/${response.data.substring(response.data.lastIndexOf('/') + 1)}`
+          const path = `${assetsURL}/${itemId}/${response.data.substring(response.data.lastIndexOf('/') + 1)}`
           setImagePath(path)
         }
         // window.location.reload()
@@ -43,12 +43,12 @@ export const ItemDisplayCard = ({ itemDetails }) => {
         // )
       }
     } catch (error) {
-      dispatch(
-        updateError({
-          status: true,
-          msg: `${error.message}`
-        })
-      )
+      // dispatch(
+      //   updateError({
+      //     status: true,
+      //     msg: `${error.message}`
+      //   })
+      // )
     }
   }
 
@@ -56,31 +56,31 @@ export const ItemDisplayCard = ({ itemDetails }) => {
     if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
       setImagePath(itemDetails.image)
     } else if (itemDetails.image !== '') {
-      getOneItemImageLocal(itemDetails.image)
+      getOneItemImageLocal(itemDetails.id)
     }
   }, [itemDetails])
 
   return (
-    <Col xs={24} xl={8} key={itemDetails.id}>
+    <Col xs={24} xl={6} key={itemDetails.id}>
       <Card
         title={
-          <Meta
-            avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
-            description={
-              <>
-                <Text>
-                  Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
-                </Text>
-                <Tag
-                  style={{ float: 'right' }}
-                  bordered={false}
-                  color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
-                >
-                  {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
-                </Tag>
-              </>
-            }
-          />
+          // <Meta
+          // avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
+          // description={
+          <>
+            <Text>
+              Listed {dayDifference(itemDetails.created_date)} days ago by {itemDetails.owner}
+            </Text>
+            <Tag
+              style={{ float: 'right' }}
+              bordered={false}
+              color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
+            >
+              {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
+            </Tag>
+          </>
+          // }
+          // />
         }
         cover={
           imagePath === '' ? (
@@ -90,7 +90,8 @@ export const ItemDisplayCard = ({ itemDetails }) => {
           )
         }
         hoverable
-        onClick={() => navigate('ViewItem', { state: itemDetails })}
+        onClick={() => window.location.assign(`#/ViewItem/${itemDetails.id}`, { state: itemDetails })}
+        // onClick={() => navigate('ViewItem', { state: itemDetails })}
       >
         <Title level={3} ellipsis={true}>
           {itemDetails.title}
@@ -98,7 +99,10 @@ export const ItemDisplayCard = ({ itemDetails }) => {
         <Space direction='vertical'>
           <Text ellipsis={true}>
             Category:
-            <Text strong>{` ${allItemCategories.find((cat) => cat.value === itemDetails.category).label}`}</Text>
+            <Text strong>
+              {/* {` ${allItemCategories.find((cat) => cat.value === itemDetails.category || cat.id === itemDetails.category).label}`} */}
+              {` ${getCategoryLabel(allItemCategories, itemDetails.category)}`}
+            </Text>
           </Text>
 
           <Text ellipsis={true}>

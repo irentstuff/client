@@ -4,7 +4,13 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateError, updateSuccess } from '../../redux/reducer'
-import { rentalStatus, patchActions, statusCanPatchActions, ownerCanPatchActions, userCanPatchActions } from '../../services/config'
+import {
+  rentalStatus,
+  patchActions,
+  statusCanPatchActions_purchase,
+  ownerCanPatchActions,
+  userCanPatchActions
+} from '../../services/config'
 import { purchasePatch } from '../../services/api'
 import moment from 'moment'
 /* -------------------------------- COMPONENT ------------------------------- */
@@ -216,7 +222,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
           )} */}
 
           {/* UPDATE PURCHASE */}
-          {roleAllowedPatchActions.includes('cancel') && statusCanPatchActions.cancel.includes(record.status) && (
+          {roleAllowedPatchActions.includes('cancel') && statusCanPatchActions_purchase.cancel.includes(record.status) && (
             <Popconfirm
               title='Delete purchase offer'
               description='Are you sure to purchase this offer?'
@@ -227,7 +233,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
               <Button type='link'>Cancel</Button>
             </Popconfirm>
           )}
-          {roleAllowedPatchActions.includes('confirm') && statusCanPatchActions.confirm.includes(record.status) && (
+          {roleAllowedPatchActions.includes('confirm') && statusCanPatchActions_purchase.confirm.includes(record.status) && (
             <Popconfirm
               title='Confirm purchase offer'
               description='Are you sure to confirm this offer?'
@@ -238,7 +244,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
               <Button type='link'>Confirm</Button>
             </Popconfirm>
           )}
-          {roleAllowedPatchActions.includes('complete') && statusCanPatchActions.complete.includes(record.status) && (
+          {roleAllowedPatchActions.includes('complete') && statusCanPatchActions_purchase.complete.includes(record.status) && (
             <Popconfirm
               title='Complete purchase offer'
               description='Are you sure to complete this offer?'

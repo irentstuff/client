@@ -29,7 +29,7 @@ export const ReviewsOverview = ({ itemId }) => {
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const refresh = useSelector((state) => state.iRentStuff.refreshReviews)
 
-  console.log('REVIEWS :', averageReviews, totalReviews)
+  console.log('REVIEWS :', refresh, itemId, averageReviews, totalReviews)
 
   //get reviews for item
   const getAverageReviewsForItemLocal = async (payload) => {
@@ -127,7 +127,7 @@ export const ReviewsOverview = ({ itemId }) => {
   }
 
   useEffect(() => {
-    if (refresh) {
+    if (refresh && itemId !== undefined) {
       //get reviews for item on load
       getAverageReviewsForItemLocal({ id: itemId })
       getReviewsForItemLocal({ id: itemId })
@@ -138,7 +138,7 @@ export const ReviewsOverview = ({ itemId }) => {
       )
       setEditReviewModal({ state: false, data: {} })
     }
-  }, [refresh])
+  }, [refresh, itemId])
 
   return (
     <Space direction='vertical' size='large' style={{ width: '70%' }}>

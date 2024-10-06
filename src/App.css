@@ -11,7 +11,7 @@
 
 .centered-image {
   width: auto !important;
-  max-height: 300px !important;
+  height: 300px !important;
   max-width: 280px !important;
   display: block;
   margin: 0 auto;
