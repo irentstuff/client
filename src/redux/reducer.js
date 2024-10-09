@@ -7,7 +7,7 @@ export const iRentStuffSlice = createSlice({
     //REFRESH
     refreshReviews: true,
     //NOTIFICATION
-    showSuccess: { status: true, msg: 'test' },
+    showSuccess: { status: false, msg: '' },
     showError: { status: false, msg: '' },
     //AUTH
     allUsers: [],

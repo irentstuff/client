@@ -13,6 +13,26 @@ class ItemsFunction {
     await this.driver.wait(until.elementLocated(By.id('addNewItem_title')))
   }
 
+  async navigateEditItem() {
+    //navigate
+    await this.driver.get(`${config.baseUrl}/#/MyItems`)
+    await this.driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div[1]/div`)).click()
+    const buttonElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Edit Item']]"))
+    await this.driver.executeScript('arguments[0].scrollIntoView(true);', buttonElement) // Scroll to the button
+    await this.driver.sleep(500)
+    await buttonElement.click() // Click the button
+  }
+
+  async navigateDeleteItem() {
+    //navigate
+    await this.driver.get(`${config.baseUrl}/#/MyItems`)
+    await this.driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div[1]/div`)).click()
+    const buttonElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Delete Item']]"))
+    await this.driver.executeScript('arguments[0].scrollIntoView(true);', buttonElement) // Scroll to the button
+    await this.driver.sleep(500)
+    await buttonElement.click() // Click the button
+  }
+
   async addNewItem(itemDetails) {
     //fill form
     /* ---------------------------------- title --------------------------------- */
@@ -75,9 +95,37 @@ class ItemsFunction {
     await buttonElement.click() // Click the button
   }
 
+  async editItem(itemDetails) {
+    //fill form
+    /* ---------------------------------- title --------------------------------- */
+    await this.driver.findElement(By.id('editItem_title')).sendKeys(itemDetails.title)
+
+    /* --------------------------------- submit --------------------------------- */
+    // const buttonElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Edit Item']]"))
+    const buttonElement = await this.driver.findElement(By.xpath(`/html/body/div[2]/div/div[2]/div/div[2]/div/div[3]/button[2]`))
+    await this.driver.executeScript('arguments[0].scrollIntoView(true);', buttonElement) // Scroll to the button
+    const clickableButton = await this.driver.wait(until.elementIsEnabled(buttonElement), 10000)
+
+    // Click the button using JavaScript if necessary
+    await this.driver.executeScript('arguments[0].click();', clickableButton)
+  }
+
+  async deleteItem() {
+    /* --------------------------------- submit --------------------------------- */
+    const buttonElement = await this.driver.findElement(
+      By.xpath(`//*[@id="root"]/div/main/div/div/div/div[2]/div[1]/div[2]/div/div[7]/div/div[2]/button`)
+    )
+    await buttonElement.click() // Click the button
+    const confirmationElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Yes']]"))
+    const clickableButton = await this.driver.wait(until.elementIsEnabled(confirmationElement), 10000)
+    // Click the button using JavaScript if necessary
+    await this.driver.executeScript('arguments[0].click();', clickableButton)
+  }
+
   async getSuccessMessage() {
     const notificationElement = await this.driver.wait(until.elementLocated(By.css('.ant-notification-notice-success')), 10000)
     // Get the notification text (message or description)
+    await this.driver.wait(until.elementIsVisible(notificationElement), 10000)
     const messageElement = await notificationElement.findElement(By.css('.ant-notification-notice-message'))
     return await messageElement.getText() // Adjust selector based on your implementation
   }
