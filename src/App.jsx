@@ -39,6 +39,7 @@ function App() {
   const dispatch = useDispatch()
   const { user } = useAuthenticator((context) => [context.user])
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
+  const allItemsMap = useSelector((state) => state.iRentStuff.allItemsMap)
   const [fetchDataAgain, setFetchDataAgain] = useState(false)
   const [fetchTransactionDataAgain, setFetchTransactionDataAgain] = useState(false)
 
@@ -146,7 +147,7 @@ function App() {
   }, [currentUser, fetchDataAgain])
 
   useEffect(() => {
-    if (currentUser.authenticated || fetchTransactionDataAgain) {
+    if (currentUser.authenticated && (fetchTransactionDataAgain || Object.keys(allItemsMap).length > 0)) {
       //offer made by user
       fetchDataAndSetGlobalState({
         item: apiLabels.allRentalOffersMadeByCurrentUser,
@@ -177,7 +178,7 @@ function App() {
 
       setFetchTransactionDataAgain(false)
     }
-  }, [currentUser, fetchTransactionDataAgain])
+  }, [currentUser, fetchTransactionDataAgain, allItemsMap])
 
   return (
     <Routes>
