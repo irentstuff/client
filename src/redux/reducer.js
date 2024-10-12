@@ -82,10 +82,12 @@ export const iRentStuffSlice = createSlice({
       const allOffersMade = action.payload.data
       const allItemsMap = current(state.allItemsMap)
 
-      const combinedList = allOffersMade.map((offer) => ({
-        ...offer,
-        itemDetails: { ...allItemsMap[offer.item_id] }
-      }))
+      const combinedList = allOffersMade
+        .filter((offer) => allItemsMap[offer.item_id]) // Keep only offers with valid item_ids
+        .map((offer) => ({
+          ...offer,
+          itemDetails: { ...allItemsMap[offer.item_id] }
+        }))
 
       state.allRentalOffersMadeByCurrentUser = combinedList
     },
@@ -93,10 +95,12 @@ export const iRentStuffSlice = createSlice({
       const allOffersMade = action.payload.data
       const allItemsMap = current(state.allItemsMap)
 
-      const combinedList = allOffersMade.map((offer) => ({
-        ...offer,
-        itemDetails: { ...allItemsMap[offer.item_id] }
-      }))
+      const combinedList = allOffersMade
+        .filter((offer) => allItemsMap[offer.item_id]) // Keep only offers with valid item_ids
+        .map((offer) => ({
+          ...offer,
+          itemDetails: { ...allItemsMap[offer.item_id] }
+        }))
 
       state.allPurchaseOffersMadeByCurrentUser = combinedList
     },
