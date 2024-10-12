@@ -54,7 +54,7 @@ export const iRentStuffSlice = createSlice({
     //ITEMS
     updateAllItems: (state, action) => {
       const allItems = action.payload.data
-      state.allItems = allItems
+      state.allItems = allItems.filter((item) => item.deleted_date == null)
 
       const itemMap = allItems.reduce((map, item) => {
         map[item.id] = item
@@ -105,10 +105,12 @@ export const iRentStuffSlice = createSlice({
       const allOffersMade = action.payload.data
       const allItemsMap = current(state.allItemsMap)
 
-      const combinedList = allOffersMade.map((offer) => ({
-        ...offer,
-        itemDetails: { ...allItemsMap[offer.item_id] }
-      }))
+      const combinedList = allOffersMade
+        .filter((offer) => allItemsMap[offer.item_id]) // Keep only offers with valid item_ids
+        .map((offer) => ({
+          ...offer,
+          itemDetails: { ...allItemsMap[offer.item_id] }
+        }))
 
       state.allRentalOffersReceivedByCurrentUser = combinedList
     },
@@ -116,10 +118,12 @@ export const iRentStuffSlice = createSlice({
       const allOffersMade = action.payload.data
       const allItemsMap = current(state.allItemsMap)
 
-      const combinedList = allOffersMade.map((offer) => ({
-        ...offer,
-        itemDetails: { ...allItemsMap[offer.item_id] }
-      }))
+      const combinedList = allOffersMade
+        .filter((offer) => allItemsMap[offer.item_id]) // Keep only offers with valid item_ids
+        .map((offer) => ({
+          ...offer,
+          itemDetails: { ...allItemsMap[offer.item_id] }
+        }))
 
       state.allPurchaseOffersReceivedByCurrentUser = combinedList
     }

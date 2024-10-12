@@ -22,30 +22,6 @@ class ItemsFunction {
     }
   }
 
-  async navigateOfferMade() {
-    //navigate
-    await this.driver.get(`${config.baseUrl}/#/OffersMade`)
-    const firstCard = await this.driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div[1]/div`))
-    if (firstCard === undefined) {
-      firstCard = await this.driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div/div`))
-    }
-    firstCard.click()
-    const buttonElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Edit Item']]"))
-    await this.driver.executeScript('arguments[0].scrollIntoView(true);', buttonElement) // Scroll to the button
-    await this.driver.sleep(500)
-    await buttonElement.click() // Click the button
-  }
-
-  async navigateOfferReceived() {
-    //navigate
-    await this.driver.get(`${config.baseUrl}/#/MyItems`)
-    await this.driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div[1]/div`)).click()
-    const buttonElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Delete Item']]"))
-    await this.driver.executeScript('arguments[0].scrollIntoView(true);', buttonElement) // Scroll to the button
-    await this.driver.sleep(500)
-    await buttonElement.click() // Click the button
-  }
-
   async addNewRentalOffer(rentalDetails) {
     const makeOfferButtonElement = await this.driver.findElement(
       By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Make Offer']]")
@@ -82,39 +58,58 @@ class ItemsFunction {
     await buttonElement.click() // Click the button
   }
 
-  async editItem(itemDetails) {
-    //fill form
-    /* ---------------------------------- title --------------------------------- */
-    const inputField = await this.driver.wait(until.elementLocated(By.id('editItem_title')), 10000)
-    await this.driver.wait(until.elementIsVisible(inputField), 10000)
+  async confirmRentalOffer(titleToFind) {
+    await this.driver.wait(until.elementsLocated(By.xpath(`//tr[td[2][text()='${titleToFind}']]`)), 5000)
+    // Locate the row with the specified title
+    const offerRows = await this.driver.findElements(By.xpath(`//tr[td[2][text()='${titleToFind}']]`))
 
-    const currentValue = await inputField.getAttribute('value')
+    if (offerRows.length > 0) {
+      // If the row is found, log the details
+      console.log(`Row displayed: ${offerRows.length} found`)
 
-    for (let i = 0; i < currentValue.length; i++) {
-      await inputField.sendKeys(Key.BACK_SPACE)
+      // Assuming you want the first matching row (adjust as necessary)
+      const offerRow = offerRows[0]
+
+      // Locate the "Confirm" button in this row
+      const confirmButton = await offerRow.findElement(By.xpath(".//button[span[text()='Confirm']]"))
+
+      // Click the button
+      await confirmButton.click()
+
+      const confirmationElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Yes']]"))
+      const clickableButton = await this.driver.wait(until.elementIsEnabled(confirmationElement), 10000)
+      // Click the button using JavaScript if necessary
+      await this.driver.executeScript('arguments[0].click();', clickableButton)
+    } else {
+      console.log(`No row found for title: ${titleToFind}`)
     }
-    await inputField.sendKeys(itemDetails.title)
-
-    /* --------------------------------- submit --------------------------------- */
-    // const buttonElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Edit Item']]"))
-    const buttonElement = await this.driver.findElement(By.xpath(`/html/body/div[2]/div/div[2]/div/div[2]/div/div[3]/button[2]`))
-    await this.driver.executeScript('arguments[0].scrollIntoView(true);', buttonElement) // Scroll to the button
-    const clickableButton = await this.driver.wait(until.elementIsEnabled(buttonElement), 10000)
-
-    // Click the button using JavaScript if necessary
-    await this.driver.executeScript('arguments[0].click();', clickableButton)
   }
 
-  async deleteItem() {
-    /* --------------------------------- submit --------------------------------- */
-    const buttonElement = await this.driver.findElement(
-      By.xpath(`//*[@id="root"]/div/main/div/div/div/div[2]/div[1]/div[2]/div/div[7]/div/div[2]/button`)
-    )
-    await buttonElement.click() // Click the button
-    const confirmationElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Yes']]"))
-    const clickableButton = await this.driver.wait(until.elementIsEnabled(confirmationElement), 10000)
-    // Click the button using JavaScript if necessary
-    await this.driver.executeScript('arguments[0].click();', clickableButton)
+  async startRentalOffer(titleToFind) {
+    // Locate the row with the specified title
+    await this.driver.wait(until.elementsLocated(By.xpath(`//tr[td[2][text()='${titleToFind}']]`)), 5000)
+    const offerRows = await this.driver.findElements(By.xpath(`//tr[td[2][text()='${titleToFind}']]`))
+
+    if (offerRows.length > 0) {
+      // If the row is found, log the details
+      console.log(`Row displayed: ${offerRows.length} found`)
+
+      // Assuming you want the first matching row (adjust as necessary)
+      const offerRow = offerRows[0]
+
+      // Locate the "Confirm" button in this row
+      const confirmButton = await offerRow.findElement(By.xpath(".//button[span[text()='Start']]"))
+
+      // Click the button
+      await confirmButton.click()
+
+      const confirmationElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Yes']]"))
+      const clickableButton = await this.driver.wait(until.elementIsEnabled(confirmationElement), 10000)
+      // Click the button using JavaScript if necessary
+      await this.driver.executeScript('arguments[0].click();', clickableButton)
+    } else {
+      console.log(`No row found for title: ${titleToFind}`)
+    }
   }
 
   async getSuccessMessage() {

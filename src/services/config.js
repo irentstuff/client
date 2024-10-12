@@ -93,12 +93,12 @@ export const availabilityOptions = [
     color: 'green'
   },
   {
-    value: 'activeRental',
+    value: 'active_rental',
     label: 'Active Rental',
     color: 'red'
   },
   {
-    value: 'pendingPurchase',
+    value: 'pending_purchase',
     label: 'Pending Purchase',
     color: 'orange'
   },
