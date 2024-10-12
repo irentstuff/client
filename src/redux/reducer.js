@@ -54,7 +54,7 @@ export const iRentStuffSlice = createSlice({
     //ITEMS
     updateAllItems: (state, action) => {
       const allItems = action.payload.data
-      state.allItems = allItems
+      state.allItems = allItems.filter((item) => item.deleted_date == null)
 
       const itemMap = allItems.reduce((map, item) => {
         map[item.id] = item
