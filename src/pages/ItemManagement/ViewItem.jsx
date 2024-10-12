@@ -4,7 +4,7 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
-import { updateError, updateSuccess, updateRefreshReviews } from '../../redux/reducer'
+import { updateError, updateSuccess, updateRefreshReviews, updateFetchImageAgain } from '../../redux/reducer'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Popconfirm, Avatar, Button, Card, Col, Row, Space, Typography, Image, Tag, Empty } from 'antd'
 import { deleteItem, getItemImage } from '../../services/api'
@@ -30,8 +30,10 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   console.log(itemId)
 
   const currentUser = useSelector((storeState) => storeState.iRentStuff.currentUser)
+  const getImageAgain = useSelector((state) => state.iRentStuff.getImageAgain)
   const allItemCategories = useSelector((storeState) => storeState.iRentStuff.allItemCategories)
   const allItemsMap = useSelector((storeState) => storeState.iRentStuff.allItemsMap)
+  const allItemsImagePath = useSelector((state) => state.iRentStuff.allItemsImagePath)
 
   const [itemDetails, setItemDetails] = useState({})
 
@@ -41,7 +43,6 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   const [editItemModal, setEditItemModal] = useState({ state: false, data: {} })
   const [makeOfferModal, setMakeOfferModal] = useState({ state: false, data: {} })
   const [itemImagePath, setItemImagePath] = useState([])
-  const [getImageAgain, setGetImageAgain] = useState(false)
 
   console.log(itemDetails)
   console.log(itemImagePath)
@@ -61,6 +62,11 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
           })
         )
         setFetchDataAgain(true)
+        dispatch(
+          updateFetchImageAgain({
+            data: true
+          })
+        )
         navigate('/MyItems')
       } else {
         dispatch(
@@ -143,14 +149,29 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
       })
     ) //get item images
     if (itemDetails?.image) {
+      console.log(itemDetails)
       if (itemDetails?.image.endsWith('.jpg') || itemDetails?.image.endsWith('.jpeg') || itemDetails?.image.endsWith('.png')) {
         setItemImagePath([itemDetails.image])
-      } else if (itemDetails?.image !== '') {
-        getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
       }
-      setGetImageAgain(false)
+      // if (itemDetails?.image !== '')
+      else {
+        // getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
+        const imageUrl = `${assetsURL}/${itemDetails.id}`
+
+        console.log(allItemsImagePath[itemDetails.id])
+
+        if (allItemsImagePath && allItemsImagePath[itemDetails.id] && allItemsImagePath[itemDetails.id][0]) {
+          const imagePath = allItemsImagePath[itemDetails.id].map((image) => {
+            const path = `${imageUrl}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`
+            return path
+          })
+          setItemImagePath(imagePath)
+        } else {
+          setItemImagePath([])
+        }
+      }
     }
-  }, [itemDetails, getImageAgain])
+  }, [itemDetails, allItemsImagePath])
 
   return (
     <>
@@ -272,12 +293,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
         )}
       </Space>
       {editItemModal.state && (
-        <ItemEditModal
-          modalDetails={editItemModal}
-          updateModalDetails={setEditItemModal}
-          setFetchDataAgain={setFetchDataAgain}
-          setGetImageAgain={setGetImageAgain}
-        />
+        <ItemEditModal modalDetails={editItemModal} updateModalDetails={setEditItemModal} setFetchDataAgain={setFetchDataAgain} />
       )}
       {makeOfferModal.state && <MakeOfferModal modalDetails={makeOfferModal} updateModalDetails={setMakeOfferModal} />}
     </>

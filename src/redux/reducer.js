@@ -6,6 +6,7 @@ export const iRentStuffSlice = createSlice({
   initialState: {
     //REFRESH
     refreshReviews: true,
+    getImageAgain: true,
     //NOTIFICATION
     showSuccess: { status: false, msg: '' },
     showError: { status: false, msg: '' },
@@ -14,6 +15,7 @@ export const iRentStuffSlice = createSlice({
     currentUser: { authenticated: false, userDetails: {}, token: '' },
     //ITEMS
     allItems: [],
+    allItemsImagePath: {},
     allItemsMap: {},
     allItemCategories: [],
     allItemsCreatedByCurrentUser: [],
@@ -28,6 +30,9 @@ export const iRentStuffSlice = createSlice({
     //REFRESH
     updateRefreshReviews: (state, action) => {
       state.refreshReviews = action.payload.data
+    },
+    updateFetchImageAgain: (state, action) => {
+      state.getImageAgain = action.payload.data
     },
     //NOTIFICATION
     updateSuccess: (state, action) => {
@@ -57,6 +62,10 @@ export const iRentStuffSlice = createSlice({
       }, {})
 
       state.allItemsMap = itemMap
+    },
+    updateAllItemsImagePath: (state, action) => {
+      const allItemsImagePath = action.payload.data
+      state.allItemsImagePath = allItemsImagePath
     },
     updateAllItemCategories: (state, action) => {
       const allItemCategories = action.payload.data
@@ -120,11 +129,13 @@ export const iRentStuffSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
   updateRefreshReviews,
+  updateFetchImageAgain,
   updateSuccess,
   updateError,
   updateAllUsers,
   updateCurrentUser,
   updateAllItems,
+  updateAllItemsImagePath,
   updateAllItemCategories,
   updateAllItemsCreatedByCurrentUser,
   updateAllRentalOffersMadeByCurrentUser,

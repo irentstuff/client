@@ -9,8 +9,10 @@ import { useAuthenticator } from '@aws-amplify/ui-react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   updateError,
+  updateFetchImageAgain,
   updateAllItems,
   updateAllItemCategories,
+  updateAllItemsImagePath,
   updateAllItemsCreatedByCurrentUser,
   updateAllRentalOffersMadeByCurrentUser,
   updateAllPurchaseOffersMadeByCurrentUser,
@@ -20,7 +22,14 @@ import {
 } from './redux/reducer'
 /* ---------------------------- API AND CONSTANTS --------------------------- */
 import { apiType, apiLabels } from './services/config'
-import { getAllItems, getAllItemCategories, getItemsByQueryParam, getRentalDetailsForUser, getPurchaseDetailsForUser } from './services/api'
+import {
+  getAllItems,
+  getAllItemImagePath,
+  getAllItemCategories,
+  getItemsByQueryParam,
+  getRentalDetailsForUser,
+  getPurchaseDetailsForUser
+} from './services/api'
 /* -------------------------- PAGES AND COMPONENTS -------------------------- */
 import { ProtectedRoutes } from './components/ProtectedRoutes'
 import { NoFoundPage } from './pages/NoFoundPage'
@@ -40,6 +49,7 @@ function App() {
   const { user } = useAuthenticator((context) => [context.user])
   const currentUser = useSelector((state) => state.iRentStuff.currentUser)
   const allItemsMap = useSelector((state) => state.iRentStuff.allItemsMap)
+  const getImageAgain = useSelector((state) => state.iRentStuff.getImageAgain)
   const [fetchDataAgain, setFetchDataAgain] = useState(false)
   const [fetchTransactionDataAgain, setFetchTransactionDataAgain] = useState(false)
 
@@ -105,6 +115,13 @@ function App() {
       apiService: getAllItemCategories,
       updateGlobalState: updateAllItemCategories
     })
+    //items images
+    fetchDataAndSetGlobalState({
+      item: apiLabels.allItemImagePath,
+      apiService: getAllItemImagePath,
+      updateGlobalState: updateAllItemsImagePath
+    })
+
     // // all users
     // fetchDataAndSetGlobalState({
     //   item: apiLabels.allUsers,
@@ -145,6 +162,24 @@ function App() {
       setFetchDataAgain(false)
     }
   }, [currentUser, fetchDataAgain])
+
+  useEffect(() => {
+    console.log('getImageAgain', getImageAgain)
+
+    if (getImageAgain) {
+      fetchDataAndSetGlobalState({
+        item: apiLabels.allItemImagePath,
+        apiService: getAllItemImagePath,
+        updateGlobalState: updateAllItemsImagePath
+      })
+
+      dispatch(
+        updateFetchImageAgain({
+          data: false
+        })
+      )
+    }
+  }, [getImageAgain])
 
   useEffect(() => {
     if (currentUser.authenticated && (fetchTransactionDataAgain || Object.keys(allItemsMap).length > 0)) {

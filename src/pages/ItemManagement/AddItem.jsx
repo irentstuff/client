@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { updateError, updateSuccess } from '../../redux/reducer'
+import { updateError, updateSuccess, updateFetchImageAgain } from '../../redux/reducer'
 import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Button, Col, Form, Input, Row, Select, Space, Typography } from 'antd'
@@ -69,6 +69,8 @@ export const AddItem = ({ setFetchDataAgain }) => {
       console.log(response)
       if (response.status === 200) {
         // window.location.reload()
+        // dispatch(updateFetchImageAgain(true))
+        // navigate('/MyItems')
       } else {
         dispatch(
           updateError({
@@ -99,6 +101,11 @@ export const AddItem = ({ setFetchDataAgain }) => {
           })
         )
         setFetchDataAgain(true)
+        dispatch(
+          updateFetchImageAgain({
+            data: true
+          })
+        )
         navigate('/MyItems')
       } else {
         dispatch(

@@ -119,6 +119,18 @@ export async function getItemImage(url) {
   return data
 }
 
+export async function getAllItemImagePath() {
+  const data = await axios({
+    method: 'GET',
+    // headers: {
+    //   Authorization: `Bearer ${token}` // Add the JWT token here
+    // },
+    url: `${assetsURL}?getOne=true`
+  })
+
+  return data
+}
+
 export async function getOneItemImage(folderPath) {
   const data = await axios({
     method: 'GET',

@@ -20,6 +20,7 @@ export const apiType = {
 
 export const apiLabels = {
   allItems: 'ALL ITEMS',
+  allItemImagePath: 'ALL ITEMS IMAGE PATH',
   allItemsCategories: 'ALL ITEMS CATEGORIES',
   allItemsCreatedByCurrentUser: 'ALL ITEMS BY CURRENT USER',
   allRentalOffersMadeByCurrentUser: 'ALL RENTAL OFFER MADE BY CURRENT USER',
@@ -39,7 +40,7 @@ export const formItemLayout = {
       span: 24
     },
     sm: {
-      span: 8
+      span: 5
     }
   },
   wrapperCol: {
