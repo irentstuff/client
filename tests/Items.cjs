@@ -1,4 +1,4 @@
-const { By, until } = require('selenium-webdriver')
+const { By, until, Key } = require('selenium-webdriver')
 const { config } = require('./config')
 
 class ItemsFunction {
@@ -98,7 +98,15 @@ class ItemsFunction {
   async editItem(itemDetails) {
     //fill form
     /* ---------------------------------- title --------------------------------- */
-    await this.driver.findElement(By.id('editItem_title')).sendKeys(itemDetails.title)
+    const inputField = await this.driver.wait(until.elementLocated(By.id('editItem_title')), 10000)
+    await this.driver.wait(until.elementIsVisible(inputField), 10000)
+
+    const currentValue = await inputField.getAttribute('value')
+
+    for (let i = 0; i < currentValue.length; i++) {
+      await inputField.sendKeys(Key.BACK_SPACE)
+    }
+    await inputField.sendKeys(itemDetails.title)
 
     /* --------------------------------- submit --------------------------------- */
     // const buttonElement = await this.driver.findElement(By.xpath("//button[contains(@class, 'ant-btn') and span[text()='Edit Item']]"))

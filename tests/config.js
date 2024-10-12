@@ -16,7 +16,7 @@ const newItemForm = {
 }
 
 const editItemForm = {
-  title: '_again',
+  title: 'test_item_again',
   category: 'Electronics',
   condition: 'Excellent',
   condition: 'Excellent',

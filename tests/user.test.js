@@ -45,7 +45,7 @@ describe('Login Tests', () => {
     } else {
       console.log('login details is incorrect:', textValue)
     }
-    expect(textValue === config.username)
+    expect(textValue).toBe(config.username)
   })
 })
 
@@ -89,7 +89,7 @@ describe('Item Tests', () => {
     await items.addNewItem(newItemForm)
     const successMessage = await items.getSuccessMessage()
     try {
-      expect(successMessage === 'Item is added successfully')
+      expect(successMessage).toBe('Item is added successfully')
       console.log('add assertion passed.')
     } catch (assertionError) {
       console.error('Assertion failed:', assertionError.message)
@@ -99,12 +99,23 @@ describe('Item Tests', () => {
     await driver.sleep(5000)
   }, 10000)
 
+  it('should render the new item in the UI', async () => {
+    const firstItemTitle = await driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div[1]/div/div[3]/h3`)).getText()
+    try {
+      expect(firstItemTitle).toBe(newItemForm.title) // Check if the new item is rendered
+      console.log('add ui render assertion passed.')
+    } catch (assertionError) {
+      console.error('Assertion failed:', assertionError.message)
+      throw new Error(`new item is not being rendered,  ${firstItemTitle} found instead`)
+    }
+  })
+
   it('should edit an existing item successfully', async () => {
     await items.navigateEditItem()
     await items.editItem(editItemForm)
     const successMessage = await items.getSuccessMessage()
     try {
-      expect(successMessage === 'Item is edited successfully')
+      expect(successMessage).toBe('Item is edited successfully')
       console.log('edit assertion passed.')
     } catch (assertionError) {
       console.error('Assertion failed:', assertionError.message)
@@ -114,12 +125,26 @@ describe('Item Tests', () => {
     await driver.sleep(5000)
   }, 10000)
 
+  it('should render the edited item in the UI', async () => {
+    const itemTitle = await driver
+      .findElement(By.xpath(`//*[@id="root"]/div/main/div/div/div/div[2]/div[1]/div[2]/div/div[1]/h3`))
+      .getText()
+    console.log(itemTitle)
+    try {
+      expect(itemTitle).toBe(editItemForm.title) // Check if the new item is rendered
+      console.log('edit ui render assertion passed.')
+    } catch (assertionError) {
+      console.error('Assertion failed:', assertionError.message)
+      throw new Error(`edited item is not being rendered, ${itemTitle} found instead`)
+    }
+  })
+
   it('should delete an existing item successfully', async () => {
     await items.navigateDeleteItem()
     await items.deleteItem()
     const successMessage = await items.getSuccessMessage()
     try {
-      expect(successMessage === 'Item is deleted successfully')
+      expect(successMessage).toBe('Item is deleted successfully')
       console.log('delete assertion passed.')
     } catch (assertionError) {
       console.error('Assertion failed:', assertionError.message)
@@ -128,4 +153,15 @@ describe('Item Tests', () => {
 
     await driver.sleep(5000)
   }, 10000)
+
+  it('should not render the edited item in the UI', async () => {
+    try {
+      const pageSource = await driver.getPageSource()
+      expect(pageSource.includes(editItemForm.title)).toBe(false) // Check if the new item is rendered
+      console.log('delete ui render assertion passed.')
+    } catch (assertionError) {
+      console.error('Assertion failed:', assertionError.message)
+      throw new Error(`deleted item is being rendered`)
+    }
+  })
 })
