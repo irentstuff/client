@@ -11,7 +11,7 @@ export async function getAllItems() {
     // headers: {
     //   Authorization: `Bearer ${token}` // Add the JWT token here
     // },
-    url: `${itemsURL}`
+    url: `${itemsURL}?valid=0`
   })
 
   return data

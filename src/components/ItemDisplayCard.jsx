@@ -81,9 +81,9 @@ export const ItemDisplayCard = ({ itemDetails }) => {
             <Tag
               style={{ float: 'right' }}
               bordered={false}
-              color={availabilityOptions.find((option) => option.value === itemDetails.availability).color}
+              color={availabilityOptions.find((option) => option.value === itemDetails.availability)?.color}
             >
-              {availabilityOptions.find((option) => option.value === itemDetails.availability).label}
+              {availabilityOptions.find((option) => option.value === itemDetails.availability)?.label}
             </Tag>
           </>
           // }
