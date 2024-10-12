@@ -47,6 +47,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   console.log(itemDetails)
   console.log(itemImagePath)
   console.log(currentUserIsItemOwner)
+  console.log(itemDetailsFromOffer)
   console.log(editItemModal)
 
   /* ------------------------------ api services ------------------------------ */
@@ -126,14 +127,15 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   }
 
   useEffect(() => {
-    if (itemDetailsFromOffer !== undefined) {
-      setItemDetails(itemDetailsFromOffer)
-    }
-
     console.log(itemDetailsFromOffer, state)
 
     setItemDetails(state)
   }, [])
+  useEffect(() => {
+    if (itemDetailsFromOffer !== undefined) {
+      setItemDetails(itemDetailsFromOffer)
+    }
+  }, [itemDetailsFromOffer])
 
   useEffect(() => {
     if (itemId !== undefined) {
