@@ -127,21 +127,6 @@ export const ReviewsOverview = ({ itemId }) => {
   }
 
   useEffect(() => {
-    if (itemId !== undefined) {
-      //get reviews for item on load
-      getAverageReviewsForItemLocal({ id: itemId })
-      getReviewsForItemLocal({ id: itemId })
-      dispatch(
-        updateRefreshReviews({
-          data: false
-        })
-      )
-      setEditReviewModal({ state: false, data: {} })
-    }
-  }, [])
-
-  useEffect(() => {
-    console.log(refresh, itemId)
     if (refresh && itemId !== undefined) {
       //get reviews for item on load
       getAverageReviewsForItemLocal({ id: itemId })
@@ -153,7 +138,21 @@ export const ReviewsOverview = ({ itemId }) => {
       )
       setEditReviewModal({ state: false, data: {} })
     }
-  }, [refresh, itemId])
+  }, [refresh])
+
+  useEffect(() => {
+    if (itemId !== undefined) {
+      //get reviews for item on load
+      getAverageReviewsForItemLocal({ id: itemId })
+      getReviewsForItemLocal({ id: itemId })
+      dispatch(
+        updateRefreshReviews({
+          data: false
+        })
+      )
+      setEditReviewModal({ state: false, data: {} })
+    }
+  }, [itemId])
 
   return (
     <Space direction='vertical' size='large' style={{ width: '70%' }}>

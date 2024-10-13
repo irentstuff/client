@@ -145,11 +145,11 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
 
   useEffect(() => {
     //update reviews refresh
-    dispatch(
-      updateRefreshReviews({
-        data: true
-      })
-    ) //get item images
+    // dispatch(
+    //   updateRefreshReviews({
+    //     data: true
+    //   })
+    // ) //get item images
     if (itemDetails?.image) {
       console.log(itemDetails)
       if (itemDetails?.image.endsWith('.jpg') || itemDetails?.image.endsWith('.jpeg') || itemDetails?.image.endsWith('.png')) {

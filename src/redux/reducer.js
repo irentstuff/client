@@ -30,6 +30,7 @@ export const iRentStuffSlice = createSlice({
     //REFRESH
     updateRefreshReviews: (state, action) => {
       state.refreshReviews = action.payload.data
+      console.log('review-reducer', action.payload.data)
     },
     updateFetchImageAgain: (state, action) => {
       state.getImageAgain = action.payload.data

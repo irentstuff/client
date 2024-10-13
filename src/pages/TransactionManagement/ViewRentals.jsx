@@ -28,6 +28,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
 
   const [viewItemModal, setViewItemModal] = useState({ state: false, data: {} })
   const [editReviewModal, setEditReviewModal] = useState({ state: false, data: {} })
+  const refresh = useSelector((state) => state.iRentStuff.refreshReviews)
 
   const roleAllowedPatchActions = isOwner ? ownerCanPatchActions : userCanPatchActions
 
