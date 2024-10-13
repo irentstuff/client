@@ -127,6 +127,7 @@ export const ReviewsOverview = ({ itemId }) => {
   }
 
   useEffect(() => {
+    console.log(refresh, itemId)
     if (refresh && itemId !== undefined) {
       //get reviews for item on load
       getAverageReviewsForItemLocal({ id: itemId })
