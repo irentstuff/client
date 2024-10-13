@@ -127,6 +127,16 @@ export const ReviewsOverview = ({ itemId }) => {
   }
 
   useEffect(() => {
+    if (itemId !== undefined) {
+      //get reviews for item on load
+      getAverageReviewsForItemLocal({ id: itemId })
+      getReviewsForItemLocal({ id: itemId })
+
+      setEditReviewModal({ state: false, data: {} })
+    }
+  }, [])
+
+  useEffect(() => {
     console.log(refresh, itemId)
     if (refresh && itemId !== undefined) {
       //get reviews for item on load
