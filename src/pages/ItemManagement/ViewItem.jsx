@@ -297,7 +297,9 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
       {editItemModal.state && (
         <ItemEditModal modalDetails={editItemModal} updateModalDetails={setEditItemModal} setFetchDataAgain={setFetchDataAgain} />
       )}
-      {makeOfferModal.state && <MakeOfferModal modalDetails={makeOfferModal} updateModalDetails={setMakeOfferModal} />}
+      {makeOfferModal.state && (
+        <MakeOfferModal modalDetails={makeOfferModal} updateModalDetails={setMakeOfferModal} setFetchDataAgain={setFetchDataAgain} />
+      )}
     </>
   )
 }

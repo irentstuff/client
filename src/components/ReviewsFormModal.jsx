@@ -4,9 +4,9 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { updateRefreshReviews, updateError, updateSuccess } from '../redux/reducer'
-import { createNewReview, editReview, getReviewsForUser } from '../services/api'
+import { createNewReview, editReview, deleteReviews, getReviewsForUser } from '../services/api'
 /* ------------------------------- COMPONENTS ------------------------------- */
-import { Col, Form, Input, Row, Rate, Button, Modal } from 'antd'
+import { Col, Form, Input, Row, Rate, Button, Modal, Popconfirm, Space } from 'antd'
 
 /* -------------------------------------------------------------------------- */
 /*                                REVIEWS CRUD                                */
@@ -118,7 +118,45 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails }) => {
       console.log(response)
       if (response.status === 200) {
         console.log(response.data)
-        setReviewsByCurrentUser(response.data)
+        if (!response.data?.message) {
+          setReviewsByCurrentUser(response.data)
+        }
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
+  //delete review
+  const deleteReview = async (payload) => {
+    try {
+      const response = await deleteReviews(payload)
+      console.log(response)
+      if (response.status === 200) {
+        dispatch(
+          updateSuccess({
+            status: true,
+            msg: `Review is deleted successfully`
+          })
+        )
+        updateModalDetails({ state: false, data: {} })
+        dispatch(
+          updateRefreshReviews({
+            data: true
+          })
+        )
       } else {
         dispatch(
           updateError({
@@ -152,6 +190,8 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails }) => {
   }, [currentUser])
 
   useEffect(() => {
+    console.log(reviewsByCurrentUser)
+
     const reviewByUserForItemAndRental = reviewsByCurrentUser.filter(
       (review) => review.item_id === initModalDetails.data.item_id && review.rental_id === initModalDetails.data.rental_id
     )
@@ -205,9 +245,22 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails }) => {
               <Input placeholder='Leave a review.' />
             </Form.Item>
 
-            <Button type='primary' htmlType='submit'>
-              Submit Review
-            </Button>
+            <Space>
+              <Button type='primary' htmlType='submit'>
+                Submit Review
+              </Button>
+              {Object.keys(modalDetails.data).includes('review_id') && (
+                <Popconfirm
+                  title='Delete review'
+                  description='Are you sure to delete this review?'
+                  onConfirm={() => deleteReview(modalDetails.data)}
+                  okText='Yes'
+                  cancelText='No'
+                >
+                  <Button>Delete review</Button>
+                </Popconfirm>
+              )}
+            </Space>
           </Form>
         </Col>
       </Row>

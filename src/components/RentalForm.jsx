@@ -6,7 +6,7 @@ import { updateError, updateSuccess } from '../redux/reducer'
 import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Col, Form, Input, Row, DatePicker, Button, Space } from 'antd'
-import { formItemLayout, tailFormItemLayout } from '../services/config'
+import { modalFormItemLayout, tailFormItemLayout } from '../services/config'
 import { createNewRental } from '../services/api'
 
 const { RangePicker } = DatePicker
@@ -14,7 +14,7 @@ const { RangePicker } = DatePicker
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const RentalForm = ({ itemDetails }) => {
+export const RentalForm = ({ itemDetails, setFetchDataAgain, updateModalDetails }) => {
   const [form] = Form.useForm()
   const dispatch = useDispatch()
 
@@ -31,11 +31,13 @@ export const RentalForm = ({ itemDetails }) => {
             msg: `Rental offer is made successfully`
           })
         )
+        setFetchDataAgain(true)
+        updateModalDetails({ state: false, data: {} })
       } else {
         dispatch(
           updateError({
             status: true,
-            msg: `${response.statusText} - ${response.message}`
+            msg: `${response.statusText} - ${response.data}`
           })
         )
       }
@@ -43,7 +45,7 @@ export const RentalForm = ({ itemDetails }) => {
       dispatch(
         updateError({
           status: true,
-          msg: `${error.message}`
+          msg: `${error.message}. ${error?.response?.data}`
         })
       )
     }
@@ -70,7 +72,7 @@ export const RentalForm = ({ itemDetails }) => {
     <Row justify='center' style={{ paddingTop: '2em' }}>
       <Col xs={24} xl={12}>
         <Form
-          {...formItemLayout}
+          {...modalFormItemLayout}
           form={form}
           name='makeOffer'
           style={{

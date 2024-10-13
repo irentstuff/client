@@ -8,19 +8,21 @@ import { PurchaseForm } from './PurchaseForm'
 /* -------------------------------------------------------------------------- */
 /*                                  ITEM EDIT                                 */
 /* -------------------------------------------------------------------------- */
-export const MakeOfferModal = ({ modalDetails, updateModalDetails }) => {
+export const MakeOfferModal = ({ modalDetails, updateModalDetails, setFetchDataAgain }) => {
   console.log(modalDetails)
 
   const items = [
     {
       key: '1',
       label: 'I want to rent!',
-      children: <RentalForm itemDetails={modalDetails.data} />
+      children: <RentalForm itemDetails={modalDetails.data} setFetchDataAgain={setFetchDataAgain} updateModalDetails={updateModalDetails} />
     },
     {
       key: '2',
       label: 'I want to buy!',
-      children: <PurchaseForm itemDetails={modalDetails.data} />
+      children: (
+        <PurchaseForm itemDetails={modalDetails.data} setFetchDataAgain={setFetchDataAgain} updateModalDetails={updateModalDetails} />
+      )
     }
   ]
 

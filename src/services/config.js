@@ -52,6 +52,25 @@ export const formItemLayout = {
     }
   }
 }
+export const modalFormItemLayout = {
+  labelCol: {
+    xs: {
+      span: 24
+    },
+    sm: {
+      span: 8
+    }
+  },
+  wrapperCol: {
+    xs: {
+      span: 24
+    },
+    sm: {
+      span: 16
+    }
+  }
+}
+
 export const tailFormItemLayout = {
   wrapperCol: {
     xs: {
@@ -140,7 +159,7 @@ export const statusCanPatchActions_purchase = {
   confirm: ['offered'],
   cancel: ['offered', 'confirmed'],
   complete: ['confirmed'],
-  review: ['completed']
+  review: ['sold']
 }
 
 export const ownerCanPatchActions = ['confirm', 'cancel', 'start', 'complete']
