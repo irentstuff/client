@@ -131,7 +131,11 @@ export const ReviewsOverview = ({ itemId }) => {
       //get reviews for item on load
       getAverageReviewsForItemLocal({ id: itemId })
       getReviewsForItemLocal({ id: itemId })
-
+      dispatch(
+        updateRefreshReviews({
+          data: false
+        })
+      )
       setEditReviewModal({ state: false, data: {} })
     }
   }, [])
