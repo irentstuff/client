@@ -67,12 +67,12 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails }) => {
             msg: `Review is edited successfully`
           })
         )
-        updateModalDetails({ state: false, data: {} })
         dispatch(
           updateRefreshReviews({
             data: true
           })
         )
+        updateModalDetails({ state: false, data: {} })
       } else {
         dispatch(
           updateError({
@@ -151,12 +151,12 @@ export const ReviewsFormModal = ({ modalDetails, updateModalDetails }) => {
             msg: `Review is deleted successfully`
           })
         )
-        updateModalDetails({ state: false, data: {} })
         dispatch(
           updateRefreshReviews({
             data: true
           })
         )
+        updateModalDetails({ state: false, data: {} })
       } else {
         dispatch(
           updateError({
