@@ -3,9 +3,9 @@
 /* -------------------------------------------------------------------------- */
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateError, updateSuccess } from '../../redux/reducer'
+import { updateError, updateSuccess, updateItemById } from '../../redux/reducer'
 import { rentalStatus, patchActions, statusCanPatchActions_rental, ownerCanPatchActions, userCanPatchActions } from '../../services/config'
-import { rentalPatch } from '../../services/api'
+import { rentalPatch, getItemByItemId } from '../../services/api'
 import moment from 'moment'
 /* -------------------------------- COMPONENT ------------------------------- */
 import { Space, Input, Table, Tag, Button, Modal, Popconfirm } from 'antd'
@@ -116,6 +116,35 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
     }
   })
 
+  const getUpdatedItemByItemId = async (payload) => {
+    try {
+      const response = await getItemByItemId(payload)
+      console.log(response)
+      if (response.status === 200) {
+        console.log(response.data)
+        dispatch(
+          updateItemById({
+            data: response.data
+          })
+        )
+      } else {
+        dispatch(
+          updateError({
+            status: true,
+            msg: response.statusText
+          })
+        )
+      }
+    } catch (error) {
+      dispatch(
+        updateError({
+          status: true,
+          msg: `${error.message}`
+        })
+      )
+    }
+  }
+
   const updateRental = async (record, action) => {
     try {
       const response = await rentalPatch(record.itemDetails.id, record.rental_id, action)
@@ -128,6 +157,8 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
           })
         )
         setFetchDataAgain(true)
+        //refetch the corresponding item details
+        getUpdatedItemByItemId(record.itemDetails)
       } else {
         dispatch(
           updateError({
@@ -229,8 +260,8 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
       dataIndex: 'status',
       show: true,
       render: (text) => (
-        <Tag style={{ float: 'right' }} bordered={false} color={rentalStatus.find((option) => option.value === text).color}>
-          {rentalStatus.find((option) => option.value === text).label}
+        <Tag style={{ float: 'right' }} bordered={false} color={rentalStatus.find((option) => option.value === text)?.color}>
+          {rentalStatus.find((option) => option.value === text)?.label}
         </Tag>
       ),
       sorter: (a, b) => a.status.localeCompare(b.status),

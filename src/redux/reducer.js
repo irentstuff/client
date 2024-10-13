@@ -63,6 +63,21 @@ export const iRentStuffSlice = createSlice({
 
       state.allItemsMap = itemMap
     },
+    updateItemById: (state, action) => {
+      const newItem = action.payload.data
+      const allItems = current(state.allItems)
+      const allItemsMap = current(state.allItemsMap)
+
+      const updatedAllItems = allItems.map((item) => (item.id === newItem.id ? newItem : item))
+      const updatedAllItemMap = {
+        ...allItemsMap,
+        [newItem.id]: newItem // Replace the value for the specified key
+      }
+
+      state.allItems = updatedAllItems
+      state.allItemsMap = updatedAllItemMap
+    },
+
     updateAllItemsImagePath: (state, action) => {
       const allItemsImagePath = action.payload.data
       state.allItemsImagePath = allItemsImagePath
@@ -143,6 +158,7 @@ export const {
   updateAllUsers,
   updateCurrentUser,
   updateAllItems,
+  updateItemById,
   updateAllItemsImagePath,
   updateAllItemCategories,
   updateAllItemsCreatedByCurrentUser,

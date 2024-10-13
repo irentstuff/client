@@ -195,6 +195,12 @@ export const rentalStatus = [
     text: 'Completed',
     label: 'Completed',
     color: 'default'
+  },
+  {
+    value: 'sold',
+    text: 'Sold',
+    label: 'Sold',
+    color: 'default'
   }
 ]
 
