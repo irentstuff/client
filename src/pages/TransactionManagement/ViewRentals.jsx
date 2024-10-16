@@ -248,8 +248,8 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
     },
     {
       title: 'Offered Date',
-      dataIndex: 'updated_at',
-      key: 'updated_at',
+      dataIndex: 'created_at',
+      key: 'created_at',
       // width: 100,
       show: true,
       render: (text) => moment(text).format('YYYY-MM-DD'),
