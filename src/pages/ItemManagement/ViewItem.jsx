@@ -35,6 +35,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   const allItemsImagePath = useSelector((storeState) => storeState.iRentStuff.allItemsImagePath)
 
   const [itemDetails, setItemDetails] = useState({})
+  const [buttonDisplay, setButtonDisplay] = useState(true)
 
   const currentUserIsItemOwner =
     currentUser?.userDetails.userId === itemDetails?.owner || currentUser?.userDetails.username === itemDetails?.owner
@@ -130,9 +131,11 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
 
     setItemDetails(state)
   }, [])
+
   useEffect(() => {
     if (itemDetailsFromOffer !== undefined) {
       setItemDetails(itemDetailsFromOffer)
+      setButtonDisplay(false)
     }
   }, [itemDetailsFromOffer])
 
@@ -293,16 +296,18 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
                       </Col>
                     </Row>
                   ) : (
-                    <Space>
-                      <Button
-                        onClick={() =>
-                          window.location.assign(`../messaging/?item=${itemDetails.id}&renter=${currentUser.userDetails.username}`)
-                        }
-                      >
-                        Enquire
-                      </Button>
-                      <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
-                    </Space>
+                    buttonDisplay && (
+                      <Space>
+                        <Button
+                          onClick={() =>
+                            window.location.assign(`../messaging/?item=${itemDetails.id}&renter=${currentUser.userDetails.username}`)
+                          }
+                        >
+                          Enquire
+                        </Button>
+                        <Button onClick={() => setMakeOfferModal({ state: true, data: itemDetails })}>Make Offer</Button>
+                      </Space>
+                    )
                   )}
                 </Space>
               </Col>
