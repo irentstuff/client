@@ -19,7 +19,7 @@ export const PageLayout = () => {
       <Content style={{ overflow: 'initial', paddingLeft: '20px', paddingRight: '20px', minHeight: '100vh' }}>
         <Outlet />
       </Content>
-      <Footer>©{new Date().getFullYear()} Copyright IRentStuff</Footer>
+      <Footer>©{new Date().getFullYear()} Copyright iRentStuff</Footer>
     </Layout>
   )
 }
