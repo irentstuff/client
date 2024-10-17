@@ -9,7 +9,7 @@ import moment from 'moment'
 /* ------------------------------- COMPONENTS ------------------------------- */
 import { Modal, Col, Form, Input, Row, Select } from 'antd'
 import { UploadImage } from './UploadImage'
-import { formItemLayout, conditionOptions, availabilityOptions, assetsURL, getCategoryLabel } from '../services/config'
+import { modalFormItemLayout, conditionOptions, availabilityOptions, assetsURL, getCategoryLabel } from '../services/config'
 import { editItem, uploadItemImage, deleteItemImage } from '../services/api'
 
 /* -------------------------------------------------------------------------- */
