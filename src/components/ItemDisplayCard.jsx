@@ -56,7 +56,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
   useEffect(() => {
     if (itemDetails.image.endsWith('.jpg') || itemDetails.image.endsWith('.jpeg') || itemDetails.image.endsWith('.png')) {
       setImagePath(itemDetails.image)
-    } else if (itemDetails.image !== '') {
+    } else if (itemDetails.image || itemDetails.image === '') {
       if (allItemsImagePath && allItemsImagePath[itemDetails.id] && allItemsImagePath[itemDetails.id][0]) {
         const path = `${assetsURL}/${allItemsImagePath[itemDetails.id][0].Key}`
         setImagePath(path)
