@@ -253,7 +253,7 @@ export const ViewRentals = ({ setFetchDataAgain, isOwner }) => {
       // width: 100,
       show: true,
       render: (text) => moment(text).format('YYYY-MM-DD'),
-      sorter: (a, b) => a.updated_at.localeCompare(b.updated_at)
+      sorter: (a, b) => a.created_at.localeCompare(b.created_at)
     },
     {
       title: 'Status',

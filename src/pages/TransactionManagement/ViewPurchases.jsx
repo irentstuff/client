@@ -216,7 +216,7 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
       key: 'created_at',
       show: true,
       render: (text) => moment(text).format('YYYY-MM-DD'),
-      sorter: (a, b) => a.updated_at.localeCompare(b.updated_at)
+      sorter: (a, b) => a.created_at.localeCompare(b.created_at)
     },
     {
       title: 'Status',

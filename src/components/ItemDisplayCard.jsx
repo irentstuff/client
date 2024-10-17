@@ -123,7 +123,7 @@ export const ItemDisplayCard = ({ itemDetails }) => {
           </Text>
 
           <Text>
-            Deposit Price (per day):
+            Deposit Price:
             <Text strong>{` $${itemDetails.deposit}`}</Text>
           </Text>
         </Space>
