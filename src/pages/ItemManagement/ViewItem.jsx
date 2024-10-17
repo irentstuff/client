@@ -190,25 +190,25 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
         ) : (
           <Card
             title={
-              <Meta
-                avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
-                description={
-                  <>
-                    {' '}
-                    <Text>
-                      Listed {dayDifference(itemDetails?.created_date)} days ago by {itemDetails?.owner}
-                    </Text>
-                    <Tag
-                      style={{ float: 'right' }}
-                      bordered={false}
-                      color={availabilityOptions.find((option) => option.value === itemDetails?.availability)?.color}
-                    >
-                      {availabilityOptions.find((option) => option.value === itemDetails?.availability)?.label}
-                    </Tag>
-                  </>
-                }
-              />
+              // <Meta
+              //   avatar={<Avatar src='https://api.dicebear.com/7.x/miniavs/svg?seed=8' />}
+              //   description={
+              <>
+                {' '}
+                <Text>
+                  Listed {dayDifference(itemDetails?.created_date)} days ago by {itemDetails?.owner}
+                </Text>
+                <Tag
+                  style={{ float: 'right' }}
+                  bordered={false}
+                  color={availabilityOptions.find((option) => option.value === itemDetails?.availability)?.color}
+                >
+                  {availabilityOptions.find((option) => option.value === itemDetails?.availability)?.label}
+                </Tag>
+              </>
             }
+            //   />
+            // }
             style={{ textAlign: 'left' }}
           >
             <Row justify='start'>
