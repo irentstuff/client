@@ -95,7 +95,7 @@ export const CustomHeader = () => {
 
   const openMenuItem = async (e) => {
     if (e.key !== 'Logout') {
-      if (e.key == 'Messaging') {
+      if (e.key === 'Messaging') {
         window.location.assign(`../messaging/`)
       } else {
         navigate(`${e.key}`)

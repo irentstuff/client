@@ -21,6 +21,57 @@ export const HomePage = ({ myItems }) => {
   const [initialDisplayItems, setInitialDisplayItems] = useState([])
   // console.log(allItems)
 
+  //sort
+  const sortItems = (allItem, sortCategoryValue, direction) => {
+    const intCompare = ['deposit', 'price_per_day']
+
+    try {
+      if (intCompare.includes(sortCategoryValue)) {
+        return [...allItem].sort((a, b) => {
+          if (!a[sortCategoryValue] || !b[sortCategoryValue]) {
+            throw new Error('Invalid format')
+          }
+          return direction === 0 ? a[sortCategoryValue] - b[sortCategoryValue] : b[sortCategoryValue] - a[sortCategoryValue]
+        })
+      }
+
+      return [...allItem].sort((a, b) => {
+        if (!a[sortCategoryValue] || !b[sortCategoryValue]) {
+          throw new Error(`Invalid ${sortCategoryValue} format`)
+        }
+        return direction === 0
+          ? a[sortCategoryValue].localeCompare(b[sortCategoryValue])
+          : b[sortCategoryValue].localeCompare(a[sortCategoryValue])
+      })
+    } catch (error) {
+      console.error('Error sorting items:', error)
+      // Optionally return the original array or handle the error accordingly
+      return allItem
+    }
+  }
+
+  const updateSortCategory = (option) => {
+    if (option === sortCategory[0]) {
+      if (sortCategory[1] === 0) {
+        setSortCategory([option, 1])
+      } else if (sortCategory[1] === 1) {
+        setSortCategory('')
+      }
+    } else {
+      setSortCategory([option, 0])
+    }
+  }
+
+  useEffect(() => {
+    if (sortCategory === '') {
+      setInitialDisplayItems(initialDisplayItems)
+    } else if (sortCategory !== '') {
+      const sortedItem = sortItems(searchedItems, sortCategory[0], sortCategory[1])
+      console.log(sortCategory, sortedItem)
+      setInitialDisplayItems(sortedItem)
+    }
+  }, [sortCategory])
+
   useEffect(() => {
     if (allItems) {
       if (myItems) {
@@ -51,57 +102,6 @@ export const HomePage = ({ myItems }) => {
     }
   }
 
-  //sort
-  const sortItems = (allItem, sortCategory, direction) => {
-    const intCompare = ['deposit', 'price_per_day']
-
-    try {
-      if (intCompare.includes(sortCategory)) {
-        return [...allItem].sort((a, b) => {
-          if (!a[sortCategory] || !b[sortCategory]) {
-            throw new Error('Invalid format')
-          }
-          return direction === 0 ? a[sortCategory] - b[sortCategory] : b[sortCategory] - a[sortCategory]
-        })
-      } else {
-        return [...allItem].sort((a, b) => {
-          if (!a[sortCategory] || !b[sortCategory]) {
-            throw new Error(`Invalid ${sortCategory} format`)
-          }
-          return direction === 0 ? a[sortCategory].localeCompare(b[sortCategory]) : b[sortCategory].localeCompare(a[sortCategory])
-        })
-      }
-    } catch (error) {
-      console.error('Error sorting items:', error)
-      // Optionally return the original array or handle the error accordingly
-      return allItem
-    }
-  }
-
-  const updateSortCategory = (option) => {
-    if (option === sortCategory[0]) {
-      if (sortCategory[1] === 0) {
-        setSortCategory([option, 1])
-      }
-
-      if (sortCategory[1] === 1) {
-        setSortCategory('')
-      }
-    } else {
-      setSortCategory([option, 0])
-    }
-  }
-
-  useEffect(() => {
-    if (sortCategory === '') {
-      setSearchedItems(initialDisplayItems)
-    } else {
-      const sortedItem = sortItems(searchedItems, sortCategory[0], sortCategory[1])
-      console.log(sortCategory, sortedItem)
-      setSearchedItems(sortedItem)
-    }
-  }, [sortCategory])
-
   const sortContent = () => {
     const sortOptions = ['created_date', 'availability', 'owner', 'category', 'deposit', 'price_per_day']
     return sortOptions.map((option) => (
@@ -126,7 +126,7 @@ export const HomePage = ({ myItems }) => {
     >
       <Row gutter={[8, 16]}>
         <Col xs={24} lg={22}>
-          <Search placeholder='Search for an item' allowClear onChange={onChange} />
+          <Search placeholder='Search for an item title' allowClear onChange={onChange} />
         </Col>
         <Col flex='auto'>
           <Popover content={sortContent} trigger='click'>

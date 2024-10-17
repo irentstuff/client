@@ -30,10 +30,9 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
   console.log(itemId)
 
   const currentUser = useSelector((storeState) => storeState.iRentStuff.currentUser)
-  const getImageAgain = useSelector((state) => state.iRentStuff.getImageAgain)
   const allItemCategories = useSelector((storeState) => storeState.iRentStuff.allItemCategories)
   const allItemsMap = useSelector((storeState) => storeState.iRentStuff.allItemsMap)
-  const allItemsImagePath = useSelector((state) => state.iRentStuff.allItemsImagePath)
+  const allItemsImagePath = useSelector((storeState) => storeState.iRentStuff.allItemsImagePath)
 
   const [itemDetails, setItemDetails] = useState({})
 
@@ -185,7 +184,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
           paddingTop: '25px'
         }}
       >
-        {itemDetails == undefined ? (
+        {itemDetails === undefined ? (
           <Empty />
         ) : (
           <Card

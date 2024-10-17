@@ -238,6 +238,10 @@ export const ViewPurchases = ({ setFetchDataAgain, isOwner }) => {
       show: true,
       render: (_, record) => (
         <Space size='middle'>
+          <Button type='link' onClick={() => window.location.assign(`../messaging/?item=${record.item_id}&renter=${record.renter_id}`)}>
+            View Chat
+          </Button>
+
           <Button type='link' onClick={() => setViewItemModal({ state: true, data: record.itemDetails })}>
             View Item Details
           </Button>
