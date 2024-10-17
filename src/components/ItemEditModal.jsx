@@ -191,7 +191,7 @@ export const ItemEditModal = ({ modalDetails, updateModalDetails, setFetchDataAg
       <Row justify='center'>
         <Col xs={24} xl={12}>
           <Form
-            {...formItemLayout}
+            {...modalFormItemLayout}
             form={form}
             name='editItem'
             initialValues={itemDetails}

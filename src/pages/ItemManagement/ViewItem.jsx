@@ -149,7 +149,8 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
     //     data: true
     //   })
     // ) //get item images
-    if (itemDetails?.image) {
+    console.log('image', itemDetails)
+    if (itemDetails?.image || itemDetails.image == '') {
       console.log(itemDetails)
       if (itemDetails?.image.endsWith('.jpg') || itemDetails?.image.endsWith('.jpeg') || itemDetails?.image.endsWith('.png')) {
         setItemImagePath([itemDetails.image])
@@ -159,7 +160,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
         // getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
         const imageUrl = `${assetsURL}/${itemDetails.id}`
 
-        console.log(allItemsImagePath[itemDetails.id])
+        console.log('image', allItemsImagePath[itemDetails.id])
 
         if (allItemsImagePath && allItemsImagePath[itemDetails.id] && allItemsImagePath[itemDetails.id][0]) {
           const imagePath = allItemsImagePath[itemDetails.id].map((image) => {
@@ -256,6 +257,23 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
                     Deposit Price:
                     <Text strong>{` $${itemDetails?.deposit}`}</Text>
                   </Text>
+
+                  {/* <Row gutter={8}>
+                    <Col>
+                      <Button onClick={() => setEditItemModal({ state: true, data: itemDetails, itemImagePath })}>Edit Item</Button>
+                    </Col>
+                    <Col>
+                      <Popconfirm
+                        title={`Delete item: ${itemDetails?.title}`}
+                        description='Are you sure to delete this item?'
+                        onConfirm={confirm}
+                        okText='Yes'
+                        cancelText='No'
+                      >
+                        <Button danger>Delete Item</Button>
+                      </Popconfirm>
+                    </Col>
+                  </Row> */}
 
                   {currentUserIsItemOwner ? (
                     <Row gutter={8}>
