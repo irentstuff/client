@@ -153,7 +153,7 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
     //   })
     // ) //get item images
     console.log('image', itemDetails)
-    if (itemDetails?.image || itemDetails.image == '') {
+    if (itemDetails?.image || itemDetails.image === '') {
       console.log(itemDetails)
       if (itemDetails?.image.endsWith('.jpg') || itemDetails?.image.endsWith('.jpeg') || itemDetails?.image.endsWith('.png')) {
         setItemImagePath([itemDetails.image])
