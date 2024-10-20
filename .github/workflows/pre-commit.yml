@@ -10,7 +10,7 @@ jobs:
 
     services:
       selenium:
-        image: selenium/standalone-chrome
+        image: eleniarm/standalone-chromium:116.0-chromedriver-116.0-grid-4.10.0-20230828
         ports:
           - '4444:4444'
           - '7900:7900'
