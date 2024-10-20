@@ -17,14 +17,8 @@ jobs:
       - name: Run linters
         run: npm run lint
 
-      # - name: Build Dev
-      #   run: npm run dev
-
-      # - name: Run tests
-      #   run: npm run test
-
-      # - name: Run tests
-      #   run: npm run test
+      - name: Run tests
+        run: npm run start:test
 
       # - name: Check formatting
       #   run: npm run format-check
