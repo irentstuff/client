@@ -14,6 +14,7 @@ describe('Login Tests', () => {
   options.addArguments('--disable-extensions') // disabling extensions
   options.addArguments('--no-sandbox') // Bypass OS security model
   options.addArguments('--headless')
+  options.addArguments('--remote-debugging-pipe')
 
   beforeAll(async () => {
     driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
