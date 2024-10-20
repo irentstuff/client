@@ -8,13 +8,13 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
 
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        ports:
-          - '4444:4444'
-          - '7900:7900'
-        options: --shm-size=2gb
+    # services:
+    #   selenium:
+    #     image: selenium/standalone-chrome
+    #     ports:
+    #       - '4444:4444'
+    #       - '7900:7900'
+    #     options: --shm-size=2gb
 
     steps:
       - uses: actions/checkout@v3
