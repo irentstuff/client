@@ -1,4 +1,5 @@
 const { Builder, By, until } = require('selenium-webdriver')
+const chrome = require('selenium-webdriver/chrome')
 const { config, secondaryUser, newItemForm, editItemForm, newItemForOfferForm, rentalOfferForm } = require('./config')
 const LoginPage = require('./LoginPage')
 const ItemsFunction = require('./Items')
@@ -7,7 +8,7 @@ const TransactionFunction = require('./Transactions')
 describe('Login Tests', () => {
   let driver, loginPage
   const options = new chrome.Options()
-  options.addArguments('--headless')
+  //options.addArguments('--headless')
 
   beforeAll(async () => {
     driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
@@ -55,7 +56,7 @@ describe('Login Tests', () => {
 describe('Item Tests', () => {
   let driver, loginPage, items
   const options = new chrome.Options()
-  options.addArguments('--headless')
+  //options.addArguments('--headless')
 
   beforeAll(async () => {
     try {
@@ -174,7 +175,7 @@ describe('Item Tests', () => {
 describe('Transaction Tests', () => {
   let driver, loginPage, items, transactions, loginPageItemOwner, itemsItemOwner, transactionsItemOwner
   const options = new chrome.Options()
-  options.addArguments('--headless')
+  // options.addArguments('--headless')
 
   beforeAll(async () => {
     try {

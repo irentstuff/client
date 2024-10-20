@@ -17,8 +17,33 @@ jobs:
       - name: Run linters
         run: npm run lint
 
-      - name: Run tests
-        run: npm run start:test
+      - name: Install Chrome dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            wget \
+            xvfb \
+            libxi6 \
+            libgconf-2-4 \
+            libnss3 \
+            libxss1 \
+            libasound2 \
+            fonts-liberation \
+            libgtk-3-0
+
+      - name: Download and install Chrome
+        run: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt-get -f install
+
+      - name: Start Xvfb
+        run: Xvfb :99 -ac &
+
+      - name: Run GUI tests
+        env:
+          DISPLAY: :99 # Use the virtual display
+        run: npm run start:test # Adjust according to your test command
+
 
       # - name: Check formatting
       #   run: npm run format-check
