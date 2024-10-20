@@ -15,10 +15,12 @@ describe('Login Tests', () => {
   options.addArguments('--no-sandbox') // Bypass OS security model
   options.addArguments('--headless')
   options.addArguments('--remote-debugging-pipe')
+  options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
 
   beforeAll(async () => {
     driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
     await driver.get(config.baseUrl)
+    console.log(await driver.getTitle())
     await driver.manage().window().maximize()
     loginPage = new LoginPage(driver)
   }, 10000)
