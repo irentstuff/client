@@ -13,7 +13,7 @@ describe('Login Tests', () => {
   options.addArguments('disable-infobars') // disabling infobars
   options.addArguments('--disable-extensions') // disabling extensions
   options.addArguments('--no-sandbox') // Bypass OS security model
-  //options.addArguments('--headless')
+  options.addArguments('--headless')
 
   beforeAll(async () => {
     driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
