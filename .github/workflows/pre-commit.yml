@@ -33,12 +33,12 @@ jobs:
       - name: Start selenoid
         uses: Xotabu4/selenoid-github-action@v2
 
-      - name: Wait for Selenium to be ready
-        run: |
-          echo "Waiting for Selenium to be ready..."
-          until curl -s http://localhost:4444/wd/hub | grep -q '"ready":true'; do
-            sleep 5
-          done
+      # - name: Wait for Selenium to be ready
+      #   run: |
+      #     echo "Waiting for Selenium to be ready..."
+      #     until curl -s http://localhost:4444/wd/hub | grep -q '"ready":true'; do
+      #       sleep 5
+      #     done
 
       - name: Run GUI tests
         run: npm run start:test # Adjust according to your test command
