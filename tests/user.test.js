@@ -6,9 +6,11 @@ const TransactionFunction = require('./Transactions')
 
 describe('Login Tests', () => {
   let driver, loginPage
+  const options = new chrome.Options()
+  options.addArguments('--headless')
 
   beforeAll(async () => {
-    driver = await new Builder().forBrowser('chrome').build()
+    driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
     await driver.get(config.baseUrl)
     await driver.manage().window().maximize()
     loginPage = new LoginPage(driver)
@@ -52,11 +54,13 @@ describe('Login Tests', () => {
 
 describe('Item Tests', () => {
   let driver, loginPage, items
+  const options = new chrome.Options()
+  options.addArguments('--headless')
 
   beforeAll(async () => {
     try {
       /* ---------------------------------- setup --------------------------------- */
-      driver = await new Builder().forBrowser('chrome').build()
+      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
       await driver.get(config.baseUrl)
       await driver.manage().window().maximize()
       loginPage = new LoginPage(driver)
@@ -169,11 +173,13 @@ describe('Item Tests', () => {
 
 describe('Transaction Tests', () => {
   let driver, loginPage, items, transactions, loginPageItemOwner, itemsItemOwner, transactionsItemOwner
+  const options = new chrome.Options()
+  options.addArguments('--headless')
 
   beforeAll(async () => {
     try {
       /* ---------------------------------- setup --------------------------------- */
-      driver = await new Builder().forBrowser('chrome').build()
+      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
       await driver.get(config.baseUrl)
       await driver.manage().window().maximize()
       loginPage = new LoginPage(driver)
@@ -192,7 +198,7 @@ describe('Transaction Tests', () => {
       }
 
       /* ----------------------------- setup secondary ---------------------------- */
-      driverItemOwner = await new Builder().forBrowser('chrome').build()
+      driverItemOwner = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
       await driverItemOwner.get(config.baseUrl)
       await driverItemOwner.manage().window().maximize()
       loginPageItemOwner = new LoginPage(driverItemOwner)

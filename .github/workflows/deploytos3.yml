@@ -9,11 +9,13 @@ name: Deploy To S3
 on:
   workflow_run:
     workflows: ['Pre-commit checks']
-    types: [completed] #requested
+    types:
+      - completed
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout code
