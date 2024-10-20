@@ -40,6 +40,7 @@ jobs:
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
+    
       # - name: Start selenoid
       #   uses: Xotabu4/selenoid-github-action@v2
 
@@ -51,17 +52,7 @@ jobs:
       #     done
 
       - name: Run GUI tests
-        run: |
-          # Example command to run tests with Chrome options
-          python - <<EOF
-          from selenium import webdriver
-      
-          chrome_options = webdriver.ChromeOptions()
-          chrome_options.add_argument("--no-sandbox")
-          chrome_options.add_argument("--disable-dev-shm-usage")
-      
-          driver = webdriver.Chrome(options=chrome_options)
-          npm run start:test # Adjust according to your test command
+        run: npm run start:test # Adjust according to your test command
 
 
       # - name: Check formatting
