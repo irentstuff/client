@@ -35,8 +35,8 @@ jobs:
       - uses: nanasess/setup-chromedriver@v2
         with:
           # Optional: do not specify to match Chrome's version
-          # chromedriver-version: '88.0.4324.96'
-          chromedriver-version: '116.0'
+          chromedriver-version: '88.0.4324.96'
+          # chromedriver-version: '116.0'
       - run: |
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
@@ -51,6 +51,13 @@ jobs:
       #     until curl -s http://localhost:4444/wd/hub | grep -q '"ready":true'; do
       #       sleep 5
       #     done
+      - name: Write SSH keys
+        run: |
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          host='http://localhost:5173'
+          hosts="$(dig +short "$host" | grep -v '\.$' | sed -z 's|\n|,|g')$host"
+          ssh-keyscan -H "$hosts" > ~/.ssh/known_hosts
 
       - name: Run GUI tests
         run: npm run start:test # Adjust according to your test command
