@@ -2,8 +2,8 @@ name: SAST with Semgrep
 
 # Trigger this workflow when a repository dispatch event occurs with event_type 'run-semgrep'
 on:
-  push:
-    branches: ['main']
+  repository_dispatch:
+    types: [run-semgrep]
 
 jobs:
   semgrep_analysis:
