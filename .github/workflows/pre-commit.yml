@@ -8,13 +8,13 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
 
-    services:
-      selenium:
-        image: selenium/standalone-chrome
-        ports:
-          - '4444:4444'
-          - '7900:7900'
-        options: --shm-size=2gb
+    # services:
+    #   selenium:
+    #     image: selenium/standalone-chrome
+    #     ports:
+    #       - '4444:4444'
+    #       - '7900:7900'
+    #     options: --shm-size=2gb
 
     steps:
       - uses: actions/checkout@v3
@@ -30,13 +30,13 @@ jobs:
       - name: Run linters
         run: npm run lint
 
-      # - name : docker start Selenium
-      #   run: docker run -d -p 4444:4444 -p 7900:7900 --shm-size="2g" selenium/standalone-chrome:latest
+      - name: Start selenoid
+        uses: Xotabu4/selenoid-github-action@v2
 
       - name: Wait for Selenium to be ready
         run: |
           echo "Waiting for Selenium to be ready..."
-          until curl -s http://172.17.0.2:4444 | grep -q '"ready":true'; do
+          until curl -s http://localhost:4444/wd/hub | grep -q '"ready":true'; do
             sleep 5
           done
 
