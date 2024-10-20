@@ -6,10 +6,10 @@ name: Deploy To S3
 #   pull_request:
 #     branches: [ "main" ]
 
- on:
-   workflow_run:
-     workflows: ["pre-commit"]
-     types: [completed] #requested
+on:
+  workflow_run:
+    workflows: ['Pre-commit checks']
+    types: [completed] #requested
 
 jobs:
   build:
