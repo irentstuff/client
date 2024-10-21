@@ -33,28 +33,28 @@ jobs:
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
 
       - name: Install Chrome dependencies
-       run: |
-        sudo apt-get update
-        sudo apt-get install -y \
-          libappindicator3-1 \
-          fonts-liberation \
-          libasound2 \
-          libatk-bridge2.0-0 \
-          libatk1.0-0 \
-          libcups2 \
-          libdbus-glib-1-2 \
-          libxcomposite1 \
-          libxrandr2 \
-          xdg-utils \
-          libgbm1 \
-          libnss3 \
-          libxss1 \
-          libxtst6 \
-          libgtk-3-0 \
-          libnotify4 \
-          libgconf-2-4 \
-          libxi6 \
-          libxss1
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libappindicator3-1 \
+            fonts-liberation \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
+            libdbus-glib-1-2 \
+            libxcomposite1 \
+            libxrandr2 \
+            xdg-utils \
+            libgbm1 \
+            libnss3 \
+            libxss1 \
+            libxtst6 \
+            libgtk-3-0 \
+            libnotify4 \
+            libgconf-2-4 \
+            libxi6 \
+            libxss1
 
       - name: Set permissions for Chrome
         run: sudo chmod +x /usr/bin/google-chrome
@@ -67,10 +67,10 @@ jobs:
 
       - name: Check installed packages
         run: dpkg -l | grep -E "libappindicator3-1|fonts-liberation|libasound2|libatk-bridge2.0-0|libatk1.0-0|libcups2|libdbus-glib-1-2|libxcomposite1|libxrandr2|xdg-utils|libgbm1|libnss3|libxss1|libxtst6"
-      
+
       - name: Check active ports
         run: lsof -i -P -n | grep LISTEN
-      
+
       - name: Run GUI tests
         run: |
           chromium-browser --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 --disable-software-rasterizer --disable-dev-shm --disable-extensions --disable-application-cache --no-sandbox --user-data-dir=/tmp/chrome-profile &
