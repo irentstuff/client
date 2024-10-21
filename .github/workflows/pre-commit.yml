@@ -105,13 +105,13 @@ jobs:
           npm i puppeteer
           npx @puppeteer/browsers install chrome@stable
 
-      - name: Check if Chrome is running
-        run: |
-          netstat -ano | findstr LISTENING | findstr 9515 || { echo "Chromedriver is not listening on port 9515"; exit 1; }
+      # - name: Check if Chrome is running
+      #   run: |
+      #     netstat -ano | findstr LISTENING | findstr 9515 || { echo "Chromedriver is not listening on port 9515"; exit 1; }
 
-      - name: Check if Chrome is running
-        run: |
-          netstat -ano | findstr LISTENING | findstr 9515
+      # - name: Check if Chrome is running
+      #   run: |
+      #     netstat -ano | findstr LISTENING | findstr 9515
 
       - name: Run tests
         run: npm run start:test
