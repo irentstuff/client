@@ -17,6 +17,7 @@ describe('Login Tests', () => {
   options.addArguments('--headless')
   options.addArguments('--remote-debugging-pipe')
   options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
+  options.addArguments('--disable-software-rasterizer')
 
   beforeAll(async () => {
     try {
@@ -78,6 +79,7 @@ describe('Item Tests', () => {
   options.addArguments('--headless')
   options.addArguments('--remote-debugging-pipe')
   options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
+  options.addArguments('--disable-software-rasterizer')
 
   beforeAll(async () => {
     try {
@@ -204,6 +206,7 @@ describe('Transaction Tests', () => {
   options.addArguments('--headless')
   options.addArguments('--remote-debugging-pipe')
   options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
+  options.addArguments('--disable-software-rasterizer')
 
   beforeAll(async () => {
     try {
