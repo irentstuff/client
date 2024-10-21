@@ -74,7 +74,7 @@ jobs:
         run: |
           chromium-browser --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-profile &
           sleep 5 # Wait a few seconds to allow Chrome to start
-          npm run start & # Start the server in the background
+          npm run start:test & # Start the server in the background
           sleep 5 # Wait a few seconds for the server to become available
           npx wait-on http://localhost:5173 || { echo "Server failed to start"; exit 1; }
           npm run test || { echo "Tests failed"; exit 1; }
