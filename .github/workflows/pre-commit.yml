@@ -49,13 +49,8 @@ jobs:
           export CHROME_ARGS="--headless --disable-gpu --no-sandbox --disable-dev-shm-usage --remote-debugging-port=9222"
           google-chrome $CHROME_ARGS &
 
-      - name: Start the application
-        run: |
-          npm run start &  # Start app in the background 
-          sleep 5  # Wait for the server to start
-
       - name: Run GUI tests
-        run: npm test # Adjust according to your test command
+        run: npm run start:test # Adjust according to your test command
 
       - name: Shutdown chrome
         run: kill $(lsof -t -i:99)
