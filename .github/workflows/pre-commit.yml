@@ -100,28 +100,10 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Chocolatey
+      - name: Install Puppeteer and Chrome
         run: |
-          Set-ExecutionPolicy Bypass -Scope Process -Force;
-          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
-          iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
-
-      - name: Install Google Chrome
-        run: choco install googlechrome -y
-
-      - name: Install Chromedriver
-        run: choco install chromedriver -y
-
-      - name: Start Chrome and Chromedriver
-        run: |
-          $chromedriverPath = Get-Command chromedriver | Select-Object -ExpandProperty Source
-          Write-Host "Chromedriver is located at: $chromedriverPath"
-
-          Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--headless", "--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage", "--remote-debugging-port=9222", "--user-data-dir=$env:TEMP\chrome-profile"
-          Start-Sleep -Seconds 5 # Wait a few seconds for Chrome to start
-
-          Start-Process "$chromedriverPath" -ArgumentList "--port=9515", "--verbose"
-          Start-Sleep -Seconds 5 # Wait for Chromedriver to start
+          npm i puppeteer
+          npx @puppeteer/browsers install chrome@stable
 
       - name: Check if Chrome is running
         run: |
@@ -132,11 +114,8 @@ jobs:
           netstat -ano | findstr LISTENING | findstr 9515
 
       - name: Run tests
-        run: |
-          # npx wait-on http://localhost:5173 || { echo "Server failed to start"; exit 1; }
-          npm run test || { echo "Tests failed"; exit 1; }
+        run: npm run start:test
 
-      - name: Shutdown Chrome and ChromeDriver
+      - name: Shutdown any remaining Chrome instances
         run: |
-          Stop-Process -Name chrome -Force
-          Stop-Process -Name chromedriver -Force
+          Stop-Process -Name chrome -Force -ErrorAction SilentlyContinue
