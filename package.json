@@ -11,7 +11,7 @@
     "server": "npx json-server json-mock-api/src/db.json --watch --port 5000",
     "test": "jest --runInBand",
     "start:test": "npm-run-all --parallel dev wait-and-test",
-    "wait-and-test": "wait-on http://localhost:5173 && npm run test && kill $(lsof -t -i:5173)"
+    "wait-and-test": "wait-on http://localhost:5173 && npm run test && kill-port 5173"
   },
   "lint-staged": {
     "./src/*.{js,jsx,ts,tsx}": [
