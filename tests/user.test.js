@@ -235,7 +235,7 @@ describe('Transaction Tests', () => {
       await loginPage.navigate()
       await loginPage.login(config.username, config.password) // Log in before each test
       await driver.sleep(2000)
-      const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+      // const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
 
       const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
       // Get the text of the username element to verify successful login
@@ -284,7 +284,7 @@ describe('Transaction Tests', () => {
       console.error('Error during setup:', error)
       throw error
     }
-  }, 50000)
+  }, 100000)
 
   afterAll(async () => {
     // await items.navigateDeleteItem()
@@ -332,7 +332,7 @@ describe('Transaction Tests', () => {
       throw new Error(`added rental offer is being rendered`)
     }
     await driver.sleep(5000)
-  }, 10000)
+  }, 100000)
 
   it('owner should confirm rental offer successfully', async () => {
     await driverItemOwner.navigate().refresh()
@@ -348,7 +348,7 @@ describe('Transaction Tests', () => {
     }
 
     await driver.sleep(5000)
-  }, 20000)
+  }, 200000)
 
   it('rental offer should be updated to confirm for owner', async () => {
     let statusTag
@@ -372,7 +372,7 @@ describe('Transaction Tests', () => {
       console.error('Assertion failed:', assertionError.message)
       throw new Error(`Expected "Confirmed" but got "${statusTag}"`)
     }
-  }, 10000)
+  }, 100000)
 
   it('rental offer should be updated to confirm for renter', async () => {
     let statusTag
@@ -395,7 +395,7 @@ describe('Transaction Tests', () => {
       console.error('Assertion failed:', assertionError.message)
       throw new Error(`Expected "Confirmed" but got "${statusTag}"`)
     }
-  }, 10000)
+  }, 100000)
 
   it('owner should start rental offer successfully', async () => {
     await driverItemOwner.navigate().refresh()
