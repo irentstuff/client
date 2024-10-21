@@ -40,17 +40,16 @@ jobs:
       - name: Set permissions for Chrome
         run: sudo chmod +x /usr/bin/google-chrome
 
+      - name: Set permissions for Chrome
+        run: sudo chmod +x /usr/bin/chromium
+
       - name: Check Chrome version
         run: google-chrome --version
 
-      - name: Configure Chrome with limited resources
-        run: |
-          echo "Starting Chrome with resource limits"
-          export CHROME_ARGS="--headless --disable-gpu --no-sandbox --disable-dev-shm-usage --remote-debugging-port=9222"
-          google-chrome $CHROME_ARGS &
-
       - name: Run GUI tests
-        run: npm run start:test # Adjust according to your test command
+        run: |
+          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 &
+          npm run start:test # Adjust according to your test command
 
       - name: Shutdown chrome
         run: kill $(lsof -t -i:99)
