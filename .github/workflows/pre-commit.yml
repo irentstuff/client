@@ -100,10 +100,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Chrome dependencies
+      - name: Install Chocolatey
         run: |
-          choco install googlechrome --version=88.0.4324.96 --ignore-checksums -y
-          # choco install python --version=3.9.0 -y # Optional, if needed for your tests
+          Set-ExecutionPolicy Bypass -Scope Process -Force;
+          [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
+          iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+      - name: Install Google Chrome
+        run: choco install googlechrome -y
 
       - name: Start Chrome and ChromeDriver
         run: |
