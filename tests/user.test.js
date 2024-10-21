@@ -245,7 +245,7 @@ describe('Transaction Tests', () => {
       }
 
       /* ----------------------------- setup secondary ---------------------------- */
-      driverItemOwner = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
+      driverItemOwner = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
       await driverItemOwner.get(config.baseUrl)
       await driverItemOwner.manage().window().maximize()
       loginPageItemOwner = new LoginPage(driverItemOwner)
@@ -279,7 +279,7 @@ describe('Transaction Tests', () => {
         throw new Error(`Expected "Item is added successfully" but got "${successMessage}"`)
       }
 
-      await driverItemOwner.sleep(2000)
+      await driverItemOwner.sleep(5000)
     } catch (error) {
       console.error('Error during setup:', error)
       throw error
