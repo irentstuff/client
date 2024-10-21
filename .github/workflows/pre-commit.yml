@@ -103,7 +103,7 @@ jobs:
       - name: Install Chrome dependencies
         run: |
           choco install googlechrome --version=88.0.4324.96 --ignore-checksums -y
-          choco install python --version=3.9.0 -y # Optional, if needed for your tests
+          # choco install python --version=3.9.0 -y # Optional, if needed for your tests
 
       - name: Start Chrome and ChromeDriver
         run: |
