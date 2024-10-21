@@ -257,9 +257,11 @@ describe('Transaction Tests', () => {
       await loginPageItemOwner.login(secondaryUser.username, secondaryUser.password) // Log in before each test
       await driverItemOwner.sleep(2000)
 
-      const ItemOwnerUsernameElement = await driverItemOwner.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+      // const ItemOwnerUsernameElement = await driverItemOwner.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+
+      const ItemOwnerUsernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, secondaryUser.username), 10000)
       // Get the text of the username element to verify successful login
-      const ItemOwnerUsernameElementText = await ItemOwnerUsernameElement.getText()
+      const ItemOwnerUsernameElementText = await ItemOwnerUsernameElementTEST.getText()
       if (ItemOwnerUsernameElementText !== secondaryUser.username) {
         throw new Error(`Login failed: Expected username '${secondaryUser.username}', but found '${ItemOwnerUsernameElementText}'`)
       }
