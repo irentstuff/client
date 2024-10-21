@@ -260,7 +260,7 @@ describe('Transaction Tests', () => {
 
       // const ItemOwnerUsernameElement = await driverItemOwner.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
 
-      const ItemOwnerUsernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, secondaryUser.username), 10000)
+      const ItemOwnerUsernameElementTEST = await driver.wait(until.elementTextIs(usernameElementTEST, secondaryUser.username), 10000)
       // Get the text of the username element to verify successful login
       const ItemOwnerUsernameElementText = await ItemOwnerUsernameElementTEST.getText()
       if (ItemOwnerUsernameElementText !== secondaryUser.username) {
