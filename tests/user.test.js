@@ -267,6 +267,7 @@ describe('Transaction Tests', () => {
       }
 
       /* ---------------------------------- create offer test item from secondary user --------------------------------- */
+      await driverItemOwner.executeScript('window.scrollTo(0, 0);')
       await itemsItemOwner.navigateAddNewItem()
       await itemsItemOwner.addNewItem(newItemForOfferForm)
       const successMessage = await itemsItemOwner.getSuccessMessage()
