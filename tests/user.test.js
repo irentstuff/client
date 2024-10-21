@@ -21,7 +21,10 @@ describe('Login Tests', () => {
 
   beforeAll(async () => {
     try {
-      driver = await new Builder().forBrowser('chrome').usingServer('http://localhost:9515/wd/hub').setChromeOptions(options).build()
+      const capabilities = {
+        pageLoadStrategy: 'normal'
+      }
+      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
       await driver.get(config.baseUrl)
       console.log(await driver.getTitle())
       await driver.manage().setTimeouts({ implicit: 10000 })
@@ -85,7 +88,10 @@ describe('Item Tests', () => {
   beforeAll(async () => {
     try {
       /* ---------------------------------- setup --------------------------------- */
-      driver = await new Builder().forBrowser('chrome').usingServer('http://localhost:9515/wd/hub').setChromeOptions(options).build()
+      const capabilities = {
+        pageLoadStrategy: 'normal'
+      }
+      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
       await driver.get(config.baseUrl)
       await driver.manage().setTimeouts({ implicit: 10000 })
       await driver.manage().window().maximize()
@@ -213,7 +219,10 @@ describe('Transaction Tests', () => {
   beforeAll(async () => {
     try {
       /* ---------------------------------- setup --------------------------------- */
-      driver = await new Builder().forBrowser('chrome').usingServer('http://localhost:9515/wd/hub').setChromeOptions(options).build()
+      const capabilities = {
+        pageLoadStrategy: 'normal'
+      }
+      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
       await driver.get(config.baseUrl)
       await driver.manage().setTimeouts({ implicit: 10000 })
       await driver.manage().window().maximize()
