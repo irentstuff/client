@@ -100,18 +100,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Install Puppeteer and Chrome
-        run: |
-          npm i puppeteer
-          npx @puppeteer/browsers install chrome@stable
-
-      # - name: Check if Chrome is running
-      #   run: |
-      #     netstat -ano | findstr LISTENING | findstr 9515 || { echo "Chromedriver is not listening on port 9515"; exit 1; }
-
-      # - name: Check if Chrome is running
-      #   run: |
-      #     netstat -ano | findstr LISTENING | findstr 9515
+      - uses: browser-actions/setup-chrome@v1
+        id: setup-chrome
+        with:
+          chrome-version: 120
+          install-dependencies: true
+      - run: |
+          ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
       - name: Run tests
         run: npm run start:test
