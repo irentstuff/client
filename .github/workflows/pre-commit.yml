@@ -98,7 +98,9 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install --save-dev kill-port wait-on npm-run-all
 
       - uses: browser-actions/setup-chrome@v1
         id: setup-chrome
