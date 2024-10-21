@@ -19,12 +19,17 @@ describe('Login Tests', () => {
   options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
 
   beforeAll(async () => {
-    driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
-    await driver.get(config.baseUrl)
-    console.log(await driver.getTitle())
-    await driver.manage().window().maximize()
-    loginPage = new LoginPage(driver)
-  }, 10000)
+    try {
+      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
+      await driver.get(config.baseUrl)
+      console.log(await driver.getTitle())
+      await driver.manage().window().maximize()
+      loginPage = new LoginPage(driver)
+    } catch (error) {
+      console.error(' before all setup error : ', error)
+      throw error
+    }
+  }, 50000)
 
   afterAll(async () => {
     await driver.quit()
@@ -65,7 +70,14 @@ describe('Login Tests', () => {
 describe('Item Tests', () => {
   let driver, loginPage, items
   const options = new chrome.Options()
-  //options.addArguments('--headless')
+  options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
+  options.addArguments('start-maximized') // open Browser in maximized mode
+  options.addArguments('disable-infobars') // disabling infobars
+  options.addArguments('--disable-extensions') // disabling extensions
+  options.addArguments('--no-sandbox') // Bypass OS security model
+  options.addArguments('--headless')
+  options.addArguments('--remote-debugging-pipe')
+  options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
 
   beforeAll(async () => {
     try {
@@ -184,7 +196,14 @@ describe('Item Tests', () => {
 describe('Transaction Tests', () => {
   let driver, loginPage, items, transactions, loginPageItemOwner, itemsItemOwner, transactionsItemOwner
   const options = new chrome.Options()
-  // options.addArguments('--headless')
+  options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
+  options.addArguments('start-maximized') // open Browser in maximized mode
+  options.addArguments('disable-infobars') // disabling infobars
+  options.addArguments('--disable-extensions') // disabling extensions
+  options.addArguments('--no-sandbox') // Bypass OS security model
+  options.addArguments('--headless')
+  options.addArguments('--remote-debugging-pipe')
+  options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
 
   beforeAll(async () => {
     try {
