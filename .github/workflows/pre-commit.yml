@@ -8,14 +8,6 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
 
-    # services:
-    #   selenium:
-    #     image: seleniarm/standalone-chromium:116.0-chromedriver-116.0-grid-4.10.0-20230828
-    #     ports:
-    #       - '4444:4444'
-    #       - '7900:7900'
-    #     options: --shm-size=2gb
-
     steps:
       - uses: actions/checkout@v3
 
@@ -29,9 +21,7 @@ jobs:
 
       - name: Run linters
         run: npm run lint
-              
-      # - uses: browser-actions/setup-chrome@latest
-      # - run: chrome --version
+
       - uses: nanasess/setup-chromedriver@v2
         with:
           # Optional: do not specify to match Chrome's version
@@ -40,20 +30,15 @@ jobs:
           export DISPLAY=:99
           chromedriver --url-base=/wd/hub &
           sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
-    
-      # - name: Start selenoid
-      #   uses: Xotabu4/selenoid-github-action@v2
 
-      # - name: Wait for Selenium to be ready
-      #   run: |
-      #     echo "Waiting for Selenium to be ready..."
-      #     until curl -s http://localhost:4444/wd/hub | grep -q '"ready":true'; do
-      #       sleep 5
-      #     done
+      - name: Set permissions for Chrome
+        run: sudo chmod +x /usr/bin/google-chrome
 
       - name: Run GUI tests
         run: npm run start:test # Adjust according to your test command
 
+      - name: Shutdown chrome
+        run: kill $(lsof -t -i:99)
 
       # - name: Check formatting
       #   run: npm run format-check
