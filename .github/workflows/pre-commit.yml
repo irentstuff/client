@@ -35,18 +35,13 @@ jobs:
       - name: Set permissions for Chrome
         run: sudo chmod +x /usr/bin/google-chrome
 
-      - name: Expose port
-        run: echo "Exposing port 5173" # This is informational
-        env:
-          PORT: 5173
-
-      - name: Expose port
-        run: echo "Exposing port 99" # This is informational
-        env:
-          PORT: 99
+      - name: Start the application
+        run: |
+          npm run start &  # Start app in the background 
+          sleep 5  # Wait for the server to start
 
       - name: Run GUI tests
-        run: npm run start:test # Adjust according to your test command
+        run: npm test # Adjust according to your test command
 
       - name: Shutdown chrome
         run: kill $(lsof -t -i:99)
