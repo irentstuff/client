@@ -54,8 +54,9 @@ describe('Login Tests', () => {
     // const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//span[text()="${config.username}"]`)))
     const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)), 1000)
 
+    const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
     // Check if the username element is displayed correctly
-    const textValue = await usernameElement.getText()
+    const textValue = await usernameElementTEST.getText()
 
     // Check the text value
     if (textValue === config.username) {
@@ -101,10 +102,9 @@ describe('Item Tests', () => {
       await loginPage.login(config.username, config.password) // Log in before each test
       await driver.sleep(2000)
       const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
-      const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, 'EXPECTED_USERNAME'), 10000)
-      console.log('usernameElementTEST : ', usernameElementTEST)
+      const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
       // Get the text of the username element to verify successful login
-      const usernameText = await usernameElement.getText()
+      const usernameText = await usernameElementTEST.getText()
       if (usernameText !== config.username) {
         throw new Error(`Login failed: Expected username '${config.username}', but found '${usernameText}'`)
       }
@@ -236,8 +236,10 @@ describe('Transaction Tests', () => {
       await loginPage.login(config.username, config.password) // Log in before each test
       await driver.sleep(2000)
       const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+
+      const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
       // Get the text of the username element to verify successful login
-      const usernameText = await usernameElement.getText()
+      const usernameText = await usernameElementTEST.getText()
       if (usernameText !== config.username) {
         throw new Error(`Login failed: Expected username '${config.username}', but found '${usernameText}'`)
       }
