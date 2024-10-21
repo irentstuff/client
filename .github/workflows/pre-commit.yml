@@ -108,6 +108,11 @@ jobs:
       - run: |
           ${{ steps.setup-chrome.outputs.chrome-path }} --version
 
+      - name: Start ChromeDriver
+        run: |
+          Start-Process "${{ steps.setup-chrome.outputs.chrome-path }}\\chromedriver.exe" -ArgumentList "--port=9515" -PassThru | Out-Null
+          Start-Sleep -Seconds 20
+
       - name: Run tests
         run: npm run start:test
 
