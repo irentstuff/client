@@ -25,8 +25,8 @@ jobs:
       - uses: nanasess/setup-chromedriver@v2
         with:
           # Optional: do not specify to match Chrome's version
-          chromedriver-version: '88.0.4324.96'
-          # chromedriver-version: '116.0'
+          # chromedriver-version: '88.0.4324.96'
+          chromedriver-version: '116.0'
       - run: |
           export DISPLAY=:99
           chromedriver --port=9515 --url-base=/wd/hub &
@@ -57,10 +57,9 @@ jobs:
             libxss1
 
       - name: Set permissions for Chrome
-        run: sudo chmod +x /usr/bin/google-chrome
-
-      - name: Set permissions for Chrome
-        run: sudo chmod +x /usr/bin/chromium
+        run: |
+          sudo chmod +x /usr/bin/google-chrome
+          sudo chmod +x /usr/bin/chromium
 
       - name: Check Chrome version
         run: google-chrome --version
@@ -73,12 +72,13 @@ jobs:
 
       - name: Run GUI tests
         run: |
-          chromium-browser --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 --disable-software-rasterizer --disable-dev-shm --disable-extensions --disable-application-cache --no-sandbox --user-data-dir=/tmp/chrome-profile &
-          sleep 15 # Give Chrome some time to start
-          npm run start:test
+          chromium-browser --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-profile &
+          npx wait-on http://localhost:5173 || { echo "Server failed to start"; exit 1; }
+          npm run start:test || { echo "Tests failed"; exit 1; }
 
-      - name: Shutdown chrome
-        run: kill $(lsof -t -i:99)
+      - name: Shutdown Chrome
+        run: |
+          pkill -f chromium-browser || true # Use pkill to gracefully kill the browser
 
       # - name: Check formatting
       #   run: npm run format-check
