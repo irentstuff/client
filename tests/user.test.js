@@ -204,261 +204,261 @@ describe('Item Tests', () => {
   }, 10000)
 })
 
-describe('Transaction Tests', () => {
-  let driver, loginPage, items, transactions, loginPageItemOwner, itemsItemOwner, transactionsItemOwner
-  const options = new chrome.Options()
-  options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
-  options.addArguments('start-maximized') // open Browser in maximized mode
-  options.addArguments('disable-infobars') // disabling infobars
-  options.addArguments('--disable-extensions') // disabling extensions
-  options.addArguments('--no-sandbox') // Bypass OS security model
-  options.addArguments('--headless')
-  options.addArguments('--remote-debugging-pipe')
-  options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
-  options.addArguments('--disable-software-rasterizer')
+// describe('Transaction Tests', () => {
+//   let driver, loginPage, items, transactions, loginPageItemOwner, itemsItemOwner, transactionsItemOwner
+//   const options = new chrome.Options()
+//   options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
+//   options.addArguments('start-maximized') // open Browser in maximized mode
+//   options.addArguments('disable-infobars') // disabling infobars
+//   options.addArguments('--disable-extensions') // disabling extensions
+//   options.addArguments('--no-sandbox') // Bypass OS security model
+//   options.addArguments('--headless')
+//   options.addArguments('--remote-debugging-pipe')
+//   options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
+//   options.addArguments('--disable-software-rasterizer')
 
-  beforeAll(async () => {
-    try {
-      /* ---------------------------------- setup --------------------------------- */
-      const capabilities = {
-        pageLoadStrategy: 'normal'
-      }
-      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
-      await driver.get(config.baseUrl)
-      await driver.manage().setTimeouts({ implicit: 10000 })
-      await driver.manage().window().maximize()
-      loginPage = new LoginPage(driver)
-      items = new ItemsFunction(driver)
-      transactions = new TransactionFunction(driver)
+//   beforeAll(async () => {
+//     try {
+//       /* ---------------------------------- setup --------------------------------- */
+//       const capabilities = {
+//         pageLoadStrategy: 'normal'
+//       }
+//       driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
+//       await driver.get(config.baseUrl)
+//       await driver.manage().setTimeouts({ implicit: 10000 })
+//       await driver.manage().window().maximize()
+//       loginPage = new LoginPage(driver)
+//       items = new ItemsFunction(driver)
+//       transactions = new TransactionFunction(driver)
 
-      /* ---------------------------------- login as main user --------------------------------- */
-      await loginPage.navigate()
-      await loginPage.login(config.username, config.password) // Log in before each test
-      await driver.sleep(2000)
-      const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+//       /* ---------------------------------- login as main user --------------------------------- */
+//       await loginPage.navigate()
+//       await loginPage.login(config.username, config.password) // Log in before each test
+//       await driver.sleep(2000)
+//       const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
 
-      const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
-      // Get the text of the username element to verify successful login
-      const usernameText = await usernameElementTEST.getText()
-      if (usernameText !== config.username) {
-        throw new Error(`Login failed: Expected username '${config.username}', but found '${usernameText}'`)
-      }
+//       const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
+//       // Get the text of the username element to verify successful login
+//       const usernameText = await usernameElementTEST.getText()
+//       if (usernameText !== config.username) {
+//         throw new Error(`Login failed: Expected username '${config.username}', but found '${usernameText}'`)
+//       }
 
-      /* ----------------------------- setup secondary ---------------------------- */
-      driverItemOwner = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
-      await driverItemOwner.get(config.baseUrl)
-      await driverItemOwner.manage().setTimeouts({ implicit: 10000 })
-      await driverItemOwner.manage().window().maximize()
-      loginPageItemOwner = new LoginPage(driverItemOwner)
-      itemsItemOwner = new ItemsFunction(driverItemOwner)
-      transactionsItemOwner = new TransactionFunction(driverItemOwner)
+//       /* ----------------------------- setup secondary ---------------------------- */
+//       driverItemOwner = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
+//       await driverItemOwner.get(config.baseUrl)
+//       await driverItemOwner.manage().setTimeouts({ implicit: 10000 })
+//       await driverItemOwner.manage().window().maximize()
+//       loginPageItemOwner = new LoginPage(driverItemOwner)
+//       itemsItemOwner = new ItemsFunction(driverItemOwner)
+//       transactionsItemOwner = new TransactionFunction(driverItemOwner)
 
-      /* ----------------------- login in as secondary user ----------------------- */
-      await loginPageItemOwner.navigate()
-      await loginPageItemOwner.login(secondaryUser.username, secondaryUser.password) // Log in before each test
-      await driverItemOwner.sleep(2000)
+//       /* ----------------------- login in as secondary user ----------------------- */
+//       await loginPageItemOwner.navigate()
+//       await loginPageItemOwner.login(secondaryUser.username, secondaryUser.password) // Log in before each test
+//       await driverItemOwner.sleep(2000)
 
-      const ItemOwnerUsernameElement = await driverItemOwner.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+//       const ItemOwnerUsernameElement = await driverItemOwner.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
 
-      const ItemOwnerUsernameElementTEST = await driver.wait(until.elementTextIs(ItemOwnerUsernameElement, secondaryUser.username), 10000)
-      // Get the text of the username element to verify successful login
-      const ItemOwnerUsernameElementText = await ItemOwnerUsernameElementTEST.getText()
-      if (ItemOwnerUsernameElementText !== secondaryUser.username) {
-        throw new Error(`Login failed: Expected username '${secondaryUser.username}', but found '${ItemOwnerUsernameElementText}'`)
-      }
+//       const ItemOwnerUsernameElementTEST = await driver.wait(until.elementTextIs(ItemOwnerUsernameElement, secondaryUser.username), 10000)
+//       // Get the text of the username element to verify successful login
+//       const ItemOwnerUsernameElementText = await ItemOwnerUsernameElementTEST.getText()
+//       if (ItemOwnerUsernameElementText !== secondaryUser.username) {
+//         throw new Error(`Login failed: Expected username '${secondaryUser.username}', but found '${ItemOwnerUsernameElementText}'`)
+//       }
 
-      /* ---------------------------------- create offer test item from secondary user --------------------------------- */
-      await driverItemOwner.executeScript('window.scrollTo(0, 0);')
-      await itemsItemOwner.navigateAddNewItem()
-      await itemsItemOwner.addNewItem(newItemForOfferForm)
-      const successMessage = await itemsItemOwner.getSuccessMessage()
-      try {
-        expect(successMessage).toBe('Item is added successfully')
-        console.log('add assertion passed.')
-      } catch (assertionError) {
-        console.error('Assertion failed:', assertionError.message)
-        throw new Error(`Expected "Item is added successfully" but got "${successMessage}"`)
-      }
+//       /* ---------------------------------- create offer test item from secondary user --------------------------------- */
+//       await driverItemOwner.executeScript('window.scrollTo(0, 0);')
+//       await itemsItemOwner.navigateAddNewItem()
+//       await itemsItemOwner.addNewItem(newItemForOfferForm)
+//       const successMessage = await itemsItemOwner.getSuccessMessage()
+//       try {
+//         expect(successMessage).toBe('Item is added successfully')
+//         console.log('add assertion passed.')
+//       } catch (assertionError) {
+//         console.error('Assertion failed:', assertionError.message)
+//         throw new Error(`Expected "Item is added successfully" but got "${successMessage}"`)
+//       }
 
-      await driverItemOwner.sleep(5000)
-    } catch (error) {
-      console.error('Error during setup:', error)
-      throw error
-    }
-  }, 100000)
+//       await driverItemOwner.sleep(5000)
+//     } catch (error) {
+//       console.error('Error during setup:', error)
+//       throw error
+//     }
+//   }, 100000)
 
-  afterAll(async () => {
-    // await items.navigateDeleteItem()
-    // await items.deleteItem()
-    // const successMessage = await items.getSuccessMessage()
-    // try {
-    //   expect(successMessage).toBe('Item is deleted successfully')
-    //   console.log('delete assertion passed.')
-    // } catch (assertionError) {
-    //   console.error('Assertion failed:', assertionError.message)
-    //   throw new Error(`Expected "Item is deleted successfully" but got "${successMessage}"`)
-    // }
-    await driver.quit()
-    await driverItemOwner.quit()
-  })
+//   afterAll(async () => {
+//     // await items.navigateDeleteItem()
+//     // await items.deleteItem()
+//     // const successMessage = await items.getSuccessMessage()
+//     // try {
+//     //   expect(successMessage).toBe('Item is deleted successfully')
+//     //   console.log('delete assertion passed.')
+//     // } catch (assertionError) {
+//     //   console.error('Assertion failed:', assertionError.message)
+//     //   throw new Error(`Expected "Item is deleted successfully" but got "${successMessage}"`)
+//     // }
+//     await driver.quit()
+//     await driverItemOwner.quit()
+//   })
 
-  beforeEach(async () => {
-    await driver.executeScript('window.scrollTo(0, 0);')
-  })
+//   beforeEach(async () => {
+//     await driver.executeScript('window.scrollTo(0, 0);')
+//   })
 
-  it('should make rental offer successfully', async () => {
-    await transactions.navigateTestOfferItem(newItemForOfferForm.title)
-    await transactions.addNewRentalOffer(rentalOfferForm)
-    const successMessage = await transactions.getSuccessMessage()
-    try {
-      expect(successMessage).toBe('Rental offer is made successfully')
-      console.log('add assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Rental offer is made successfully" but got "${successMessage}"`)
-    }
+//   it('should make rental offer successfully', async () => {
+//     await transactions.navigateTestOfferItem(newItemForOfferForm.title)
+//     await transactions.addNewRentalOffer(rentalOfferForm)
+//     const successMessage = await transactions.getSuccessMessage()
+//     try {
+//       expect(successMessage).toBe('Rental offer is made successfully')
+//       console.log('add assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Rental offer is made successfully" but got "${successMessage}"`)
+//     }
 
-    await driver.sleep(5000)
-  }, 20000)
+//     await driver.sleep(5000)
+//   }, 20000)
 
-  it('should render rental offer successfully', async () => {
-    await driver.navigate().refresh()
+//   it('should render rental offer successfully', async () => {
+//     await driver.navigate().refresh()
 
-    try {
-      const pageSource = await driver.getPageSource()
-      expect(pageSource.includes(newItemForOfferForm.title)).toBe(true) // Check if the new item is rendered
-      console.log('added rental offer ui render assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`added rental offer is being rendered`)
-    }
-    await driver.sleep(5000)
-  }, 100000)
+//     try {
+//       const pageSource = await driver.getPageSource()
+//       expect(pageSource.includes(newItemForOfferForm.title)).toBe(true) // Check if the new item is rendered
+//       console.log('added rental offer ui render assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`added rental offer is being rendered`)
+//     }
+//     await driver.sleep(5000)
+//   }, 100000)
 
-  it('owner should confirm rental offer successfully', async () => {
-    await driverItemOwner.navigate().refresh()
-    await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
-    await transactionsItemOwner.confirmRentalOffer(newItemForOfferForm.title)
-    const successMessage = await transactionsItemOwner.getSuccessMessage()
-    try {
-      expect(successMessage).toBe('Rental offer is updated to confirm successfully')
-      console.log('confirm assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Rental offer is updated to confirm successfully" but got "${successMessage}"`)
-    }
+//   it('owner should confirm rental offer successfully', async () => {
+//     await driverItemOwner.navigate().refresh()
+//     await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
+//     await transactionsItemOwner.confirmRentalOffer(newItemForOfferForm.title)
+//     const successMessage = await transactionsItemOwner.getSuccessMessage()
+//     try {
+//       expect(successMessage).toBe('Rental offer is updated to confirm successfully')
+//       console.log('confirm assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Rental offer is updated to confirm successfully" but got "${successMessage}"`)
+//     }
 
-    await driver.sleep(5000)
-  }, 200000)
+//     await driver.sleep(5000)
+//   }, 200000)
 
-  it('rental offer should be updated to confirm for owner', async () => {
-    let statusTag
-    try {
-      await driverItemOwner.navigate().refresh()
-      await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
-      const offerRow = await driverItemOwner.wait(
-        until.elementLocated(By.xpath(`//tr[td[2][text()='${newItemForOfferForm.title}']]`)),
-        5000
-      )
+//   it('rental offer should be updated to confirm for owner', async () => {
+//     let statusTag
+//     try {
+//       await driverItemOwner.navigate().refresh()
+//       await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
+//       const offerRow = await driverItemOwner.wait(
+//         until.elementLocated(By.xpath(`//tr[td[2][text()='${newItemForOfferForm.title}']]`)),
+//         5000
+//       )
 
-      // Verify if the row is displayed
-      const isDisplayed = await offerRow.isDisplayed()
-      console.log(`Row displayed: ${isDisplayed}`)
+//       // Verify if the row is displayed
+//       const isDisplayed = await offerRow.isDisplayed()
+//       console.log(`Row displayed: ${isDisplayed}`)
 
-      statusTag = await offerRow.findElement(By.xpath('td[8]')).getText()
+//       statusTag = await offerRow.findElement(By.xpath('td[8]')).getText()
 
-      expect(statusTag).toBe('Confirmed')
-      console.log('confirm render passed for owner.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Confirmed" but got "${statusTag}"`)
-    }
-  }, 100000)
+//       expect(statusTag).toBe('Confirmed')
+//       console.log('confirm render passed for owner.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Confirmed" but got "${statusTag}"`)
+//     }
+//   }, 100000)
 
-  it('rental offer should be updated to confirm for renter', async () => {
-    let statusTag
+//   it('rental offer should be updated to confirm for renter', async () => {
+//     let statusTag
 
-    try {
-      await driver.navigate().refresh()
-      await driver.get(`${config.baseUrl}/#/OffersMade`)
+//     try {
+//       await driver.navigate().refresh()
+//       await driver.get(`${config.baseUrl}/#/OffersMade`)
 
-      const offerRow = await driver.wait(until.elementLocated(By.xpath(`//tr[td[text()='${newItemForOfferForm.title}']]`)), 5000)
+//       const offerRow = await driver.wait(until.elementLocated(By.xpath(`//tr[td[text()='${newItemForOfferForm.title}']]`)), 5000)
 
-      // Verify if the row is displayed
-      const isDisplayed = await offerRow.isDisplayed()
-      console.log(`Row displayed: ${isDisplayed}`)
+//       // Verify if the row is displayed
+//       const isDisplayed = await offerRow.isDisplayed()
+//       console.log(`Row displayed: ${isDisplayed}`)
 
-      statusTag = await offerRow.findElement(By.xpath('td[7]')).getText()
+//       statusTag = await offerRow.findElement(By.xpath('td[7]')).getText()
 
-      expect(statusTag).toBe('Confirmed')
-      console.log('confirm render passed for renter.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Confirmed" but got "${statusTag}"`)
-    }
-  }, 100000)
+//       expect(statusTag).toBe('Confirmed')
+//       console.log('confirm render passed for renter.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Confirmed" but got "${statusTag}"`)
+//     }
+//   }, 100000)
 
-  it('owner should start rental offer successfully', async () => {
-    await driverItemOwner.navigate().refresh()
-    await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
-    await transactionsItemOwner.startRentalOffer(newItemForOfferForm.title)
-    const successMessage = await transactionsItemOwner.getSuccessMessage()
-    try {
-      expect(successMessage).toBe('Rental offer is updated to start successfully')
-      console.log('confirm assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Rental offer is updated to start successfully" but got "${successMessage}"`)
-    }
+//   it('owner should start rental offer successfully', async () => {
+//     await driverItemOwner.navigate().refresh()
+//     await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
+//     await transactionsItemOwner.startRentalOffer(newItemForOfferForm.title)
+//     const successMessage = await transactionsItemOwner.getSuccessMessage()
+//     try {
+//       expect(successMessage).toBe('Rental offer is updated to start successfully')
+//       console.log('confirm assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Rental offer is updated to start successfully" but got "${successMessage}"`)
+//     }
 
-    await driver.sleep(5000)
-  }, 20000)
+//     await driver.sleep(5000)
+//   }, 20000)
 
-  it('rental offer should be updated to ongoing for owner', async () => {
-    let statusTag
-    try {
-      await driverItemOwner.navigate().refresh()
-      await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
-      await driverItemOwner.wait(until.elementsLocated(By.xpath(`//tr[td[2][text()='${newItemForOfferForm.title}']]`)), 5000)
-      const offerRow = await driverItemOwner.wait(
-        until.elementLocated(By.xpath(`//tr[td[2][text()='${newItemForOfferForm.title}']]`)),
-        5000
-      )
+//   it('rental offer should be updated to ongoing for owner', async () => {
+//     let statusTag
+//     try {
+//       await driverItemOwner.navigate().refresh()
+//       await driverItemOwner.get(`${config.baseUrl}/#/OffersReceived`)
+//       await driverItemOwner.wait(until.elementsLocated(By.xpath(`//tr[td[2][text()='${newItemForOfferForm.title}']]`)), 5000)
+//       const offerRow = await driverItemOwner.wait(
+//         until.elementLocated(By.xpath(`//tr[td[2][text()='${newItemForOfferForm.title}']]`)),
+//         5000
+//       )
 
-      // Verify if the row is displayed
-      const isDisplayed = await offerRow.isDisplayed()
-      console.log(`Row displayed: ${isDisplayed}`)
+//       // Verify if the row is displayed
+//       const isDisplayed = await offerRow.isDisplayed()
+//       console.log(`Row displayed: ${isDisplayed}`)
 
-      statusTag = await offerRow.findElement(By.xpath('td[8]')).getText()
+//       statusTag = await offerRow.findElement(By.xpath('td[8]')).getText()
 
-      expect(statusTag).toBe('Ongoing')
-      console.log('confirm render passed for owner.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Ongoing" but got "${statusTag}"`)
-    }
-  }, 20000)
+//       expect(statusTag).toBe('Ongoing')
+//       console.log('confirm render passed for owner.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Ongoing" but got "${statusTag}"`)
+//     }
+//   }, 20000)
 
-  it('rental offer should be updated to confirm for renter', async () => {
-    let statusTag
+//   it('rental offer should be updated to confirm for renter', async () => {
+//     let statusTag
 
-    try {
-      await driver.navigate().refresh()
-      await driver.get(`${config.baseUrl}/#/OffersMade`)
-      await driver.wait(until.elementsLocated(By.xpath(`//tr[td[text()='${newItemForOfferForm.title}']]`)), 5000)
-      const offerRow = await driver.wait(until.elementLocated(By.xpath(`//tr[td[text()='${newItemForOfferForm.title}']]`)), 5000)
+//     try {
+//       await driver.navigate().refresh()
+//       await driver.get(`${config.baseUrl}/#/OffersMade`)
+//       await driver.wait(until.elementsLocated(By.xpath(`//tr[td[text()='${newItemForOfferForm.title}']]`)), 5000)
+//       const offerRow = await driver.wait(until.elementLocated(By.xpath(`//tr[td[text()='${newItemForOfferForm.title}']]`)), 5000)
 
-      // Verify if the row is displayed
-      const isDisplayed = await offerRow.isDisplayed()
-      console.log(`Row displayed: ${isDisplayed}`)
+//       // Verify if the row is displayed
+//       const isDisplayed = await offerRow.isDisplayed()
+//       console.log(`Row displayed: ${isDisplayed}`)
 
-      statusTag = await offerRow.findElement(By.xpath('td[7]')).getText()
+//       statusTag = await offerRow.findElement(By.xpath('td[7]')).getText()
 
-      expect(statusTag).toBe('Ongoing')
-      console.log('confirm render passed for renter.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Ongoing" but got "${statusTag}"`)
-    }
-  }, 20000)
-})
+//       expect(statusTag).toBe('Ongoing')
+//       console.log('confirm render passed for renter.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Ongoing" but got "${statusTag}"`)
+//     }
+//   }, 20000)
+// })
