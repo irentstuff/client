@@ -46,6 +46,11 @@ jobs:
             libxi6 \
             libxss1
 
+      - name: start chrome
+        run:
+          chromium-browser --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-profile &
+          sleep 5 # Wait a few seconds to allow Chrome to start
+
       - uses: nanasess/setup-chromedriver@v2
         with:
           # Optional: do not specify to match Chrome's version
@@ -61,23 +66,11 @@ jobs:
           sudo chmod +x /usr/bin/google-chrome
           sudo chmod +x /usr/bin/chromium
 
-      - name: Check Chrome version
-        run: google-chrome --version
-
-      - name: Check installed packages
-        run: dpkg -l | grep -E "libappindicator3-1|fonts-liberation|libasound2|libatk-bridge2.0-0|libatk1.0-0|libcups2|libdbus-glib-1-2|libxcomposite1|libxrandr2|xdg-utils|libgbm1|libnss3|libxss1|libxtst6"
-
       - name: Check active ports
         run: lsof -i -P -n | grep LISTEN
 
       - name: Run GUI tests
-        run: |
-          chromium-browser --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-profile &
-          sleep 5 # Wait a few seconds to allow Chrome to start
-          npm run start:test & # Start the server in the background
-          sleep 5 # Wait a few seconds for the server to become available
-          npx wait-on http://localhost:5173 || { echo "Server failed to start"; exit 1; }
-          npm run test || { echo "Tests failed"; exit 1; }
+        run: npm run start:test & # Start the server in the background
 
       - name: Shutdown Chrome
         run: |
