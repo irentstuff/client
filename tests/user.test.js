@@ -24,6 +24,7 @@ describe('Login Tests', () => {
       driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
       await driver.get(config.baseUrl)
       console.log(await driver.getTitle())
+      await driver.manage().setTimeouts({ implicit: 10000 })
       await driver.manage().window().maximize()
       loginPage = new LoginPage(driver)
     } catch (error) {
@@ -86,6 +87,7 @@ describe('Item Tests', () => {
       /* ---------------------------------- setup --------------------------------- */
       driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
       await driver.get(config.baseUrl)
+      await driver.manage().setTimeouts({ implicit: 10000 })
       await driver.manage().window().maximize()
       loginPage = new LoginPage(driver)
       items = new ItemsFunction(driver)
@@ -213,6 +215,7 @@ describe('Transaction Tests', () => {
       /* ---------------------------------- setup --------------------------------- */
       driver = await new Builder().forBrowser('chrome').setChromeOptions(options).build()
       await driver.get(config.baseUrl)
+      await driver.manage().setTimeouts({ implicit: 10000 })
       await driver.manage().window().maximize()
       loginPage = new LoginPage(driver)
       items = new ItemsFunction(driver)
