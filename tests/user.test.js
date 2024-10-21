@@ -8,7 +8,7 @@ const TransactionFunction = require('./Transactions')
 describe('Login Tests', () => {
   let driver, loginPage
   const options = new chrome.Options()
-  options.setBinary('/path/to/chrome')
+  // options.setBinary('/path/to/chrome')
   options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
   options.addArguments('start-maximized') // open Browser in maximized mode
   options.addArguments('disable-infobars') // disabling infobars
