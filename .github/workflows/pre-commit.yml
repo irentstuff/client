@@ -35,7 +35,21 @@ jobs:
       - name: Install Chrome dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libappindicator3-1 fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libcups2 libdbus-glib-1-2 libxcomposite1 libxrandr2 xdg-utils libgbm1
+          sudo apt-get install -y \
+            libappindicator3-1 \
+            fonts-liberation \
+            libasound2 \
+            libatk-bridge2.0-0 \
+            libatk1.0-0 \
+            libcups2 \
+            libdbus-glib-1-2 \
+            libxcomposite1 \
+            libxrandr2 \
+            xdg-utils \
+            libgbm1 \
+            libnss3 \
+            libxss1 \
+            libxtst6
 
       - name: Set permissions for Chrome
         run: sudo chmod +x /usr/bin/google-chrome
@@ -46,10 +60,14 @@ jobs:
       - name: Check Chrome version
         run: google-chrome --version
 
+      - name: Check installed packages
+        run: dpkg -l | grep -E "libappindicator3-1|fonts-liberation|libasound2|libatk-bridge2.0-0|libatk1.0-0|libcups2|libdbus-glib-1-2|libxcomposite1|libxrandr2|xdg-utils|libgbm1|libnss3|libxss1|libxtst6"
+
       - name: Run GUI tests
         run: |
-          google-chrome --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 &
-          npm run start:test # Adjust according to your test command
+          chromium-browser --headless --no-sandbox --disable-gpu --disable-dev-shm-usage --remote-debugging-port=9222 --disable-software-rasterizer --disable-dev-shm --disable-extensions &
+          sleep 5 # Give Chrome some time to start
+          npm run start:test
 
       - name: Shutdown chrome
         run: kill $(lsof -t -i:99)
