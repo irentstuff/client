@@ -153,26 +153,28 @@ export const ViewItem = ({ setFetchDataAgain, itemDetailsFromOffer }) => {
     //   })
     // ) //get item images
     console.log('image', itemDetails)
-    if (itemDetails?.image || itemDetails.image === '') {
-      console.log(itemDetails)
-      if (itemDetails?.image.endsWith('.jpg') || itemDetails?.image.endsWith('.jpeg') || itemDetails?.image.endsWith('.png')) {
-        setItemImagePath([itemDetails.image])
-      }
-      // if (itemDetails?.image !== '')
-      else {
-        // getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
-        const imageUrl = `${assetsURL}/${itemDetails.id}`
+    if (Object.keys(allItemsImagePath).length > 0) {
+      if (itemDetails?.image || itemDetails.image === '') {
+        console.log(itemDetails)
+        if (itemDetails?.image.endsWith('.jpg') || itemDetails?.image.endsWith('.jpeg') || itemDetails?.image.endsWith('.png')) {
+          setItemImagePath([itemDetails.image])
+        }
+        // if (itemDetails?.image !== '')
+        else {
+          // getItemImageLocal(`${assetsURL}/${itemDetails.id}`)
+          const imageUrl = `${assetsURL}/${itemDetails.id}`
 
-        console.log('image', allItemsImagePath[itemDetails.id])
+          console.log('image', allItemsImagePath[itemDetails.id])
 
-        if (allItemsImagePath && allItemsImagePath[itemDetails.id] && allItemsImagePath[itemDetails.id][0]) {
-          const imagePath = allItemsImagePath[itemDetails.id].map((image) => {
-            const path = `${imageUrl}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`
-            return path
-          })
-          setItemImagePath(imagePath)
-        } else {
-          setItemImagePath([])
+          if (allItemsImagePath && allItemsImagePath[itemDetails.id] && allItemsImagePath[itemDetails.id][0]) {
+            const imagePath = allItemsImagePath[itemDetails.id].map((image) => {
+              const path = `${imageUrl}/${image.Key.substring(image.Key.lastIndexOf('/') + 1)}`
+              return path
+            })
+            setItemImagePath(imagePath)
+          } else {
+            setItemImagePath([])
+          }
         }
       }
     }
