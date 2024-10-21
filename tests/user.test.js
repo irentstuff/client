@@ -235,7 +235,7 @@ describe('Transaction Tests', () => {
       await loginPage.navigate()
       await loginPage.login(config.username, config.password) // Log in before each test
       await driver.sleep(2000)
-      // const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+      const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
 
       const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
       // Get the text of the username element to verify successful login
@@ -258,9 +258,9 @@ describe('Transaction Tests', () => {
       await loginPageItemOwner.login(secondaryUser.username, secondaryUser.password) // Log in before each test
       await driverItemOwner.sleep(2000)
 
-      // const ItemOwnerUsernameElement = await driverItemOwner.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+      const ItemOwnerUsernameElement = await driverItemOwner.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
 
-      const ItemOwnerUsernameElementTEST = await driver.wait(until.elementTextIs(usernameElementTEST, secondaryUser.username), 10000)
+      const ItemOwnerUsernameElementTEST = await driver.wait(until.elementTextIs(ItemOwnerUsernameElement, secondaryUser.username), 10000)
       // Get the text of the username element to verify successful login
       const ItemOwnerUsernameElementText = await ItemOwnerUsernameElementTEST.getText()
       if (ItemOwnerUsernameElementText !== secondaryUser.username) {
