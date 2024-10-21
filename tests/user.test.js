@@ -8,7 +8,7 @@ const TransactionFunction = require('./Transactions')
 describe('Login Tests', () => {
   let driver, loginPage
   const options = new chrome.Options()
-  // options.setBinary('/path/to/chrome')
+  options.setBinary('/path/to/chrome')
   options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
   options.addArguments('start-maximized') // open Browser in maximized mode
   options.addArguments('disable-infobars') // disabling infobars
@@ -27,7 +27,7 @@ describe('Login Tests', () => {
       driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
       await driver.get(config.baseUrl)
       console.log(await driver.getTitle())
-      await driver.manage().setTimeouts({ implicit: 10000 })
+      // await driver.manage().setTimeouts({ implicit: 10000 })
       await driver.manage().window().maximize()
       loginPage = new LoginPage(driver)
     } catch (error) {
@@ -35,10 +35,6 @@ describe('Login Tests', () => {
       throw error
     }
   }, 50000)
-
-  afterAll(async () => {
-    await driver.quit()
-  })
 
   it('should render the correct page', async () => {
     let title = await driver.getTitle()
@@ -70,6 +66,10 @@ describe('Login Tests', () => {
     }
     expect(textValue).toBe(config.username)
   }, 10000)
+
+  afterAll(async () => {
+    await driver.quit()
+  })
 })
 
 describe('Item Tests', () => {
@@ -102,6 +102,8 @@ describe('Item Tests', () => {
       await loginPage.login(config.username, config.password) // Log in before each test
       await driver.sleep(2000)
       const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+      const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, 'EXPECTED_USERNAME'), 10000)
+      console.log('usernameElementTEST : ', usernameElementTEST)
       // Get the text of the username element to verify successful login
       const usernameText = await usernameElement.getText()
       if (usernameText !== config.username) {
