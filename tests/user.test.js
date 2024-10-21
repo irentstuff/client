@@ -247,6 +247,7 @@ describe('Transaction Tests', () => {
       /* ----------------------------- setup secondary ---------------------------- */
       driverItemOwner = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
       await driverItemOwner.get(config.baseUrl)
+      await driverItemOwner.manage().setTimeouts({ implicit: 10000 })
       await driverItemOwner.manage().window().maximize()
       loginPageItemOwner = new LoginPage(driverItemOwner)
       itemsItemOwner = new ItemsFunction(driverItemOwner)
