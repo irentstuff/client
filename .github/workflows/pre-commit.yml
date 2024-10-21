@@ -109,11 +109,18 @@ jobs:
       - name: Install Google Chrome
         run: choco install googlechrome -y
 
-      - name: Start Chrome and ChromeDriver
+      - name: Install Chromedriver
+        run: choco install chromedriver -y
+
+      - name: Start Chrome and Chromedriver
         run: |
+          $chromedriverPath = Get-Command chromedriver | Select-Object -ExpandProperty Source
+          Write-Host "Chromedriver is located at: $chromedriverPath"
+
           Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--headless", "--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage", "--remote-debugging-port=9222", "--user-data-dir=$env:TEMP\chrome-profile"
-          Start-Process "C:\Program Files\chromedriver\chromedriver.exe" -ArgumentList "--port=9515", "--url-base=/wd/hub"
-          Start-Sleep -Seconds 5 # Wait for Chrome and ChromeDriver to start
+          Start-Sleep -Seconds 5 # Wait a few seconds for Chrome to start
+
+          Start-Process "$chromedriverPath" -ArgumentList "--port=9515"
 
       - name: Check if Chrome is running
         run: |
