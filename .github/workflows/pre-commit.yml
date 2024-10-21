@@ -120,7 +120,12 @@ jobs:
           Start-Process "C:\Program Files\Google\Chrome\Application\chrome.exe" -ArgumentList "--headless", "--no-sandbox", "--disable-gpu", "--disable-dev-shm-usage", "--remote-debugging-port=9222", "--user-data-dir=$env:TEMP\chrome-profile"
           Start-Sleep -Seconds 5 # Wait a few seconds for Chrome to start
 
-          Start-Process "$chromedriverPath" -ArgumentList "--port=9515"
+          Start-Process "$chromedriverPath" -ArgumentList "--port=9515", "--verbose"
+          Start-Sleep -Seconds 5 # Wait for Chromedriver to start
+
+      - name: Check if Chrome is running
+        run: |
+          netstat -ano | findstr LISTENING | findstr 9515 || { echo "Chromedriver is not listening on port 9515"; exit 1; }
 
       - name: Check if Chrome is running
         run: |
