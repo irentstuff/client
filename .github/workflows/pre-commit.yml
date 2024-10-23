@@ -100,8 +100,7 @@ jobs:
       - name: Install dependencies
         run: |
           npm install
-          npm install cross-env --save-dev 
-          # kill-port wait-on npm-run-all
+          npm install cross-env --save-dev kill-port wait-on npm-run-all
 
       - uses: browser-actions/setup-chrome@v1
         id: setup-chrome
@@ -118,3 +117,6 @@ jobs:
       - name: Shutdown any remaining Chrome instances
         run: |
           Stop-Process -Name chrome -Force -ErrorAction SilentlyContinue
+
+      - name: Shutdown Vite server
+        run: npm run shutdown
