@@ -112,7 +112,9 @@ jobs:
           Start-Sleep -Seconds 20
 
       - name: Run tests
-        run: npm run start:test
+        run: |
+          npm run dev
+          npm run test
 
       - name: Shutdown any remaining Chrome instances
         run: |
