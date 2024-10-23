@@ -13,10 +13,10 @@ describe('Login Tests', () => {
   options.addArguments('disable-infobars') // disabling infobars
   options.addArguments('--disable-extensions') // disabling extensions
   options.addArguments('--no-sandbox') // Bypass OS security model
-  // options.addArguments('--headless')
-  // options.addArguments('--remote-debugging-pipe')
-  // options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
-  // options.addArguments('--disable-software-rasterizer')
+  options.addArguments('--headless')
+  options.addArguments('--remote-debugging-pipe')
+  options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
+  options.addArguments('--disable-software-rasterizer')
 
   beforeAll(async () => {
     try {
