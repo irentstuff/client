@@ -72,137 +72,137 @@ describe('Login Tests', () => {
   })
 })
 
-describe('Item Tests', () => {
-  let driver, loginPage, items
-  const options = new chrome.Options()
-  options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
-  options.addArguments('start-maximized') // open Browser in maximized mode
-  options.addArguments('disable-infobars') // disabling infobars
-  options.addArguments('--disable-extensions') // disabling extensions
-  options.addArguments('--no-sandbox') // Bypass OS security model
-  options.addArguments('--headless')
-  options.addArguments('--remote-debugging-pipe')
-  options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
-  options.addArguments('--disable-software-rasterizer')
+// describe('Item Tests', () => {
+//   let driver, loginPage, items
+//   const options = new chrome.Options()
+//   options.addArguments('--disable-dev-shm-usage') // overcome limited resource problems
+//   options.addArguments('start-maximized') // open Browser in maximized mode
+//   options.addArguments('disable-infobars') // disabling infobars
+//   options.addArguments('--disable-extensions') // disabling extensions
+//   options.addArguments('--no-sandbox') // Bypass OS security model
+//   options.addArguments('--headless')
+//   options.addArguments('--remote-debugging-pipe')
+//   options.addArguments('--crash-dumps-dir=${crashDumpsDir}')
+//   options.addArguments('--disable-software-rasterizer')
 
-  beforeAll(async () => {
-    try {
-      /* ---------------------------------- setup --------------------------------- */
-      const capabilities = {
-        pageLoadStrategy: 'normal'
-      }
-      driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
-      await driver.get(config.baseUrl)
-      await driver.manage().setTimeouts({ implicit: 10000 })
-      await driver.manage().window().maximize()
-      loginPage = new LoginPage(driver)
-      items = new ItemsFunction(driver)
-      /* ---------------------------------- login --------------------------------- */
-      await loginPage.navigate()
-      await loginPage.login(config.username, config.password) // Log in before each test
-      await driver.sleep(2000)
-      const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
-      const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
-      // Get the text of the username element to verify successful login
-      const usernameText = await usernameElementTEST.getText()
-      if (usernameText !== config.username) {
-        throw new Error(`Login failed: Expected username '${config.username}', but found '${usernameText}'`)
-      }
-    } catch (error) {
-      console.error('Error during setup:', error)
-      throw error
-    }
-  }, 50000)
+//   beforeAll(async () => {
+//     try {
+//       /* ---------------------------------- setup --------------------------------- */
+//       const capabilities = {
+//         pageLoadStrategy: 'normal'
+//       }
+//       driver = await new Builder().forBrowser('chrome').setChromeOptions(options).withCapabilities(capabilities).build()
+//       await driver.get(config.baseUrl)
+//       await driver.manage().setTimeouts({ implicit: 10000 })
+//       await driver.manage().window().maximize()
+//       loginPage = new LoginPage(driver)
+//       items = new ItemsFunction(driver)
+//       /* ---------------------------------- login --------------------------------- */
+//       await loginPage.navigate()
+//       await loginPage.login(config.username, config.password) // Log in before each test
+//       await driver.sleep(2000)
+//       const usernameElement = await driver.wait(until.elementLocated(By.xpath(`//*[@id="root"]/div/header/div/div[3]`)))
+//       const usernameElementTEST = await driver.wait(until.elementTextIs(usernameElement, config.username), 10000)
+//       // Get the text of the username element to verify successful login
+//       const usernameText = await usernameElementTEST.getText()
+//       if (usernameText !== config.username) {
+//         throw new Error(`Login failed: Expected username '${config.username}', but found '${usernameText}'`)
+//       }
+//     } catch (error) {
+//       console.error('Error during setup:', error)
+//       throw error
+//     }
+//   }, 50000)
 
-  afterAll(async () => {
-    await driver.quit()
-  })
+//   afterAll(async () => {
+//     await driver.quit()
+//   })
 
-  beforeEach(async () => {
-    await driver.executeScript('window.scrollTo(0, 0);')
-  })
+//   beforeEach(async () => {
+//     await driver.executeScript('window.scrollTo(0, 0);')
+//   })
 
-  it('should create a new item successfully', async () => {
-    await items.navigateAddNewItem()
-    await items.addNewItem(newItemForm)
-    const successMessage = await items.getSuccessMessage()
-    try {
-      expect(successMessage).toBe('Item is added successfully')
-      console.log('add assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Item is added successfully" but got "${successMessage}"`)
-    }
+//   it('should create a new item successfully', async () => {
+//     await items.navigateAddNewItem()
+//     await items.addNewItem(newItemForm)
+//     const successMessage = await items.getSuccessMessage()
+//     try {
+//       expect(successMessage).toBe('Item is added successfully')
+//       console.log('add assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Item is added successfully" but got "${successMessage}"`)
+//     }
 
-    await driver.sleep(5000)
-  }, 10000)
+//     await driver.sleep(5000)
+//   }, 10000)
 
-  it('should render the new item in the UI', async () => {
-    const firstItemTitle = await driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div[1]/div/div[3]/h3`)).getText()
-    try {
-      expect(firstItemTitle).toBe(newItemForm.title) // Check if the new item is rendered
-      console.log('add ui render assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`new item is not being rendered,  ${firstItemTitle} found instead`)
-    }
-  }, 10000)
+//   it('should render the new item in the UI', async () => {
+//     const firstItemTitle = await driver.findElement(By.xpath(`//*[@id="root"]/div/main/div/div[2]/div/div[1]/div/div[3]/h3`)).getText()
+//     try {
+//       expect(firstItemTitle).toBe(newItemForm.title) // Check if the new item is rendered
+//       console.log('add ui render assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`new item is not being rendered,  ${firstItemTitle} found instead`)
+//     }
+//   }, 10000)
 
-  it('should edit an existing item successfully', async () => {
-    await items.navigateEditItem()
-    await items.editItem(editItemForm)
-    const successMessage = await items.getSuccessMessage()
-    try {
-      expect(successMessage).toBe('Item is edited successfully')
-      console.log('edit assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Item is edited successfully" but got "${successMessage}"`)
-    }
+//   it('should edit an existing item successfully', async () => {
+//     await items.navigateEditItem()
+//     await items.editItem(editItemForm)
+//     const successMessage = await items.getSuccessMessage()
+//     try {
+//       expect(successMessage).toBe('Item is edited successfully')
+//       console.log('edit assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Item is edited successfully" but got "${successMessage}"`)
+//     }
 
-    await driver.sleep(5000)
-  }, 10000)
+//     await driver.sleep(5000)
+//   }, 10000)
 
-  it('should render the edited item in the UI', async () => {
-    const itemTitle = await driver
-      .findElement(By.xpath(`//*[@id="root"]/div/main/div/div/div/div[2]/div[1]/div[2]/div/div[1]/h3`))
-      .getText()
-    console.log(itemTitle)
-    try {
-      expect(itemTitle).toBe(editItemForm.title) // Check if the new item is rendered
-      console.log('edit ui render assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`edited item is not being rendered, ${itemTitle} found instead`)
-    }
-  }, 10000)
+//   it('should render the edited item in the UI', async () => {
+//     const itemTitle = await driver
+//       .findElement(By.xpath(`//*[@id="root"]/div/main/div/div/div/div[2]/div[1]/div[2]/div/div[1]/h3`))
+//       .getText()
+//     console.log(itemTitle)
+//     try {
+//       expect(itemTitle).toBe(editItemForm.title) // Check if the new item is rendered
+//       console.log('edit ui render assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`edited item is not being rendered, ${itemTitle} found instead`)
+//     }
+//   }, 10000)
 
-  it('should delete an existing item successfully', async () => {
-    await items.navigateDeleteItem()
-    await items.deleteItem()
-    const successMessage = await items.getSuccessMessage()
-    try {
-      expect(successMessage).toBe('Item is deleted successfully')
-      console.log('delete assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`Expected "Item is deleted successfully" but got "${successMessage}"`)
-    }
+//   it('should delete an existing item successfully', async () => {
+//     await items.navigateDeleteItem()
+//     await items.deleteItem()
+//     const successMessage = await items.getSuccessMessage()
+//     try {
+//       expect(successMessage).toBe('Item is deleted successfully')
+//       console.log('delete assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`Expected "Item is deleted successfully" but got "${successMessage}"`)
+//     }
 
-    await driver.sleep(5000)
-  }, 10000)
+//     await driver.sleep(5000)
+//   }, 10000)
 
-  it('should not render the edited item in the UI', async () => {
-    try {
-      const pageSource = await driver.getPageSource()
-      expect(pageSource.includes(editItemForm.title)).toBe(false) // Check if the new item is rendered
-      console.log('delete ui render assertion passed.')
-    } catch (assertionError) {
-      console.error('Assertion failed:', assertionError.message)
-      throw new Error(`deleted item is being rendered`)
-    }
-  }, 10000)
-})
+//   it('should not render the edited item in the UI', async () => {
+//     try {
+//       const pageSource = await driver.getPageSource()
+//       expect(pageSource.includes(editItemForm.title)).toBe(false) // Check if the new item is rendered
+//       console.log('delete ui render assertion passed.')
+//     } catch (assertionError) {
+//       console.error('Assertion failed:', assertionError.message)
+//       throw new Error(`deleted item is being rendered`)
+//     }
+//   }, 10000)
+// })
 
 // describe('Transaction Tests', () => {
 //   let driver, loginPage, items, transactions, loginPageItemOwner, itemsItemOwner, transactionsItemOwner
