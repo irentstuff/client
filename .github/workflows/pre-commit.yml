@@ -112,13 +112,8 @@ jobs:
           Start-Sleep -Seconds 20
 
       - name: Run tests
-        run: |
-          npm run dev
-          npm run test
+        run: npm run start:test
 
       - name: Shutdown any remaining Chrome instances
         run: |
           Stop-Process -Name chrome -Force -ErrorAction SilentlyContinue
-
-      - name: Shutdown Vite server
-        run: npm run shutdown
