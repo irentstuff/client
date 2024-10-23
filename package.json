@@ -4,14 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --verbose",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src/**/*.js src/**/*.jsx",
     "server": "npx json-server json-mock-api/src/db.json --watch --port 5000",
     "test": "jest --runInBand",
     "start:test": "npm-run-all --parallel --continue-on-error dev wait-and-test",
-    "wait-and-test": "wait-on http://localhost:5173 && npm run test && npx kill-port 5173"
+    "wait-and-test": "wait-on http://localhost:5173 --timeout 10000 && npm run test && sleep 5 && npx kill-port 5173"
   },
   "lint-staged": {
     "./src/*.{js,jsx,ts,tsx}": [
